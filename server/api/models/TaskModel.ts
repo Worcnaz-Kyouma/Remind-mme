@@ -4,6 +4,8 @@ import { User } from './UserModel'
 import { Group } from './GroupModel'
  
 export type Task = {
+    _id: string | null
+
     userId: string
     groupId: string
 
@@ -11,6 +13,7 @@ export type Task = {
     name: string
     description: string | null
     importance: number | null
+    isCompleted: boolean
 
     user: User | undefined
     group: Group | undefined
@@ -21,5 +24,5 @@ export type Task = {
 
 
 
-export const database = new Datastore('./../../database/tasks.db');
+export const database = new Datastore('database/tasks.db');
 database.loadDatabase()

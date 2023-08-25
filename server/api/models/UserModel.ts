@@ -5,12 +5,14 @@ import { Task } from './TaskModel'
 import { Token } from './TokenModel'
 
 export type User = {
+    _id: string| null
+
     username: string
     password: string
     name: string
     email: string
     phone: string
-    //imageUrl: string
+    imageUrl: string
 
     groups: Group[] | undefined
     tasks: Task[] | undefined
@@ -22,5 +24,5 @@ export type User = {
 
 
 
-export const database = new Datastore('./../../database/users.db');
+export const database = new Datastore('database/users.db');
 database.loadDatabase()

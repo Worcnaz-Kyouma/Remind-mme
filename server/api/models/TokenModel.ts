@@ -3,6 +3,8 @@ import Datastore from 'nedb'
 import { User } from './UserModel'
 
 export type Token = {
+    _id: string | null
+
     userId: string
 
     token: string
@@ -13,5 +15,5 @@ export type Token = {
     updatedAt: Date
 }
 
-export const database = new Datastore('./../../database/tokens.db');
+export const database = new Datastore('database/tokens.db');
 database.loadDatabase()

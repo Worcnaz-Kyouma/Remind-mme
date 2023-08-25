@@ -4,6 +4,8 @@ import { User } from './UserModel'
 import { Task } from './TaskModel'
 
 export type Group = {
+    _id: string
+
     name: string
 
     users: User[] | undefined
@@ -15,5 +17,5 @@ export type Group = {
 
 
 
-export const database = new Datastore('./../../database/groups.db');
+export const database = new Datastore('database/groups.db');
 database.loadDatabase()

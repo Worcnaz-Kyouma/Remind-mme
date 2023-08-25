@@ -4,6 +4,8 @@ import { User } from './UserModel'
 import { Group } from './GroupModel'
 
 export type UserGroup = {
+    _id: string | null
+    
     userId: string
     groupId: string
     level: number
@@ -17,5 +19,5 @@ export type UserGroup = {
 
 
 
-export const database = new Datastore('./../../database/usersgroups.db');
+export const database = new Datastore('database/usersgroups.db');
 database.loadDatabase()

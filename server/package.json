@@ -16,12 +16,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mysql2": "^3.6.0",
     "nedb": "^1.8.0",
     "nodemon": "^3.0.1",
-    "sequelize": "^6.32.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "@types/nedb": "^1.8.13"
   }
 }

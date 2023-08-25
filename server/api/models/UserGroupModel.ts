@@ -1,39 +1,21 @@
-import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, NonAttribute } from "sequelize";
-import sequelize from "../../config/sequelize"
-import User from "./UserModel";
-import Group from "./GroupModel";
+import Datastore from 'nedb'
 
-class UserGroup extends Model<InferAttributes<UserGroup, { omit: "userId" | "groupId" }>, InferCreationAttributes<UserGroup, { omit: "userId" | "groupId" }>> {
-    declare id: CreationOptional<number>
+import { User } from './UserModel'
+import { Group } from './GroupModel'
 
-    declare userId: ForeignKey<User['id']>
-    declare user?: NonAttribute<User>
+export type UserGroup = {
+    userId: string
+    groupId: string
+    level: number
 
-    declare groupId: ForeignKey<Group['id']>
-    declare group?: NonAttribute<Group>
+    user: User | undefined
+    group: Group | undefined
 
-    declare level: number
+    createdAt: Date
+    updatedAt: Date
 }
 
-UserGroup.init(
-    {
-        id: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true
-        },
 
-        level: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
-        }
-    }, {
-        sequelize,
-        tableName: 'users_groups'
-    }
-)
 
-export default UserGroup
+export const database = new Datastore('./../../database/usersgroups.db');
+database.loadDatabase()

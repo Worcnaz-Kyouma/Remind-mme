@@ -1,46 +1,19 @@
-import { Association, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute } from "sequelize";
-import sequelize from "../../config/sequelize"
-import User from "./UserModel";
-import Task from "./TaskModel";
+import Datastore from 'nedb'
 
-class Group extends Model<InferAttributes<Group, { omit: "users" | 'tasks' }>, InferCreationAttributes<Group, { omit: "users" | 'tasks' }>> {
-    declare id: CreationOptional<number>
-    declare createdAt: CreationOptional<Date>
-    declare updatedAt: CreationOptional<Date>
+import { User } from './UserModel'
+import { Task } from './TaskModel'
 
-    declare users?: NonAttribute<User[]>
-    declare tasks?: NonAttribute<Task[]>
+export type Group = {
+    name: string
 
-    declare name: string
+    users: User[] | undefined
+    tasks: Task[] | undefined
 
-    declare public static associations: {
-        users: Association<Group, User>
-        tasks: Association<Group, Task>
-    }
+    createdAt: Date
+    updatedAt: Date
 }
 
-Group.init(
-    {
-        id: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        createdAt: DataTypes.DATE,
-        updatedAt: DataTypes.DATE,
 
-        name: {
-            type: new DataTypes.STRING(255),
-            allowNull: false,
-            unique: true,
-            validate: {
-                notEmpty: true
-            }
-        }
-    }, {
-        sequelize,
-        tableName: 'groups'
-    }
-)
 
-export default Group
+export const database = new Datastore('./../../database/groups.db');
+database.loadDatabase()

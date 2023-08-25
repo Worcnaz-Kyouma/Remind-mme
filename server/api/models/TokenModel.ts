@@ -1,40 +1,17 @@
-import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, NonAttribute } from "sequelize";
-import sequelize from "../../config/sequelize"
-import User from "./UserModel";
+import Datastore from 'nedb'
 
-class Token extends Model<InferAttributes<Token, { omit: "user" }>, InferCreationAttributes<Token, { omit: "user" }>> {
-    declare id: CreationOptional<number>
-    declare createdAt: CreationOptional<Date>
-    declare updatedAt: CreationOptional<Date>
+import { User } from './UserModel'
 
-    declare userId: ForeignKey<User['id']> | null
-    declare user?: NonAttribute<User>
+export type Token = {
+    userId: string
 
-    declare token: string
+    token: string
+
+    user: User | undefined
+
+    createdAt: Date
+    updatedAt: Date
 }
 
-Token.init(
-    {
-        id: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        createdAt: DataTypes.DATE,
-        updatedAt: DataTypes.DATE,
-
-        token: {
-            type: new DataTypes.STRING(255),
-            unique: true,
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
-        }
-    }, {
-        sequelize,
-        tableName: 'users_groups'
-    }
-)
-
-export default Token
+export const database = new Datastore('./../../database/tokens.db');
+database.loadDatabase()

@@ -178,6 +178,24 @@
                 font-size: 13px;
                 transform: translateY(-150%);
             }
+
+            span {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+
+                width: 25px;
+                height: 25px;
+
+                cursor: pointer;
+
+                z-index: 5;
+
+                background: url('/eye-show.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
         }
 
         .inputs-wrapper,&>.input-wrapper{

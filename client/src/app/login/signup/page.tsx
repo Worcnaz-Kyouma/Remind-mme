@@ -9,6 +9,7 @@ export default function Login() {
 
     const imgElementRef = useRef(null)
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
+    const [ isPasswordVisible, setPasswordVisible ] = useState(false)
     // const [ usernameInvalid, setUsernameInvalid ] = useState<boolean>(false)
 
     const userMutation = useMutation({
@@ -79,8 +80,9 @@ export default function Login() {
                         <label htmlFor="username">Username </label>
                     </div>
                     <div className={styles['input-wrapper']}>
-                        <input type="password" name="password" id="password" placeholder=' ' required />
+                        <input type={isPasswordVisible ? "text" : "password"} name="password" id="password" placeholder=' ' required />
                         <label htmlFor="password">Password </label>
+                        <span id="show-password" onClick={() => setPasswordVisible((isVisible) => !isVisible)}></span>
                     </div>
                 </div>
 

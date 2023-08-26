@@ -3,9 +3,11 @@ import { useMutation } from "@tanstack/react-query"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import styles from "@/app/styles/login.module.scss"
+import { useState } from "react"
 
 export default function Login() {
     const router = useRouter()
+    const [ isPasswordVisible, setPasswordVisible ] = useState(false)
 
     const userMutation = useMutation({
         mutationFn: (user: { [k:string]: FormDataEntryValue }) => {
@@ -52,8 +54,9 @@ export default function Login() {
                     <label htmlFor="username">Username </label>
                 </div>
                 <div className={styles['input-wrapper']}>
-                    <input type="password" name="password" id="password" placeholder=' ' />
+                    <input type={isPasswordVisible ? "text" : "password"} name="password" id="password" placeholder=' ' />
                     <label htmlFor="password">Password </label>
+                    <span id="show-password" onClick={() => setPasswordVisible((isVisible) => !isVisible)}></span>
                 </div>
                 <button type="submit">Login</button>
             </form>

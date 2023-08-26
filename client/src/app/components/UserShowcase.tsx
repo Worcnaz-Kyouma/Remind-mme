@@ -14,6 +14,7 @@ export default function UserShowcase({
 }) {
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ haveChanges, setHaveChanges ] = useState(false)
+    const [ isPasswordVisible, setPasswordVisible ] = useState(false)
     const queryClient = useQueryClient()
 
     const userMutation = useMutation({
@@ -92,8 +93,9 @@ export default function UserShowcase({
                     </div>
                     {user._id === loggedUser._id &&
                         <div className={styles['input-wrapper']}>
-                            <input type="password" name="password" id="password"  required defaultValue={user.password} onChange={() => setHaveChanges(true)}/>
+                            <input type={isPasswordVisible ? "text" : "password"} name="password" id="password"  required defaultValue={user.password} onChange={() => setHaveChanges(true)}/>
                             <label htmlFor="password">Password </label>
+                            <span id="show-password" onClick={() => setPasswordVisible((isVisible) => !isVisible)}></span>
                         </div>
                     }
                 </div>

@@ -21,6 +21,7 @@
 
     width: 70%;
     max-width: 900px;
+    min-width: 500px;
 
     border: 1px solid rgba(0, 0, 0, 0.384);
     border-radius: 15px;
@@ -30,6 +31,19 @@
     padding: 50px 20px 30px 20px;
 
     background-color: white;
+
+    animation: appear 0.3s ease-out forwards;
+
+    @keyframes appear {
+        from{
+            width: 0%;
+            opacity: 0;
+        }
+        to{
+            width: 70%;
+            opacity: 1;
+        }
+    }
 
     .exit-button {
         $height: 20px;
@@ -73,7 +87,6 @@
         .image-wrapper {
             $size: 150px;
             $translate: translate(-50%, -50%);
-            padding: 5px;
 
             position: absolute;
             left: 0px;
@@ -93,21 +106,6 @@
             cursor: pointer;
 
             transition: all 0.4s;
-
-            background-color: #cb5e56;
-
-            &::before{
-                content: '';
-                position: absolute;
-
-                top: 50%;
-                left: 50%;
-
-                width: 50%;
-                height: 50%;
-
-                background-color: white;
-            }
 
             &:hover {
                 transform: $translate scale(1.03);
@@ -201,6 +199,24 @@
                 font-size: 13px;
                 transform: translateY(-150%);
             }
+
+            span {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+
+                width: 25px;
+                height: 25px;
+
+                cursor: pointer;
+
+                z-index: 5;
+
+                background: url('/eye-show.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
         }
 
         .inputs-wrapper,&>.input-wrapper{
@@ -228,9 +244,6 @@
 
         button {
             width: 25%;
-            padding: 0px 0px;
-
-            opacity: 0;
 
             border: 1px solid rgba(0, 0, 0, 0.384);
             border-radius: 8px;
@@ -244,7 +257,7 @@
 
             transition: all 0.4s;
 
-            animation: appear 0.2s ease-out forwards;
+            animation: btn-appear 0.2s ease-out forwards;
 
             &:hover {
                 transform: scale(1.05);
@@ -258,8 +271,11 @@
             color: rgb(0, 186, 0);
         }
 
-        @keyframes appear {
-            from{}
+        @keyframes btn-appear {
+            from{           
+                padding: 0px 0px;
+                opacity: 0;
+            }
             to{
                 padding: 10px 0px;
                 opacity: 1;

@@ -1,12 +1,8 @@
 .main-header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 
-    padding: 1% 0%;
-
-    border-bottom-left-radius: 150px 30px;
-    border-bottom-right-radius: 150px 30px;
-
-    background-color: rgb(138, 27, 27);
+    margin: 12px 50px;
+    
 }

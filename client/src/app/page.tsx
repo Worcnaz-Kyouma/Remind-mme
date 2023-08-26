@@ -10,7 +10,7 @@ export default function Page() {
   })
     .then((res) => res.json())
     .then((res) => res?._id 
-      ? router.push('/home')
+      ? router.push('/home/teams')
       : router.push('/login')
     )
 }

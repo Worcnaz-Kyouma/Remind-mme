@@ -66,7 +66,7 @@ export async function getUserGeneretingCookie(req:Request, res:Response) {
         res.status(500)
     }
     else{
-        res.cookie('SESSIONRMM', data.webToken, {expires: new Date(Date.now() + 360000) }); 
+        res.cookie('SESSIONRMM', data.webToken); 
     }
 
     res.json(data)

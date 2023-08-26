@@ -1,8 +1,7 @@
 'use client'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import Header from "../components/Header"
-import UserShowcase from "../components/UserShowcase"
-
+import styles from "@/app/styles/home.module.scss"
 export default function Layout({
     children
 }: {
@@ -12,8 +11,10 @@ export default function Layout({
 
     return (
         <QueryClientProvider client={queryClient}>
-            <Header />
-            {children}
+            <div className={styles['page-wrapper']}>
+                <Header />
+                {children}
+            </div>
         </QueryClientProvider>
     )
 }

@@ -1,4 +1,4 @@
-import UserShowcase from "./UserShowcase"
+import Profile from "./Profile"
 import styles from "./../styles/components/Header.module.scss"
 import { useQuery } from "@tanstack/react-query"
 
@@ -24,7 +24,7 @@ export default function Header() {
         <header className={styles['main-header']}>
             <span>Tasks</span>
             <h1>Remind-MME</h1>
-            <UserShowcase user={userQuery.data}/>
+            <Profile user={userQuery.data}/>
         </header>
     )
 }

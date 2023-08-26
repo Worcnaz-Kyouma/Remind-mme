@@ -1,9 +1,8 @@
 body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   margin: 0px;
 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-div:not(.blur-wrapper ) {
-  z-index: 1;
 }

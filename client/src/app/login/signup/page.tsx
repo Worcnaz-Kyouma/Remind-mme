@@ -1,12 +1,14 @@
 'use client'
-import { useMutation, useQuery } from "@tanstack/react-query"
-import Link from "next/link"
+import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRef, useState } from "react"
+import styles from "@/app/styles/signup.module.scss"
 
 export default function Login() {
     const router = useRouter()
 
+    const imgElementRef = useRef(null)
+    const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     // const [ usernameInvalid, setUsernameInvalid ] = useState<boolean>(false)
 
     const userMutation = useMutation({
@@ -35,23 +37,6 @@ export default function Login() {
         }
     })
 
-    /*const userValidateMutation = useMutation({
-        mutationFn: (username: string) => {
-            return fetch(`http://localhost:22194/users/username/${username}`)
-                .then((res) => res.json())
-                .then((resJson) => {
-                    if(resJson?.error)
-                        throw resJson.error
-                    return resJson
-                })
-                .then((resJson) => {
-                    if(resJson)
-                        return true
-                    return false
-                })
-        }
-    })*/
-
     function handleSubmit(event: React.FormEvent<EventTarget>){
         event.preventDefault()
 
@@ -61,39 +46,68 @@ export default function Login() {
     }
 
     return (
-        <div>
+        <div className={styles['div-wrapper']}>
+            <h1>Sign up</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="image">Image </label>
-                <input type="file" name="image" id="image" accept="image/*" />
+                <input type="file" name="image" id="image" accept="image/*" onChange={(event) => {
+                    const input = event.currentTarget.files
+                    if (input){
+                        const file = input[0]
+                        const reader = new FileReader()
 
-                <label htmlFor="username">Username </label>
-                <input type="text" name="username" id="username" required />
+                        reader.onloadend = () => {
+                            setImgSrc(typeof reader.result === "string" ? reader.result : null)
+                        }
 
-                {/*onChange={(event) => {
-                    if (!userValidateMutation.data) {
-                        event.target.setCustomValidity("Username already in use"); 
-                    } else {
-                        event.target.setCustomValidity("");
+                        if (file) {
+                            reader.readAsDataURL(file)
+                        }
                     }
-                }}*/}
+                }}/>
+                <div className={styles['image-wrapper']}>
+                    <label htmlFor="image">
+                        {!imgSrc
+                            ? <span>+</span>
+                            : <img src={imgSrc} ref={imgElementRef} alt="Character image"/>
+                        }
+                    </label>
+                </div>
 
-                <label htmlFor="password">Password </label>
-                <input type="password" name="password" id="password" required />
+                <div className={styles['inputs-wrapper']}>
+                    <div className={styles['input-wrapper']}>
+                        <input type="text" name="username" id="username" placeholder=' ' required />
+                        <label htmlFor="username">Username </label>
+                    </div>
+                    <div className={styles['input-wrapper']}>
+                        <input type="password" name="password" id="password" placeholder=' ' required />
+                        <label htmlFor="password">Password </label>
+                    </div>
+                </div>
 
-                <label htmlFor="name">Name </label>
-                <input type="text" name="name" id="name" required />
+                <div className={styles['input-wrapper']}>
+                    <input type="text" name="name" id="name" required placeholder=' ' />
+                    <label htmlFor="name">Name </label>
+                </div>
 
-                <label htmlFor="email">Email </label>
-                <input type="email" name="email" id="email" required />
+                <div className={styles['input-wrapper']}>
+                    <input type="email" name="email" id="email" required placeholder=' ' />
+                    <label htmlFor="email">Email </label>
+                </div>
 
-                <label htmlFor="phone">Phone </label>
-                <input type="tel" name="phone" id="phone" />
-
-                <label htmlFor="bornDate">Born date </label>
-                <input type="date" name="bornDate" id="bornDate" required max={new Date().toISOString().slice(0,10)} />
+                <div className={styles['inputs-wrapper']}>
+                    <div className={styles['input-wrapper']}>
+                        <input type="tel" name="phone" id="phone" placeholder=' ' />
+                        <label htmlFor="phone">Phone </label>
+                    </div>
+                    <div className={styles['input-wrapper']}>
+                        <input type="date" name="bornDate" id="bornDate" required max={new Date().toISOString().slice(0,10)} />
+                        <label htmlFor="bornDate">Born date </label>
+                    </div>
+                </div>
 
                 <button type="submit">Sign up</button>
             </form>
+            <button className={styles['login-button']} onClick={() => router.push('./')}>Login</button>
         </div>
     )
 }

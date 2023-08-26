@@ -11,6 +11,8 @@ server.get('/', (req, res) => {
 
 server.use('/', rootRoutes)
 
+server.use('/uploads', express.static('uploads'))
+
 const port = process.env.PORT
 server.listen(port, () => {
     console.log("Server running in port: " + port)

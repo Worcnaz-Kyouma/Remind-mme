@@ -2,6 +2,7 @@
 import { useMutation } from "@tanstack/react-query"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import styles from "@/app/styles/login.module.scss"
 
 export default function Login() {
     const router = useRouter()
@@ -43,16 +44,21 @@ export default function Login() {
     }
     
     return (
-        <div>
+        <div className={styles['div-wrapper']}>
+            <h1>Login</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username </label>
-                <input type="text" name="username" id="username" />
-                <label htmlFor="password">Password </label>
-                <input type="password" name="password" id="password" />
+                <div className={styles['input-wrapper']}>
+                    <input type="text" name="username" id="username" placeholder=' ' />
+                    <label htmlFor="username">Username </label>
+                </div>
+                <div className={styles['input-wrapper']}>
+                    <input type="password" name="password" id="password" placeholder=' ' />
+                    <label htmlFor="password">Password </label>
+                </div>
                 <button type="submit">Login</button>
             </form>
 
-            <Link href="login/signup/">Sign Up</Link>
+            <button className={styles['signup-button']} onClick={() => router.push('login/signup')}>Signup</button>
         </div>
     )
 }

@@ -24,6 +24,16 @@ export async function createUser(req:Request, res:Response) {
     res.json(data)
 }
 
+export async function updateUser(req:Request, res:Response) {
+    const data = await userService.updateUser(req, res)
+
+    res.status(201)
+    if('error' in data)
+        res.status(500)
+    
+    res.json(data)
+}
+
 export async function getUserByUsername(req:Request, res:Response) {
     if(typeof req.params.username === 'undefined'){
         invalidRequest(res)

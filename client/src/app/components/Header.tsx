@@ -1,9 +1,12 @@
 import Profile from "./Profile"
 import styles from "./../styles/components/Header.module.scss"
 import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 
 
 export default function Header() {
+    const router = useRouter()
+
     const userQuery = useQuery({
         queryKey: ['users'],
         queryFn: () => {
@@ -11,6 +14,7 @@ export default function Header() {
                 credentials: 'include',
             })
             .then((res) => res.json())
+            .then((res) => !res?._id ? router.push('/login') : res)
         }
     })
 
@@ -18,7 +22,7 @@ export default function Header() {
         return <h1>Loading...</h1>
 
     if(userQuery.isError)
-        return <h1>Error!</h1>
+        return <></>
 
     return (
         <header className={styles['main-header']}>

@@ -3,6 +3,7 @@ import upload from "./../../config/multer"
 import crypto from 'crypto'
 import { Request, Response } from "express"
 import validatorJS from "validator"
+import fs from "fs"
 
 type ErrorJSON = {
     error:any
@@ -26,12 +27,14 @@ async function validator(userJSON:User) {
     if(!userJSON.email)
         return { error: "Email cannot be null" }
 
-    if(await getUserByUsername(userJSON.username))
+    if(!userJSON._id && await getUserByUsername(userJSON.username))
         return { error: "Already exist an user with that username" }
+    else
+        if(await getUserByUsernameIdNe(userJSON.username, userJSON._id!))
+            return { error: "Already exist an user with that username" } 
 
     if(!validatorJS.isEmail(userJSON.email))
         return { error: "Invalid email" }
-
     if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
         return { error: "Invalid number" }
 
@@ -75,9 +78,55 @@ export function createUser(req:Request, res:Response) {
     })
 }
 
+export function updateUser(req:Request, res:Response) {
+    return new Promise<User | ErrorJSON>(async (resolve, reject) => {
+        upload.single('image')(req, res, async function (err) {
+            if (err)
+                resolve (generateErrorJSON({
+                    type: "Upload error",
+                    field: ["image"],
+                    message: "Error in the process of image upload"
+                }))
+
+            if(req.file?.path)
+                fs.unlink(req.body.imageUrl, err => {
+                    if (err) resolve(generateErrorJSON("Error trying delete old image"))
+                })
+
+            const userJSON:User = req.body
+
+            //Validator
+            const validatorResult = await validator(userJSON)
+            if(validatorResult)
+                resolve(generateErrorJSON(validatorResult.error))
+
+            userJSON.imageUrl = req.file?.path || req.body.imageUrl
+            userJSON.updatedAt = new Date()
+
+            database.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
+                if(err)
+                    resolve(generateErrorJSON())
+
+                resolve(userJSON)
+            })
+        })
+    })
+}
+
 export function getUserByUsername(username: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
         database.findOne({ username: username }, function(err, docs) {
+            if(err)
+                resolve(generateErrorJSON())
+
+            resolve(docs)
+        })
+    })
+}
+
+export function getUserByUsernameIdNe(username: string, _id: string) {
+    return new Promise<User | ErrorJSON >(async (resolve, reject) => {
+        database.findOne({_id: { $ne: _id }, username: username }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
 

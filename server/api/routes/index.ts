@@ -1,8 +1,8 @@
 import express from "express"
-import tokenRouter from "./TokenRoutes"
+import userRouter from "./UserRoutes"
 
 const rootRoutes = express.Router()
 
-rootRoutes.use('/tokens', tokenRouter)
+rootRoutes.use('/users', userRouter)
 
 export = rootRoutes

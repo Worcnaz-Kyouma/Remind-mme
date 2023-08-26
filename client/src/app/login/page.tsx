@@ -1,4 +1,6 @@
+'use client'
 import { useMutation } from "@tanstack/react-query"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function Login() {
@@ -6,9 +8,10 @@ export default function Login() {
 
     const userMutation = useMutation({
         mutationFn: (user: { [k:string]: FormDataEntryValue }) => {
-            return fetch('http://localhost:22194/users', {
+            return fetch('http://localhost:22194/users/login', {
                 method: "POST",
                 body: JSON.stringify(user),
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -23,6 +26,9 @@ export default function Login() {
         },
         onSuccess: () => {
             router.push('./')
+        },
+        onError: (err) => {
+            console.log(err)
         }
     })
 
@@ -37,14 +43,16 @@ export default function Login() {
     }
     
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username </label>
-            <input type="text" name="username" id="username" />
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="username">Username </label>
+                <input type="text" name="username" id="username" />
+                <label htmlFor="password">Password </label>
+                <input type="password" name="password" id="password" />
+                <button type="submit">Login</button>
+            </form>
 
-            <label htmlFor="password">Password </label>
-            <input type="password" name="password" id="password" />
-
-            <button type="submit">Login</button>
-        </form>
+            <Link href="login/signup/">Sign Up</Link>
+        </div>
     )
 }

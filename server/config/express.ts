@@ -6,7 +6,10 @@ function createServer() {
     const server = express()
 
     server.use(express.json())
-    server.use(cors())
+    server.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    }))
     server.use(cookieParser())
 
     return server

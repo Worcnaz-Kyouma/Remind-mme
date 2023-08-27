@@ -16,4 +16,7 @@ router.route('/login')
 router.route('/webtoken')
     .get(userController.getUserByWebToken)
 
+router.route('/search/')
+    .get(userController.getUsersByGivenFieldOutOfTeam)
+
 export = router

@@ -171,7 +171,7 @@ export function getUserGeneretingWebToken(username: string, password: string) {
             if(err)
                 resolve(generateErrorJSON())
 
-            if(Object.entries(docs).length !== 0)
+            if(!docs)
                 resolve(generateErrorJSON('Incorrect password'))
 
             resolve(generateErrorJSON('User not exist'))
@@ -197,6 +197,22 @@ export function getUserByWebToken(webToken: string) {
 
                     resolve(user)
                 })
+            })
+        })
+    })
+}
+
+export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field: "name"|"email"|"phone", value: string, teamId:string) {
+    return new Promise<User[] | ErrorJSON>(async (resolve, reject) => {
+        databaseUserTeam.find({ teamId: teamId }, {}, function(err, userTeams: UserTeam[]) {
+            if(err)
+                resolve(generateErrorJSON())
+
+            databaseUser.find({ [field]: value, $nin: userTeams.map(userTeam => userTeam.userId) }).skip((page-1)*limit).limit(limit).exec(function (err, users: User[]) {
+                if(err)
+                    resolve(generateErrorJSON())
+
+                resolve(users)
             })
         })
     })

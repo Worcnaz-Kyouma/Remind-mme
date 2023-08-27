@@ -2,11 +2,13 @@
     position: relative;
 
     width: 93%;
-    height: 50px;
+    height: 30px;
 
     margin-top: 20px;
 
     border: 1px solid rgba(0, 0, 0, 0.384);
+    border-right: 3px solid rgba(0, 0, 0, 0.384);
+    border-bottom: 4px solid rgba(0, 0, 0, 0.384);
     border-radius: 12px;
 
     padding: 20px 0px;
@@ -29,7 +31,35 @@
         background-color: white;
     }
 
-    button {
+    .member-opener {
+        position: absolute;
+        left: 50%;
+        bottom: 16%;
+        transform: translateX(-50%);
+
+        width: 50px;
+        aspect-ratio: 1;
+
+        border: 2px solid black;
+        border-radius: 16px;
+
+        cursor: pointer;
+
+        background: url('/new-member-icon.png');
+        background-repeat: no-repeat;
+        background-size: 75% 75%;
+        background-position: 65% 50%;
+
+        transition: all 0.4s;
+
+        &:hover {
+            transform: translateX(-50%) scale(1.01);
+
+            box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
+        }
+    }
+
+    button.team-opener {
         position: absolute;
         left: 0px;
         bottom: 0px;
@@ -67,7 +97,7 @@
         }
     }
 
-    button.opened {
+    button.team-opener.opened {
         &::before {
             transform: rotate(-180deg);
         }
@@ -75,5 +105,6 @@
 }
 
 .team-wrapper.opened {
+    padding: 20px 0px 120px 0px;
     height: fit-content;
 }

@@ -18,6 +18,7 @@ export default function Team({
 }) {
     const [ isClosed, setClosed ] = useState(true)
     const [ segments, setSegments ] = useState<{ level: number, users: UserModel[] }[] | null>(null)
+    const [ isMemberGeneratorOpen, setMemberGeneratorOpen ] = useState(false)
 
     const segmentsQuery = useQuery({
         queryKey: ['segments'],
@@ -40,17 +41,22 @@ export default function Team({
     })
 
     return (
+        <>
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
             <span>{team.name}</span>
             {!isClosed && 
                 <div className={styles['opened-team']}>
                     {segments && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} team={team} setUserShowcaseData={setUserShowcaseData} />)}
-                    <MemberGenerator team={team}/>
+                    <button className={styles['member-opener']} onClick={() => {
+                        setMemberGeneratorOpen(true)
+                    }}></button>
                 </div>
             }
-            <button id="team-opener" className={!isClosed ? styles.opened : ""} onClick={() => {
+            <button className={`${styles['team-opener']} ${!isClosed && styles.opened}`} onClick={() => {
                 setClosed((isClosed) => !isClosed)
             }}></button>
         </div>
+        {isMemberGeneratorOpen && <MemberGenerator team={team} closeModal={() => setMemberGeneratorOpen(false)} />}
+        </>
     )
 }

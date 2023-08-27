@@ -81,3 +81,30 @@ export async function getUserGeneretingCookie(req:Request, res:Response) {
 
     res.json(data)
 }
+
+export async function getUsersByGivenFieldOutOfTeam(req:Request, res:Response) {
+    if(
+        typeof req.query.limit === "undefined" && 
+        typeof req.query.page === "undefined"  &&
+        typeof req.query.field === "undefined"  &&
+        typeof req.query.value === "undefined"  &&
+        typeof req.query.teamId === "undefined" 
+    ){
+        invalidRequest(res)
+        return
+    }
+
+    const data = await userService.getUsersByGivenFieldOutOfTeam(
+        parseInt(req.query.limit as string), 
+        parseInt(req.query.page as string), 
+        req.query.field as "name"|"email"|"phone", 
+        req.query.value as string,
+        req.query!.teamId as string
+    )
+
+    res.status(200)
+    if(data && 'error' in data)
+        res.status(500)
+
+    res.json(data)
+}

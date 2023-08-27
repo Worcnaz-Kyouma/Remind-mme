@@ -16,8 +16,10 @@ export default function Page() {
           throw resJson
       return resJson
     })
-    .then((res:User) => res?._id 
-      ? router.push('/home/teams')
-      : router.push('/login')
-    )
+    .then((res:User) => res?._id && router.push('/home/teams')
+    ).catch((err:ErrorJSON) => {
+      if(typeof err.error === 'string' && err.error.includes('cookie'))
+        router.push('/login')
+      else console.error(err)
+    })
 }

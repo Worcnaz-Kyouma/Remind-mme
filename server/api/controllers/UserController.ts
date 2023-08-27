@@ -6,9 +6,9 @@ import * as userService from "./../services/UserService"
     
 */
 
-function invalidRequest(res:Response){
+function invalidRequest(res:Response, message="Invalid request"){
     res.status(400)
-    res.json({error: "Invalid request"})
+    res.json({error: message})
 }
 
 export async function createUser(req:Request, res:Response) {
@@ -51,7 +51,7 @@ export async function getUserByUsername(req:Request, res:Response) {
 
 export async function getUserByWebToken(req:Request, res:Response) {
     if(typeof req.cookies.SESSIONRMM === 'undefined'){
-        invalidRequest(res)
+        invalidRequest(res, "cookie don't exist")
         return
     }
 

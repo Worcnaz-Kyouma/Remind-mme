@@ -93,12 +93,27 @@ export function updateUser(req:Request, res:Response) {
                     if (err) resolve(generateErrorJSON("Error trying delete old image"))
                 })
 
-            const userJSON:User = req.body
+            const userJSON:User & { teamId?:string, level?:number } = req.body
 
             //Validator
             const validatorResult = await validator(userJSON)
             if(validatorResult)
                 resolve(generateErrorJSON(validatorResult.error))
+
+            if(userJSON.teamId && userJSON.level){
+                databaseUserTeam.update({ 
+                    userId: userJSON._id, 
+                    teamId: userJSON.teamId 
+                }, { $set: { 
+                    level: userJSON.level, 
+                    updatedAt: new Date() 
+                } }, {}, function (err, doc) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                })
+                userJSON.teamId = undefined
+                userJSON.level = undefined
+            }
 
             userJSON.imageUrl = req.file?.path || req.body.imageUrl
             userJSON.updatedAt = new Date()

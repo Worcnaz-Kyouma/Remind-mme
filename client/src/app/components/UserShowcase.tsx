@@ -57,9 +57,9 @@ export default function UserShowcase({
     })
 
     const levelQuery = useQuery({
-        queryKey: ['users', 'level', loggedUser._id, team?._id],
+        queryKey: ['users', 'level', loggedUser._id],
         queryFn: () => {
-            return fetch(`http://localhost:22194/usersteams/level-compare?userId=${loggedUser._id}&teamId=${team!._id}`)
+            return fetch(`http://localhost:22194/usersteams/level-compare/?userId=${loggedUser._id}&teamId=${team!._id}`)
                 .then((res) => res.json())
                 .then((resJson: {loggedUserLevel:number, maxLevel:number} | ErrorJSON) => {
                     if('error' in resJson) 
@@ -67,7 +67,7 @@ export default function UserShowcase({
                     return resJson
                 })
         },
-        enabled: typeof team !== "undefined",
+        enabled: typeof team !== 'undefined',
         onSuccess: (data) => {
             setLoggedUserLevel(data.loggedUserLevel)
             setMaxTeamLevel(data.maxLevel)
@@ -84,7 +84,8 @@ export default function UserShowcase({
         formData.append('createdAt', user.createdAt as string)
         formData.append('imageUrl', user.imageUrl as string)
 
-        handle level change
+        if(userLevel)
+            formData.append('teamId', team!._id as string)
 
         userMutation.mutate(formData)
     }

@@ -11,6 +11,21 @@ function invalidRequest(res:Response, message="Invalid request"){
     res.json({error: message})
 }
 
+export async function getUserAndMaxLevelInGroup(req:Request, res:Response) {
+    if(typeof req.query.userId === 'undefined' || typeof req.query.teamId === 'undefined'){
+        invalidRequest(res)
+        return
+    }
+
+    const data = await userTeamService.getUserAndMaxLevelInGroup(req.query.userId as string, req.query.teamId as string)
+
+    res.status(200)
+    if(data && 'error' in data)
+        res.status(500)
+
+    res.json(data)
+}
+
 export async function getLevelSegmentsInTeamWithUsers(req:Request, res:Response) {
     if(typeof req.params.teamId === 'undefined'){
         invalidRequest(res)

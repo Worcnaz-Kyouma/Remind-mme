@@ -17,10 +17,13 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, calc(-50% - .5px));
+    //Chrome error!
 
     width: 70%;
     max-width: 900px;
+
+    max-height: 800px;
 
     border: 1px solid rgba(0, 0, 0, 0.384);
     border-radius: 15px;
@@ -219,7 +222,7 @@
             }
         }
 
-        .inputs-wrapper,&>.input-wrapper{
+        .inputs-wrapper,&>.input-wrapper,.additional-data-wrapper{
             height: 50px;
             width: 85%;
 
@@ -239,6 +242,55 @@
 
             .input-wrapper:has(input[type="date"]){
                 width: 30%;
+            }
+        }
+
+        .additional-data-wrapper{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            padding-top: 20px;
+
+            border-top: 1px solid rgba(0, 0, 0, 0.384);
+
+            .level-wrapper {
+                margin-bottom: 20px;
+
+                border-radius: 5px;
+
+                padding: 4px 20px;
+
+                background-color: #f4f4f4;
+
+                label{
+                    margin-right: 20px;
+
+                    font-size: 16px;
+                
+                    color: rgb(96, 96, 96);
+                
+                }
+                
+                input {
+                    text-align: center;
+                    max-width: 70px;
+
+                    border: 1px solid rgba(0, 0, 0, 0.384);
+                    border-radius: 5px;
+
+                    padding: 4px;
+
+                    font-size: 19px;
+                    font-weight: lighter;
+
+                    background-color: transparent;
+                }
+
+                input:focus{
+                    outline: none;
+                }
             }
         }
 

@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import SegmentTeam from "./SegmentTeam"
 import User from "@shared/models/UserModel"
-import UserGenerator from "./UserGenerator"
+import UserTeamGenerator from "./UserTeamGenerator"
 
 export default function Team({
     team
@@ -41,7 +41,7 @@ export default function Team({
             {!isClosed && 
                 <div className={styles['opened-team']}>
                     {segments && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users}/>)}
-                    <UserGenerator team={team}/>
+                    <UserTeamGenerator team={team}/>
                 </div>
             }
             <button id="team-opener" className={!isClosed ? styles.opened : ""} onClick={() => {

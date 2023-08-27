@@ -1,6 +1,6 @@
 import TeamModel from "@shared/models/TeamModel";
 
-export default function UserGenerator({
+export default function UserTeamGenerator({
     team
 }: {
     team: TeamModel

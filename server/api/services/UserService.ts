@@ -203,16 +203,22 @@ export function getUserByWebToken(webToken: string) {
 }
 
 export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field: "name"|"email"|"phone", value: string, teamId:string) {
-    return new Promise<User[] | ErrorJSON>(async (resolve, reject) => {
+    return new Promise<{ users: User[], totalPages: number, currentPage: number } | ErrorJSON>(async (resolve, reject) => {
         databaseUserTeam.find({ teamId: teamId }, {}, function(err, userTeams: UserTeam[]) {
             if(err)
                 resolve(generateErrorJSON())
 
-            databaseUser.find({ [field]: value, $nin: userTeams.map(userTeam => userTeam.userId) }).skip((page-1)*limit).limit(limit).exec(function (err, users: User[]) {
+            databaseUser.find({ [field]: value, $nin: userTeams.map(userTeam => userTeam.userId) }, {}, function(err, users: User[]) {
                 if(err)
                     resolve(generateErrorJSON())
 
-                resolve(users)
+                const result = {
+                    users: users.slice((page-1)*limit, limit),
+                    totalPages: users.length,
+                    currentPage: page
+                }
+
+                resolve(result)
             })
         })
     })

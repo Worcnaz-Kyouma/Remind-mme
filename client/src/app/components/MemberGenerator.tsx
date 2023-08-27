@@ -24,7 +24,7 @@ export default function UserTeamGenerator({
 
             return fetch(`http://localhost:22194/users/search/?limit=${limit}&page=${page}&field=${field}&value=${value}&teamId=${team._id}`)
                 .then(res => res.json())
-                .then((resJson: UserModel | ErrorJSON) => {
+                .then((resJson: { users: UserModel[], totalPages: number, currentPage: number } | ErrorJSON) => {
                     if('error' in resJson)
                         throw resJson
                     return resJson

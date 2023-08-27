@@ -14,7 +14,7 @@ export default function Team({
 }: {
     team: TeamModel,
     loggedUser: UserModel,
-    setUserShowcaseData: (user:UserModel, userLevel:number, loggedUser:UserModel) => void
+    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel}) => void
 }) {
     const [ isClosed, setClosed ] = useState(true)
     const [ segments, setSegments ] = useState<{ level: number, users: UserModel[] }[] | null>(null)

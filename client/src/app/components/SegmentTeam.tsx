@@ -11,7 +11,7 @@ export default function SegmentTeam({
     level: number,
     users: UserModel[],
     loggedUser: UserModel,
-    setUserShowcaseData: (user:UserModel, userLevel:number, loggedUser:UserModel) => void
+    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel}) => void
 }) {
     return (
         <div className={styles.segment}>

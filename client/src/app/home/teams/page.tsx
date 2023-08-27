@@ -12,33 +12,19 @@ import UserShowcase from "@/app/components/UserShowcase"
  
 export default function Teams() {
     type UserShowcaseData = {
-        user?: UserModel
-        userLevel?: number
-        loggedUser?: UserModel
-        setCompressedOn: () => void
+        user: UserModel
+        userLevel: number
+        loggedUser: UserModel
     }
 
     const router = useRouter()
     const [ teams, setTeams ] = useState<TeamModel[] | null>(null)
-    const [ userShowcaseData, setUserShowcaseData ] = useState<UserShowcaseData>({
-        setCompressedOn: () => {
-            setUserShowcaseData(userShowcaseData => {
-                userShowcaseData.user = undefined
-                userShowcaseData.userLevel = undefined
-                userShowcaseData.loggedUser = undefined
-                return userShowcaseData
-            }
-        )}
-    })
+    const [ isUserShowcaseEnabled, setUserShowcaseEnabled ] = useState(false)
+    const [ userShowcaseData, setUserShowcaseData ] = useState<UserShowcaseData|null>(null)
 
-    function setUserShowcaseDataFromComponents(user:UserModel, userLevel:number, loggedUser:UserModel) {
-        console.log(user, userLevel, loggedUser)
-        setUserShowcaseData(userShowcaseData => {
-            userShowcaseData.user = user
-            userShowcaseData.userLevel = userLevel
-            userShowcaseData.loggedUser = loggedUser
-            return userShowcaseData
-        })
+    function setUserShowcaseFromComponents(userShowcaseDate :{user:UserModel, userLevel:number, loggedUser:UserModel}){
+        setUserShowcaseData(userShowcaseDate)
+        setUserShowcaseEnabled(true)
     }
 
     const userQuery = useQuery({
@@ -71,12 +57,12 @@ export default function Teams() {
         <>
             <div className={styles['teams-wrapper']}>
                 <div className={styles.teams}>
-                    {teams && teams.map((team) => <Team key={team._id } team={team} loggedUser={userQuery.data} setUserShowcaseData={setUserShowcaseDataFromComponents} />)}
+                    {teams && teams.map((team) => <Team key={team._id } team={team} loggedUser={userQuery.data} setUserShowcaseData={setUserShowcaseFromComponents} />)}
                 </div>
                 <TeamGenerator user={userQuery.data} />
             </div>
-            {userShowcaseData.user && 
-                <UserShowcase user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser as UserModel} setCompressedOn={userShowcaseData.setCompressedOn} />
+            {isUserShowcaseEnabled && userShowcaseData &&
+                <UserShowcase user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser as UserModel} setCompressedOn={() => setUserShowcaseEnabled(false)} />
             }
         </>
     )

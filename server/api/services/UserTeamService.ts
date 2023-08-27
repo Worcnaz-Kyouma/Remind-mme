@@ -34,10 +34,15 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
                 if(users.length != usersTeams.length)
                     return generateErrorJSON()
 
-                let results:{ level: number, users: User[] }[]
+                let results:{ level: number, users: User[] }[] = []
                 usersTeams.forEach((userTeam, index) => {
-                    results[userTeam.level].level = userTeam.level
-                    results[userTeam.level].users.push(users[index])
+                    if(typeof results[userTeam.level] === 'undefined'){
+                        results[userTeam.level] = { level: userTeam.level, users: [users[index]] }
+                    }
+                    else{
+                        results[userTeam.level].level = userTeam.level
+                        results[userTeam.level].users.push(users[index])
+                    }
                 })
 
                 results = results!.filter(result => result != null).sort((a, b) => a.level - b.level)

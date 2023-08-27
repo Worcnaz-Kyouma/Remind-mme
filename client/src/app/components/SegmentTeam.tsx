@@ -7,5 +7,6 @@ export default function SegmentTeam({
     level: string,
     users: UserModel[]
 }) {
+    console.log("Level:" + level, users)
     return <h1>SegmentTeam</h1>
 }

@@ -18,7 +18,7 @@ export default function Team({
     const segmentsQuery = useQuery({
         queryKey: ['segments'],
         queryFn: () => {
-            return fetch(`http://localhost:22194/userteams/segments/${team._id}`, { 
+            return fetch(`http://localhost:22194/usersteams/${team._id}`, { 
                 credentials: 'include',
             })
             .then((res) => res.json())

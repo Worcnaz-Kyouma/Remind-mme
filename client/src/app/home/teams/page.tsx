@@ -15,6 +15,7 @@ export default function Teams() {
         user: UserModel
         userLevel: number
         loggedUser: UserModel
+        team: TeamModel
     }
 
     const router = useRouter()
@@ -22,7 +23,7 @@ export default function Teams() {
     const [ isUserShowcaseEnabled, setUserShowcaseEnabled ] = useState(false)
     const [ userShowcaseData, setUserShowcaseData ] = useState<UserShowcaseData|null>(null)
 
-    function setUserShowcaseFromComponents(userShowcaseDate :{user:UserModel, userLevel:number, loggedUser:UserModel}){
+    function setUserShowcaseFromComponents(userShowcaseDate:UserShowcaseData){
         setUserShowcaseData(userShowcaseDate)
         setUserShowcaseEnabled(true)
     }
@@ -62,7 +63,7 @@ export default function Teams() {
                 <TeamGenerator user={userQuery.data} />
             </div>
             {isUserShowcaseEnabled && userShowcaseData &&
-                <UserShowcase user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser as UserModel} setCompressedOn={() => setUserShowcaseEnabled(false)} />
+                <UserShowcase user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser} team={userShowcaseData.team} setCompressedOn={() => setUserShowcaseEnabled(false)} />
             }
         </>
     )

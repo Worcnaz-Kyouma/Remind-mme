@@ -14,7 +14,7 @@ export default function Team({
 }: {
     team: TeamModel,
     loggedUser: UserModel,
-    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel}) => void
+    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, team:TeamModel}) => void
 }) {
     const [ isClosed, setClosed ] = useState(true)
     const [ segments, setSegments ] = useState<{ level: number, users: UserModel[] }[] | null>(null)
@@ -44,7 +44,7 @@ export default function Team({
             <span>{team.name}</span>
             {!isClosed && 
                 <div className={styles['opened-team']}>
-                    {segments && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} setUserShowcaseData={setUserShowcaseData}/>)}
+                    {segments && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} team={team} setUserShowcaseData={setUserShowcaseData} />)}
                     <MemberGenerator team={team}/>
                 </div>
             }

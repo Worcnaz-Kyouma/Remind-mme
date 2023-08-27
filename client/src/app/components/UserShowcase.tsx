@@ -1,25 +1,31 @@
 'use client'
 import { useRef, useState } from "react"
 import styles from "./../styles/components/UserShowcase.module.scss"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import User from "@shared/models/UserModel"
+import TeamModel from "@shared/models/TeamModel"
 
 export default function UserShowcase({
     user,
     userLevel,
     loggedUser,
+    team,
     setCompressedOn,
 }: {
-    user: UserModel,
-    userLevel: number | undefined
-    loggedUser: UserModel,
+    user: UserModel
+    userLevel?: number
+    loggedUser: UserModel
+    team?: TeamModel
     setCompressedOn: () => void
 }) {
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ haveChanges, setHaveChanges ] = useState(false)
     const [ isPasswordVisible, setPasswordVisible ] = useState(false)
+    const [ loggedUserLevel, setLoggedUserLevel ] = useState<number | null>(null)
+    const [ maxTeamLevel, setMaxTeamLevel ] = useState<number | null>(null)
+
     const queryClient = useQueryClient()
 
     const userMutation = useMutation({
@@ -50,6 +56,25 @@ export default function UserShowcase({
         }
     })
 
+    const levelQuery = useQuery({
+        queryKey: ['users', 'level', loggedUser._id, team?._id],
+        queryFn: () => {
+            return fetch(`http://localhost:22194/usersteams/level-compare?userId=${loggedUser._id}&teamId=${team!._id}`)
+                .then((res) => res.json())
+                .then((resJson: {loggedUserLevel:number, maxLevel:number} | ErrorJSON) => {
+                    if('error' in resJson) 
+                        throw resJson
+                    return resJson
+                })
+        },
+        enabled: typeof team !== "undefined",
+        onSuccess: (data) => {
+            setLoggedUserLevel(data.loggedUserLevel)
+            setMaxTeamLevel(data.maxLevel)
+        },
+
+    })
+
     function handleSubmit(event: React.FormEvent<EventTarget>){
         event.preventDefault()
 
@@ -59,7 +84,7 @@ export default function UserShowcase({
         formData.append('createdAt', user.createdAt as string)
         formData.append('imageUrl', user.imageUrl as string)
 
-        //console.log(Object.fromEntries(formData.entries()))
+        handle level change
 
         userMutation.mutate(formData)
     }
@@ -125,6 +150,15 @@ export default function UserShowcase({
                         <label htmlFor="bornDate">Born date </label>
                     </div>
                 </div>
+                
+                {loggedUserLevel && userLevel && maxTeamLevel &&
+                    <div className={styles['additional-data-wrapper']}>
+                        <div className={styles['level-wrapper']}>
+                            <label htmlFor="level">Level </label>
+                            <input type="number" name="level" id="level" required defaultValue={loggedUserLevel} max={loggedUserLevel<maxTeamLevel ? maxTeamLevel : undefined} readOnly={loggedUserLevel<userLevel} onChange={() => setHaveChanges(true)}/>
+                        </div>
+                    </div>
+                }
 
                 {haveChanges &&<button className={userMutation.isSuccess ? styles['success'] : ""} type="submit">Save</button>}
             </form>

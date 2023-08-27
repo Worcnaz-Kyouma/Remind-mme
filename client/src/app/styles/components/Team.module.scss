@@ -9,13 +9,13 @@
     border: 1px solid rgba(0, 0, 0, 0.384);
     border-radius: 12px;
 
-    padding: 20px 0px 20px 20px;
+    padding: 20px 0px;
 
     box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.218) inset;
 
     background-color: white;
 
-    span {
+    &>span {
         position: absolute;
         top: 0px;
         left: 16px;
@@ -47,7 +47,9 @@
 
         background-color: transparent;
 
-        label {
+        &::before {
+            content: '';
+
             position: absolute;
             left: 0px;
             bottom: 0px;
@@ -66,7 +68,7 @@
     }
 
     button.opened {
-        label {
+        &::before {
             transform: rotate(-180deg);
         }
     }
@@ -74,21 +76,4 @@
 
 .team-wrapper.opened {
     height: fit-content;
-}
-
-.opened-team {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    .showcase {
-        width: 80px;
-        aspect-ratio: 1;
-
-        margin-right: 15px;
-        margin-bottom: 15px;
-
-        border: 1px dotted rgba(0, 0, 0, 0.384);
-        border-radius: 15px;
-    }
 }

@@ -1,4 +1,6 @@
 import UserModel from "@shared/models/UserModel"
+import styles from "@/app/styles/components/SegmentTeam.module.scss"
+import User from "./User"
 
 export default function SegmentTeam({
     level,
@@ -7,6 +9,10 @@ export default function SegmentTeam({
     level: string,
     users: UserModel[]
 }) {
-    console.log("Level:" + level, users)
-    return <h1>SegmentTeam</h1>
+    return (
+        <div className={styles.segment}>
+            {users.map(user => <User key={user._id} user={user} />)}
+            <span>{level}</span>
+        </div>
+    )
 }

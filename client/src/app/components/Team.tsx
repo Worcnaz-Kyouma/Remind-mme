@@ -46,7 +46,7 @@ export default function Team({
             }
             <button id="team-opener" className={!isClosed ? styles.opened : ""} onClick={() => {
                 setClosed((isClosed) => !isClosed)
-            }}><label></label></button>
+            }}></button>
         </div>
     )
 }

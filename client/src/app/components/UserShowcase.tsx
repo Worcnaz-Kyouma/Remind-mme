@@ -93,7 +93,7 @@ export default function UserShowcase({
     return (
         <>
         <div className={styles['pseudo-body']} ></div>
-        <div className={`${styles['showcase-wrapper']} ${user._id !== loggedUser._id && styles['not-editable']}`}>
+        <div className={`${styles['showcase-wrapper']} ${user._id !== loggedUser._id && styles['not-editable']} ${team && styles.fixerror}`}>
             <form onSubmit={handleSubmit}>
                 <input type="file" name="image" id="image" accept="image/*" onChange={(event) => {
                     setHaveChanges(true)

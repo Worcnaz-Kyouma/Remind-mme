@@ -12,13 +12,15 @@
 .not-editable .image-wrapper{
     pointer-events: none;
 }
-
+.fixerror {
+    transform: translate(-50%, calc(-50% - .5px)) !important; 
+    //Chrome error!
+}
 .showcase-wrapper {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, calc(-50% - .5px));
-    //Chrome error!
+    transform: translate(-50%, -50%);
 
     width: 70%;
     max-width: 900px;

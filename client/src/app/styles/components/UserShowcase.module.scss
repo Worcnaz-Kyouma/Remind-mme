@@ -21,7 +21,6 @@
 
     width: 70%;
     max-width: 900px;
-    min-width: 500px;
 
     border: 1px solid rgba(0, 0, 0, 0.384);
     border-radius: 15px;
@@ -42,6 +41,7 @@
         to{
             width: 70%;
             opacity: 1;
+            min-width: 500px;
         }
     }
 

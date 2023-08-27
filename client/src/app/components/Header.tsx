@@ -15,11 +15,12 @@ export default function Header() {
             })
             .then((res) => res.json())
             .then((res) => !res?._id ? router.push('/login') : res)
-        }
+        },
+        refetchInterval: 5000
     })
 
     if(userQuery.isLoading)
-        return <h1>Loading...</h1>
+        return <></>
 
     if(userQuery.isError)
         return <></>

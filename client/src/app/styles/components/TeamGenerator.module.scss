@@ -1,0 +1,27 @@
+.team-generator {
+    position: static;
+    bottom: 0px;
+
+    width: 80px;
+    aspect-ratio: 1;
+
+    border: 2px solid black;
+    border-radius: 16px;
+
+    margin-bottom: 20px;
+
+    cursor: pointer;
+
+    background: url('/team-icon.png');
+    background-repeat: no-repeat;
+    background-size: 75% 75%;
+    background-position: 49% 35%;
+
+    transition: all 0.4s;
+
+    &:hover {
+        transform: scale(1.05);
+
+        box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
+    }
+}

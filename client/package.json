@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.33.0",
+    "@tanstack/react-query-devtools": "^4.33.0",
     "@types/nedb": "^1.8.13",
     "@types/node": "20.5.6",
     "@types/react": "18.2.21",

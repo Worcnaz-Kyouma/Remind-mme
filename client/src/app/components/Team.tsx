@@ -10,11 +10,33 @@ export default function Team({
     const [ isClosed, setClosed ] = useState(true)
 
     return (
-        isClosed
-            ? 
-            <div className={styles['closed-team']}>
-                <span>{team.name}</span>
-            </div>
-            : <div className={styles['opened-team']}></div>
+        <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
+            <span>{team.name}</span>
+            {!isClosed && 
+                <div className={styles['opened-team']}>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                    <div className={styles['showcase']}></div>
+                </div>
+            }
+            <button id="team-opener" className={!isClosed ? styles.opened : ""} onClick={() => setClosed((isClosed) => !isClosed)}><label></label></button>
+        </div>
     )
 }

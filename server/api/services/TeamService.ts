@@ -19,7 +19,7 @@ async function validator(teamJSON:Team) {}
 
 export function createTeamByOwner(userId:string){
     return new Promise<Team | ErrorJSON>(async (resolve, reject) => {
-        const team:Team = { name: "Template", createdAt: new Date(), updatedAt: new Date() }
+        const team:Team = { name: "Place Holder", createdAt: new Date(), updatedAt: new Date() }
         databaseTeam.insert(team, function(err, team:Team) {
             if(err)
                 resolve(generateErrorJSON())

@@ -1,0 +1,32 @@
+.member-wrapper{
+    $radius: 15px;
+
+    position: relative;
+    width: 80px;
+    aspect-ratio: 1;
+
+    margin: 14px;
+
+    border: 1px dotted rgba(0, 0, 0, 0.384);
+    border-radius: $radius;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        height: 90%;
+
+        border-radius: $radius;
+    }
+
+    transition: all 0.4s;
+    &:hover{
+        transform: scale(1.05);
+    }
+}

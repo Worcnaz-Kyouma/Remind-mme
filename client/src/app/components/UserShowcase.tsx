@@ -8,10 +8,12 @@ import User from "@shared/models/UserModel"
 
 export default function UserShowcase({
     user,
+    userLevel,
     loggedUser,
     setCompressedOn,
 }: {
     user: UserModel,
+    userLevel: number | undefined
     loggedUser: UserModel,
     setCompressedOn: () => void
 }) {

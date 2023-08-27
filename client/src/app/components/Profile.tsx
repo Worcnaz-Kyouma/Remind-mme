@@ -2,12 +2,13 @@
 import { Dispatch, SetStateAction, useState } from "react"
 import CompressedProfile from "./CompressedProfile"
 import UserShowcase from "./UserShowcase"
+import UserModel from "@shared/models/UserModel"
 
 
 export default function Profile({
     user,
 }: {
-    user:any,
+    user: UserModel,
 }) {
     const [ isCompressed, setIsCompressed ] = useState(true)
 

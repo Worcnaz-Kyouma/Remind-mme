@@ -1,21 +1,21 @@
 import Datastore from 'nedb'
-import { Group } from './GroupModel'
+import { Team } from './TeamModel'
 import { Task } from './TaskModel'
 
 export type User = {
-    _id: string| null
-    webToken: string | null
+    _id?: string
+    webToken?: string
 
     username: string
     password: string
     name: string
     email: string
-    phone: string | null
+    phone?: string
     imageUrl: string
     bornDate: string
 
-    groups: Group[] | undefined
-    tasks: Task[] | undefined
+    teams?: Team[]
+    tasks?: Task[]
 
     createdAt: Date
     updatedAt: Date
@@ -23,5 +23,5 @@ export type User = {
 
 
 
-export const database = new Datastore('database/users.db');
-database.loadDatabase()
+export const databaseUser = new Datastore('database/users.db');
+databaseUser.loadDatabase()

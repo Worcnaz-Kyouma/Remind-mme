@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import styles from "@/app/styles/signup.module.scss"
+import UserModel from "@shared/models/UserModel"
+import ErrorJSON from "@shared/models/ErrorJSON"
 
 export default function Login() {
     const router = useRouter()
@@ -23,8 +25,8 @@ export default function Login() {
                 }
             })
             .then(res => res.json())
-            .then(resJson => {
-                if(resJson?.error) 
+            .then((resJson: UserModel | ErrorJSON) => {
+                if('error' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -33,7 +35,7 @@ export default function Login() {
         onSuccess: () => {
             router.push('./../')
         },
-        onError: (err) => {
+        onError: (err: ErrorJSON) => {
             console.log(err)
         }
     })

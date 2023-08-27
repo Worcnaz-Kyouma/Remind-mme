@@ -2,14 +2,17 @@
 import { useRef, useState } from "react"
 import styles from "./../styles/components/UserShowcase.module.scss"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import UserModel from "@shared/models/UserModel"
+import ErrorJSON from "@shared/models/ErrorJSON"
+import User from "@shared/models/UserModel"
 
 export default function UserShowcase({
     user,
     loggedUser,
     setCompressedOn,
 }: {
-    user:any,
-    loggedUser:any,
+    user: UserModel,
+    loggedUser: UserModel,
     setCompressedOn: () => void
 }) {
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
@@ -28,8 +31,8 @@ export default function UserShowcase({
                 }
             })
             .then(res => res.json())
-            .then(resJson => {
-                if(resJson?.error) 
+            .then((resJson: User | ErrorJSON) => {
+                if('error' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -40,7 +43,7 @@ export default function UserShowcase({
             console.log('success')
 
         },
-        onError: (err) => {
+        onError: (err: ErrorJSON) => {
             console.log(err)
         }
     })
@@ -49,10 +52,10 @@ export default function UserShowcase({
         event.preventDefault()
 
         const formData = new FormData(event.target as HTMLFormElement)
-        formData.append('_id', user._id)
-        formData.append('webToken', user.webToken)
-        formData.append('createdAt', user.createdAt)
-        formData.append('imageUrl', user.imageUrl)
+        formData.append('_id', user._id as string)
+        formData.append('webToken', user.webToken as string)
+        formData.append('createdAt', user.createdAt as string)
+        formData.append('imageUrl', user.imageUrl as string)
 
         //console.log(Object.fromEntries(formData.entries()))
 

@@ -1,4 +1,6 @@
-import { User, database } from "../models/UserModel";
+import { User, databaseUser } from "../models/UserModel";
+import { Team, databaseTeam } from "../models/TeamModel"
+import { UserTeam, databaseUserTeam } from "../models/UserTeamModel"
 import upload from "./../../config/multer"
 import crypto from 'crypto'
 import { Request, Response } from "express"
@@ -38,8 +40,6 @@ async function validator(userJSON:User) {
     if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
         return { error: "Invalid number" }
 
-    console.log(userJSON)
-
     if(!validatorJS.isBefore(userJSON.bornDate, (new Date()).toISOString()))
         return { error: "Invalid date" }
 
@@ -68,7 +68,7 @@ export function createUser(req:Request, res:Response) {
             userJSON.createdAt = new Date()
             userJSON.updatedAt = new Date()
 
-            database.insert(userJSON, function (err, doc) {
+            databaseUser.insert(userJSON, function (err, doc) {
                 if(err)
                     resolve(generateErrorJSON())
 
@@ -103,7 +103,7 @@ export function updateUser(req:Request, res:Response) {
             userJSON.imageUrl = req.file?.path || req.body.imageUrl
             userJSON.updatedAt = new Date()
 
-            database.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
+            databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
                 if(err)
                     resolve(generateErrorJSON())
 
@@ -115,7 +115,7 @@ export function updateUser(req:Request, res:Response) {
 
 export function getUserByUsername(username: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
-        database.findOne({ username: username }, function(err, docs) {
+        databaseUser.findOne({ username: username }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
 
@@ -126,7 +126,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByUsernameIdNe(username: string, _id: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
-        database.findOne({_id: { $ne: _id }, username: username }, function(err, docs) {
+        databaseUser.findOne({_id: { $ne: _id }, username: username }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
 
@@ -137,14 +137,14 @@ export function getUserByUsernameIdNe(username: string, _id: string) {
 
 export function getUserGeneretingWebToken(username: string, password: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
-        database.findOne({ username: username, password: password }, function(err, docs) {
+        databaseUser.findOne({ username: username, password: password }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
 
-            if(Object.entries(docs).length !== 0){
+            if(docs){
                 docs.webToken = crypto.randomUUID()
                 docs.updatedAt = new Date()
-                database.update({ _id: docs._id }, { $set: docs }, {}, function(err, docs) {
+                databaseUser.update({ _id: docs._id }, { $set: docs }, {}, function(err, docs) {
                     if(err)
                         resolve(generateErrorJSON())
                 })
@@ -152,7 +152,7 @@ export function getUserGeneretingWebToken(username: string, password: string) {
             }
         })
 
-        database.findOne({ username: username }, function(err, docs) {
+        databaseUser.findOne({ username: username }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
 
@@ -165,12 +165,24 @@ export function getUserGeneretingWebToken(username: string, password: string) {
 }
 
 export function getUserByWebToken(webToken: string) {
-    return new Promise<User | Error>(async (resolve, reject) => {
-        database.findOne({ webToken: webToken } , function(err, docs) {
+    return new Promise<User | ErrorJSON>(async (resolve, reject) => {
+        databaseUser.findOne({ webToken: webToken } , function(err, user: User) {
             if(err)
-                resolve(err)
+                resolve(generateErrorJSON())
 
-            resolve(docs)
+            databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
+                if(err)
+                    resolve(generateErrorJSON())
+
+                databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
+                    if(err)
+                        resolve(generateErrorJSON())
+
+                    user.teams = teams
+
+                    resolve(user)
+                })
+            })
         })
     })
 }

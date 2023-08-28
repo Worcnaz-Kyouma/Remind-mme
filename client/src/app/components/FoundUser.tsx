@@ -37,7 +37,7 @@ export default function FoundUser({
         },
         onSuccess: () => {
             refetchUserList()
-            clientQuery.invalidateQueries(['segments'])
+            clientQuery.invalidateQueries(['segments', teamId])
         },
         onError: (err: ErrorJSON) => {
             console.log(err)

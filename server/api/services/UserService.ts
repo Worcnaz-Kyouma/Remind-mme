@@ -93,37 +93,42 @@ export function updateUser(req:Request, res:Response) {
                     if (err) resolve(generateErrorJSON("Error trying delete old image"))
                 })
 
-            const userJSON:User & { teamId?:string, level?:number } = req.body
-
-            //Validator
-            const validatorResult = await validator(userJSON)
-            if(validatorResult)
-                resolve(generateErrorJSON(validatorResult.error))
+            const userJSON:User & { teamId?:string, level?:string } = req.body
 
             if(userJSON.teamId && userJSON.level){
                 databaseUserTeam.update({ 
                     userId: userJSON._id, 
                     teamId: userJSON.teamId 
                 }, { $set: { 
-                    level: userJSON.level, 
+                    level: parseInt(userJSON.level), 
                     updatedAt: new Date() 
                 } }, {}, function (err, doc) {
                     if(err)
                         resolve(generateErrorJSON())
+                    databaseUserTeam.loadDatabase();
+                    if(!userJSON.password)
+                        resolve(userJSON)
                 })
                 userJSON.teamId = undefined
                 userJSON.level = undefined
             }
 
-            userJSON.imageUrl = req.file?.path || req.body.imageUrl
-            userJSON.updatedAt = new Date()
+            if(userJSON.password){
+                //Validator
+                const validatorResult = await validator(userJSON)
+                if(validatorResult)
+                    resolve(generateErrorJSON(validatorResult.error))
 
-            databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
-                if(err)
-                    resolve(generateErrorJSON())
+                userJSON.imageUrl = req.file?.path || req.body.imageUrl
+                userJSON.updatedAt = new Date()
 
-                resolve(userJSON)
-            })
+                databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                    databaseUser.loadDatabase()
+                    resolve(userJSON)
+                })
+            }
         })
     })
 }
@@ -216,7 +221,7 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
                     resolve(generateErrorJSON(err.message))
 
                 const result = {
-                    users: users ? users.slice((page-1)*limit, limit) : [],
+                    users: users ? users.slice((page-1)*limit, (page-1)*limit+limit) : [],
                     totalPages: users ? Math.ceil(users.length/limit) : 0,
                     currentPage: page
                 }

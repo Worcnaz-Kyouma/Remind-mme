@@ -212,6 +212,9 @@
 
         button:first-child{
             transform: rotate(90deg);
+            &:not(:disabled):hover {
+                transform: rotate(90deg) scale(1.03);
+            }
         }
     }
 

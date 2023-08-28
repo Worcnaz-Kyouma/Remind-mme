@@ -8,9 +8,11 @@ import FoundUser from "./FoundUser";
 
 export default function UserTeamGenerator({
     team,
+    loggedUserLevel,
     closeModal
 }: {
     team: TeamModel
+    loggedUserLevel: number
     closeModal: () => void
 }) {
     const [ inputSearchType, setInputSearchType ] = useState<string>("text")
@@ -67,23 +69,23 @@ export default function UserTeamGenerator({
                 <div className={styles['controllers-wrapper']}>
                     <div className={`${styles['input-wrapper']} ${styles['level-wrapper']}`}>
                         <label htmlFor="level">Level </label>
-                        <input type="number" name="level" value={level} id="level" onChange={(event) => setLevel(event.target.value)}/>
+                        <input type="number" name="level" value={level} id="level" onChange={(event) => setLevel(event.target.value)} max={loggedUserLevel}/>
                     </div>
 
                     <div className={styles['btn-page-controllers']}>
-                        <button onClick={() => {
-                            setPage(page => ++page)
-                            userSearchMutation.mutate({
-                                page:page+1, field: field, value: value
-                            })
-                        }} disabled={page===userSearchMutation.data?.totalPages}></button>
-                        <span>{page}/{userSearchMutation.data?.totalPages}</span>
                         <button onClick={() => {
                             setPage(page => --page)
                             userSearchMutation.mutate({
                                 page:page-1, field: field, value: value
                             })
                         }} disabled={page===1}></button>
+                        <span>{page}/{userSearchMutation.data?.totalPages}</span>
+                        <button onClick={() => {
+                            setPage(page => ++page)
+                            userSearchMutation.mutate({
+                                page:page+1, field: field, value: value
+                            })
+                        }} disabled={page===userSearchMutation.data?.totalPages}></button>
                     </div>
                 </div>
                 <div className={styles['users-wrapper']}>

@@ -24,8 +24,6 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
             if(!usersTeams)
                 resolve(generateErrorJSON("group don't have any member"))
 
-            //console.log(usersTeams)
-
             databaseUser.find({ _id: { $in: usersTeams.map(userTeam => userTeam.userId) } }).sort({ _id: 1 }).exec(function (err, users:User[]) {
                 if(err)
                     resolve(generateErrorJSON())
@@ -47,11 +45,7 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
                     }
                 })
 
-                //console.log(results)
-
-                results = results!.filter(result => result != null).sort((a, b) => a.level - b.level)
-
-                //console.log(results)
+                results = results!.filter(result => result != null).sort((a, b) => b.level - a.level)
 
                 resolve(results)
             })
@@ -74,8 +68,8 @@ export function getUserAndMaxLevelInGroup(userId:string, teamId:string) {
                     
                 if(!maxLevel)
                     resolve(generateErrorJSON('Empty User / Team relationship'))
-
-                resolve({ loggedUserLevel:userTeam.level, maxLevel:maxLevel[0].level })
+                else
+                    resolve({ loggedUserLevel:userTeam.level, maxLevel:maxLevel[0].level })
             })
         })
     })

@@ -6,19 +6,23 @@ export default function Member({
     user,
     userLevel,
     loggedUser,
+    loggedUserLevel,
+    maxTeamLevel,
     team,
     setUserShowcaseData
 }: {
     user: UserModel
     userLevel: number
     loggedUser: UserModel
+    loggedUserLevel: number
+    maxTeamLevel: number
     team: TeamModel
-    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, team:TeamModel}) => void
+    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, loggedUserLevel:number, maxTeamLevel:number, team:TeamModel}) => void
 }) {
     return (
     <>
         <div className={styles['member-wrapper']} onClick={() => {
-            setUserShowcaseData({user, userLevel, loggedUser, team})
+            setUserShowcaseData({user, userLevel, loggedUser, loggedUserLevel, maxTeamLevel, team})
         }}>
             <img src={`http://localhost:22194/${user.imageUrl}`} alt="Member image" />
         </div>

@@ -11,22 +11,26 @@ export default function UserShowcase({
     user,
     userLevel,
     loggedUser,
+    loggedUserLevel,
+    maxTeamLevel,
     team,
     setCompressedOn,
 }: {
     user: UserModel
     userLevel?: number
     loggedUser: UserModel
+    loggedUserLevel: number
+    maxTeamLevel: number
     team?: TeamModel
     setCompressedOn: () => void
 }) {
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ haveChanges, setHaveChanges ] = useState(false)
     const [ isPasswordVisible, setPasswordVisible ] = useState(false)
-    const [ loggedUserLevel, setLoggedUserLevel ] = useState<number | null>(null)
-    const [ maxTeamLevel, setMaxTeamLevel ] = useState<number | null>(null)
 
     const queryClient = useQueryClient()
+
+    console.log(loggedUserLevel, maxTeamLevel)
 
     const userMutation = useMutation({
         mutationFn: (editedUser: FormData) => {
@@ -48,31 +52,11 @@ export default function UserShowcase({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
-            console.log('success')
-
+            team && queryClient.invalidateQueries(['segments', team._id])
         },
         onError: (err: ErrorJSON) => {
             console.log(err)
         }
-    })
-
-    const levelQuery = useQuery({
-        queryKey: ['users', 'level', loggedUser._id],
-        queryFn: () => {
-            return fetch(`http://localhost:22194/usersteams/level-compare/?userId=${loggedUser._id}&teamId=${team!._id}`)
-                .then((res) => res.json())
-                .then((resJson: {loggedUserLevel:number, maxLevel:number} | ErrorJSON) => {
-                    if('error' in resJson) 
-                        throw resJson
-                    return resJson
-                })
-        },
-        enabled: typeof team !== 'undefined',
-        onSuccess: (data) => {
-            setLoggedUserLevel(data.loggedUserLevel)
-            setMaxTeamLevel(data.maxLevel)
-        },
-
     })
 
     function handleSubmit(event: React.FormEvent<EventTarget>){
@@ -156,7 +140,7 @@ export default function UserShowcase({
                     <div className={styles['additional-data-wrapper']}>
                         <div className={styles['level-wrapper']}>
                             <label htmlFor="level">Level </label>
-                            <input type="number" name="level" id="level" required defaultValue={loggedUserLevel} max={loggedUserLevel<maxTeamLevel ? maxTeamLevel : undefined} readOnly={loggedUserLevel<userLevel} onChange={() => setHaveChanges(true)}/>
+                            <input type="number" name="level" id="level" required defaultValue={userLevel} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<userLevel} onChange={() => setHaveChanges(true)}/>
                         </div>
                     </div>
                 }

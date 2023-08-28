@@ -28,7 +28,6 @@ export default function TeamGenerator({
             })
         },
         onSuccess: () => {
-            console.log('sus')
             queryClient.invalidateQueries(["users"])
         },
         onError: (err: ErrorJSON) => {

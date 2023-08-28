@@ -14,14 +14,16 @@ export default function Team({
 }: {
     team: TeamModel,
     loggedUser: UserModel,
-    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, team:TeamModel}) => void
+    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, loggedUserLevel:number, maxTeamLevel:number, team:TeamModel}) => void
 }) {
     const [ isClosed, setClosed ] = useState(true)
     const [ segments, setSegments ] = useState<{ level: number, users: UserModel[] }[] | null>(null)
     const [ isMemberGeneratorOpen, setMemberGeneratorOpen ] = useState(false)
+    const [ loggedUserLevel, setLoggedUserLevel ] = useState<number | null>(null)
+    const [ maxTeamLevel, setMaxTeamLevel ] = useState<number | null>(null)
 
     const segmentsQuery = useQuery({
-        queryKey: ['segments'],
+        queryKey: ['segments', team._id],
         queryFn: () => {
             return fetch(`http://localhost:22194/usersteams/${team._id}`, { 
                 credentials: 'include',
@@ -40,13 +42,34 @@ export default function Team({
         refetchInterval: 5000
     })
 
+    const levelQuery = useQuery({
+        queryKey: ['users', 'level', loggedUser._id],
+        queryFn: () => {
+            return fetch(`http://localhost:22194/usersteams/level-compare/?userId=${loggedUser._id}&teamId=${team!._id}`)
+                .then((res) => res.json())
+                .then((resJson: {loggedUserLevel:number, maxLevel:number} | ErrorJSON) => {
+                    if('error' in resJson) 
+                        throw resJson
+                    return resJson
+                })
+        },
+        enabled: segmentsQuery.isSuccess,
+        onSuccess: (data) => {
+            setLoggedUserLevel(data.loggedUserLevel)
+            setMaxTeamLevel(data.maxLevel)
+        },
+    })
+
     return (
         <>
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
+            <div className={styles['btn-team-controllers']}>
+                <button></button>
+            </div>
             <span>{team.name}</span>
             {!isClosed && 
                 <div className={styles['opened-team']}>
-                    {segments && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} team={team} setUserShowcaseData={setUserShowcaseData} />)}
+                    {segments && levelQuery.isSuccess && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} loggedUserLevel={loggedUserLevel as number} maxTeamLevel={maxTeamLevel as number} team={team} setUserShowcaseData={setUserShowcaseData} />)}
                     <button className={styles['member-opener']} onClick={() => {
                         setMemberGeneratorOpen(true)
                     }}></button>
@@ -56,7 +79,7 @@ export default function Team({
                 setClosed((isClosed) => !isClosed)
             }}></button>
         </div>
-        {isMemberGeneratorOpen && <MemberGenerator team={team} closeModal={() => setMemberGeneratorOpen(false)} />}
+        {isMemberGeneratorOpen && levelQuery.data?.loggedUserLevel && <MemberGenerator team={team} loggedUserLevel={loggedUserLevel as number} closeModal={() => setMemberGeneratorOpen(false)} />}
         </>
     )
 }

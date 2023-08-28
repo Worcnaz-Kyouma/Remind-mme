@@ -168,6 +168,7 @@ export function getUserGeneretingWebToken(username: string, password: string) {
                     if(err)
                         resolve(generateErrorJSON())
                 })
+                databaseUser.loadDatabase()
                 resolve(docs)
             }
         })

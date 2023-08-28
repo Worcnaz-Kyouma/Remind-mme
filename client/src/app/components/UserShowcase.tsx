@@ -30,8 +30,6 @@ export default function UserShowcase({
 
     const queryClient = useQueryClient()
 
-    console.log(loggedUserLevel, maxTeamLevel)
-
     const userMutation = useMutation({
         mutationFn: (editedUser: FormData) => {
             return fetch('http://localhost:22194/users', {

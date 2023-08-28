@@ -13,7 +13,7 @@ type ErrorJSON = {
 
 function generateErrorJSON(err:any = 'Server internal error'){
     const errorJSON:ErrorJSON = {
-        error: { err }
+        error: err
     }
 
     return errorJSON
@@ -157,19 +157,24 @@ export function getUserByUsernameIdNe(username: string, _id: string) {
 
 export function getUserGeneretingWebToken(username: string, password: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
-        databaseUser.findOne({ username: username, password: password }, function(err, docs) {
-            if(err)
+        databaseUser.findOne({ username: username, password: password }, function(err, user:User) {
+            if(err){
                 resolve(generateErrorJSON())
+            }
 
-            if(docs){
-                docs.webToken = crypto.randomUUID()
-                docs.updatedAt = new Date()
-                databaseUser.update({ _id: docs._id }, { $set: docs }, {}, function(err, docs) {
-                    if(err)
+            if(user){
+                user.webToken = crypto.randomUUID()
+                user.updatedAt = new Date()
+                databaseUser.update({ _id: user._id }, { $set: user }, {}, function(err, docs) {
+                    if(err){
                         resolve(generateErrorJSON())
+                    }
+                    else {
+                        databaseUser.loadDatabase()
+                        resolve(user)
+                    }
                 })
-                databaseUser.loadDatabase()
-                resolve(docs)
+                
             }
         })
 
@@ -192,7 +197,8 @@ export function getUserByWebToken(webToken: string) {
                 resolve(generateErrorJSON())
 
             if(!user)
-                resolve(generateErrorJSON())
+                resolve(generateErrorJSON("cookie not valid"))
+
             else
                 databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
                     if(err)
@@ -217,18 +223,21 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
             if(err)
                 resolve(generateErrorJSON())
 
-            databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
-                if(err)
-                    resolve(generateErrorJSON(err.message))
+            else
+                databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
+                    if(err)
+                        resolve(generateErrorJSON(err.message))
 
-                const result = {
-                    users: users ? users.slice((page-1)*limit, (page-1)*limit+limit) : [],
-                    totalPages: users ? Math.ceil(users.length/limit) : 0,
-                    currentPage: page
-                }
+                    else{
+                        const result = {
+                            users: users ? users.slice((page-1)*limit, (page-1)*limit+limit) : [],
+                            totalPages: users ? Math.ceil(users.length/limit) : 0,
+                            currentPage: page
+                        }
 
-                resolve(result)
+                        resolve(result)
+                    }
+                })
             })
-        })
     })
 }

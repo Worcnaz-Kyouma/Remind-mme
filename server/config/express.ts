@@ -9,7 +9,7 @@ function createServer() {
     server.use(cors({
         origin: 'http://localhost:3000',
         credentials: true
-    }))
+    }));
     server.use(cookieParser())
 
     return server

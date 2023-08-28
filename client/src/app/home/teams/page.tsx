@@ -15,6 +15,8 @@ export default function Teams() {
         user: UserModel
         userLevel: number
         loggedUser: UserModel
+        loggedUserLevel: number
+        maxTeamLevel: number
         team: TeamModel
     }
 
@@ -63,7 +65,7 @@ export default function Teams() {
                 <TeamGenerator user={userQuery.data} />
             </div>
             {isUserShowcaseEnabled && userShowcaseData &&
-                <UserShowcase user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser} team={userShowcaseData.team} setCompressedOn={() => setUserShowcaseEnabled(false)} />
+                <UserShowcase user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser} loggedUserLevel={userShowcaseData.loggedUserLevel} maxTeamLevel={userShowcaseData.maxTeamLevel} team={userShowcaseData.team} setCompressedOn={() => setUserShowcaseEnabled(false)} />
             }
         </>
     )

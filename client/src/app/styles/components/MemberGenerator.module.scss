@@ -12,15 +12,14 @@
 }
 
 .search-wrapper{
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, calc(-50% - .5px));
 
-    width: 40%;
-    max-width: 600px;
-
-    height: 80%;
+    &:focus-within{
+        transform: translate(-50%, -50%);
+    }
 
     z-index: 6;
 
@@ -31,6 +30,8 @@
 
     background-color: white;
 
+    overflow-y: auto;
+
     animation: appear 0.3s ease-out forwards;
 
     @keyframes appear {
@@ -39,171 +40,189 @@
             opacity: 0;
         }
         to{
-            width: 70%;
+            width: 32%;
+            max-height: 80%;
             opacity: 1;
-            min-width: 500px;
+            min-width: 600px;
         }
     }
 
-    .inputs-wrapper {
+    //Label + input styling
+    .input-wrapper {
         display: flex;
+        width: 60%;
 
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
+        input, label, select {
+            padding: 6px;
+            font-size: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.384);
+        }
 
-        border-bottom: 1px solid rgba(0, 0, 0, 0.384);
+        input {
+            flex-grow: 1;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
 
-        margin-bottom: 15px;
+            transition: all 0.4s;
 
-        height: 22%;
+            &:hover, &:focus {
+                transform: scale(1.03);
 
-        .input-wrapper {
-            display: flex;
-            justify-content: space-evenly;
-            align-items: stretch;
-            width: 80%;
-
-            input, select {
-                border: 0px;
-                padding: 5px;
-                font-size: 16px;
-                transition: all 0.4s;
-            }
-
-            select {
-                border: 1px solid rgba(0, 0, 0, 0.384);
-                border-right: 0px;
-
-                cursor: pointer;
-            }
-
-            input[name="value"] {
-                flex-grow: 1;
-
-                border: 1px solid rgba(0, 0, 0, 0.384);
-                border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
-            }
-
-            select {
-                color: rgb(100, 100, 100);
-                padding: 7px 12px;
-            }
-
-            select:focus,input:focus {
                 outline: none;
-            }
 
-            input:hover {
-                transform: scale(1.09);
                 box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
             }
 
-            input:focus {
-                transform: scale(1.09);
-                box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
-            }
-
-            select:focus {
-                box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.398) inset;
+            &:focus {
+                border: 1px solid black;
             }
         }
 
+        select {
+            max-width: 30%;
+
+            transition: all 0.4s;
+
+            &:hover, &:focus {
+                transform: scale(1.03);
+
+                outline: none;
+
+                box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
+            }
+
+            &:focus {
+                border: 1px solid black;
+            }
+        }
+
+        label {
+            flex-grow: 1;
+        }
+
+        label { 
+            text-align: center;
+        }
+    }
+
+    //Label + input styling
+    .controllers-wrapper .level-wrapper {
+        max-width: 20%;
+        input {
+            text-align: center;
+            max-width: 45%;
+        }
+
+        label {
+            max-width: 40%;
+            padding: 6px 8px;
+        }
+    }
+
+    .input-search-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        width: 100%;
+        height: 18%;
+        min-height: 120px;
+
         button {
-            min-height: 40px;
+            padding: 8px;
 
             border: 1px solid rgba(0, 0, 0, 0.384);
             border-radius: 8px;
 
-            padding: 14px 24px;
+            font-size: 20px;
 
-            margin-top: 20px;
-            
             cursor: pointer;
 
-            background-color: transparent;
+            background-color: white;
+            color: rgb(100, 100, 100);
 
             transition: all 0.4s;
 
             &:hover {
-                transform: scale(1.09);
+                transform: scale(1.05);
+
                 box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
             }
         }
+    }
+
+    .controllers-wrapper {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+
+        padding: 20px 0px 15px 0px;
+        border-top: 1px solid rgba(0, 0, 0, 0.384);
     }
 
     .users-wrapper {
         position: relative;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        height: 78%;
-
-        .input-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            width: 10%;
-
-            margin-bottom: 15px;
-
-            input {
-                max-width: 65px;
-
-                text-align: center;
-
-                border: 0px;
-                padding: 5px;
-                font-size: 16px;
-                transition: all 0.4s;
-
-                border: 1px solid rgba(0, 0, 0, 0.384);
-                border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
-            }
-
-            label {
-                border: 1px solid rgba(0, 0, 0, 0.384);
-                border-right: 0px;
-
-                cursor: pointer;
-            }
-
-            label {
-                color: rgb(100, 100, 100);
-                padding: 7px 12px;
-            }
-
-            input:focus {
-                outline: none;
-            }
-
-            input:hover {
-                transform: scale(1.09);
-                box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
-            }
-
-            input:focus {
-                transform: scale(1.09);
-                box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
-            }
-        }
     }
 
     .btn-page-controllers{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
         position: absolute;
-        bottom: 0px;
-        right: 15px;
+        right: 7.5%;
+
+        width: 100px;
+
+        button {
+            width: 20px;
+            height: 20px;
+
+            border: 1px solid rgba(0, 0, 0, 0.384);
+            border-radius: 8px;
+
+            padding: 14px 12px;
+
+            background: url('/arrow-icon.png');
+            background-repeat: no-repeat;
+            background-size: 10px 8px;
+            background-position: center;
+
+            cursor: pointer;
+
+            transform: rotate(-90deg);
+
+            transition: all 0.4s;
+            &:not(:disabled):hover {
+                transform: rotate(-90deg) scale(1.03);
+                box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
+            }
+
+            &:disabled {
+                background-color: rgba(0, 0, 0, 0.151);
+                cursor: default;
+            }
+        
+        }
+
+        button:first-child{
+            transform: rotate(90deg);
+            &:not(:disabled):hover {
+                transform: rotate(90deg) scale(1.03);
+            }
+        }
     }
 
     .exit-button {
         $height: 20px;
 
         position: absolute;
-        top: - calc($height);
+        top: 15px;
         left: 90%;
         transform: translateX(-50%);
 

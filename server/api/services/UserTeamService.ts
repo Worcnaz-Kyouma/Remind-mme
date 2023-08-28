@@ -45,7 +45,7 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
                     }
                 })
 
-                results = results!.filter(result => result != null).sort((a, b) => a.level - b.level)
+                results = results!.filter(result => result != null).sort((a, b) => b.level - a.level)
 
                 resolve(results)
             })
@@ -62,15 +62,39 @@ export function getUserAndMaxLevelInGroup(userId:string, teamId:string) {
             if(!userTeam)
                 resolve(generateErrorJSON('User / Team relationship not found'))
 
-            databaseUserTeam.find({}).sort({ level: -1 }).limit(1).exec(function (err, maxLevel:UserTeam[]) {
-                if(err)
-                    resolve(generateErrorJSON())
-                    
-                if(!maxLevel)
-                    resolve(generateErrorJSON('Empty User / Team relationship'))
+            else
+                databaseUserTeam.find({}).sort({ level: -1 }).limit(1).exec(function (err, maxLevel:UserTeam[]) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                        
+                    if(!maxLevel)
+                        resolve(generateErrorJSON('Empty User / Team relationship'))
+                    else
+                        resolve({ loggedUserLevel:userTeam.level, maxLevel:maxLevel[0].level })
+                })
+        })
+    })
+}
 
-                resolve({ loggedUserLevel:userTeam.level, maxLevel:maxLevel[0].level })
-            })
+export function createUserTeamRelation(userId: string, teamId: string, level:number) {
+    return new Promise<UserTeam | ErrorJSON>(async (resolve, reject) => {
+        const newUserTeam:UserTeam = {userId: userId, teamId: teamId, level: level, createdAt: new Date(), updatedAt: new Date()}
+        databaseUserTeam.insert(newUserTeam, function(err, doc) {
+            if(err)
+                resolve(generateErrorJSON())
+
+            resolve(doc)
+        })
+    })
+}
+
+export function deleteUserTeamRelation(userId:string, teamId:string){
+    return new Promise<{ status:string } | ErrorJSON>(async (resolve, reject) => {
+        databaseUserTeam.remove({ userId:userId, teamId: teamId }, {}, function (err, numRemoved) {
+            if(err)
+                resolve(generateErrorJSON())
+
+            resolve({ status: 'Success' })
         })
     })
 }

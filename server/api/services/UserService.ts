@@ -13,7 +13,7 @@ type ErrorJSON = {
 
 function generateErrorJSON(err:any = 'Server internal error'){
     const errorJSON:ErrorJSON = {
-        error: { err }
+        error: err
     }
 
     return errorJSON
@@ -93,37 +93,42 @@ export function updateUser(req:Request, res:Response) {
                     if (err) resolve(generateErrorJSON("Error trying delete old image"))
                 })
 
-            const userJSON:User & { teamId?:string, level?:number } = req.body
-
-            //Validator
-            const validatorResult = await validator(userJSON)
-            if(validatorResult)
-                resolve(generateErrorJSON(validatorResult.error))
+            const userJSON:User & { teamId?:string, level?:string } = req.body
 
             if(userJSON.teamId && userJSON.level){
                 databaseUserTeam.update({ 
                     userId: userJSON._id, 
                     teamId: userJSON.teamId 
                 }, { $set: { 
-                    level: userJSON.level, 
+                    level: parseInt(userJSON.level), 
                     updatedAt: new Date() 
                 } }, {}, function (err, doc) {
                     if(err)
                         resolve(generateErrorJSON())
+                    databaseUserTeam.loadDatabase();
+                    if(!userJSON.password)
+                        resolve(userJSON)
                 })
                 userJSON.teamId = undefined
                 userJSON.level = undefined
             }
 
-            userJSON.imageUrl = req.file?.path || req.body.imageUrl
-            userJSON.updatedAt = new Date()
+            if(userJSON.password){
+                //Validator
+                const validatorResult = await validator(userJSON)
+                if(validatorResult)
+                    resolve(generateErrorJSON(validatorResult.error))
 
-            databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
-                if(err)
-                    resolve(generateErrorJSON())
+                userJSON.imageUrl = req.file?.path || req.body.imageUrl
+                userJSON.updatedAt = new Date()
 
-                resolve(userJSON)
-            })
+                databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                    databaseUser.loadDatabase()
+                    resolve(userJSON)
+                })
+            }
         })
     })
 }
@@ -152,18 +157,24 @@ export function getUserByUsernameIdNe(username: string, _id: string) {
 
 export function getUserGeneretingWebToken(username: string, password: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
-        databaseUser.findOne({ username: username, password: password }, function(err, docs) {
-            if(err)
+        databaseUser.findOne({ username: username, password: password }, function(err, user:User) {
+            if(err){
                 resolve(generateErrorJSON())
+            }
 
-            if(docs){
-                docs.webToken = crypto.randomUUID()
-                docs.updatedAt = new Date()
-                databaseUser.update({ _id: docs._id }, { $set: docs }, {}, function(err, docs) {
-                    if(err)
+            if(user){
+                user.webToken = crypto.randomUUID()
+                user.updatedAt = new Date()
+                databaseUser.update({ _id: user._id }, { $set: user }, {}, function(err, docs) {
+                    if(err){
                         resolve(generateErrorJSON())
+                    }
+                    else {
+                        databaseUser.loadDatabase()
+                        resolve(user)
+                    }
                 })
-                resolve(docs)
+                
             }
         })
 
@@ -171,7 +182,7 @@ export function getUserGeneretingWebToken(username: string, password: string) {
             if(err)
                 resolve(generateErrorJSON())
 
-            if(!docs)
+            if(docs)
                 resolve(generateErrorJSON('Incorrect password'))
 
             resolve(generateErrorJSON('User not exist'))
@@ -185,19 +196,23 @@ export function getUserByWebToken(webToken: string) {
             if(err)
                 resolve(generateErrorJSON())
 
-            databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
-                if(err)
-                    resolve(generateErrorJSON())
+            if(!user)
+                resolve(generateErrorJSON("cookie not valid"))
 
-                databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
+            else
+                databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
                     if(err)
                         resolve(generateErrorJSON())
 
-                    user.teams = teams
+                    databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
+                        if(err)
+                            resolve(generateErrorJSON())
 
-                    resolve(user)
+                        user.teams = teams
+
+                        resolve(user)
+                    })
                 })
-            })
         })
     })
 }
@@ -208,18 +223,21 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
             if(err)
                 resolve(generateErrorJSON())
 
-            databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
-                if(err)
-                    resolve(generateErrorJSON(err.message))
+            else
+                databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
+                    if(err)
+                        resolve(generateErrorJSON(err.message))
 
-                const result = {
-                    users: users ? users.slice((page-1)*limit, limit) : [],
-                    totalPages: users ? Math.ceil(users.length/limit) : 0,
-                    currentPage: page
-                }
+                    else{
+                        const result = {
+                            users: users ? users.slice((page-1)*limit, (page-1)*limit+limit) : [],
+                            totalPages: users ? Math.ceil(users.length/limit) : 0,
+                            currentPage: page
+                        }
 
-                resolve(result)
+                        resolve(result)
+                    }
+                })
             })
-        })
     })
 }

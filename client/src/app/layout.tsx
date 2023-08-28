@@ -1,6 +1,9 @@
+'use client'
 import React from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export const metadata: Metadata = {
   title: 'Remind-MME',
@@ -12,13 +15,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode,
 }) {
-  
+  const queryClient = new QueryClient()
 
   return (
-    <html lang="en">
-      <body>
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <QueryClientProvider client={queryClient}>
+          <body>
+            {children}
+            <ReactQueryDevtools />
+          </body>
+        </QueryClientProvider>
+      </html>
   )
 }

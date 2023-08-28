@@ -16,11 +16,6 @@ export default function Header() {
                 credentials: 'include',
             })
             .then((res) => res.json())
-            .then((resJson: UserModel | ErrorJSON) => {
-                if('error' in resJson) 
-                    throw resJson
-                return resJson
-            })
             .then((res: UserModel) => !res?._id ? router.push('/login') : res)
         },
         refetchInterval: 5000

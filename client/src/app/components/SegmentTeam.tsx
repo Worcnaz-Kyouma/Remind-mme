@@ -7,18 +7,22 @@ export default function SegmentTeam({
     level,
     users,
     loggedUser,
+    loggedUserLevel,
+    maxTeamLevel,
     team,
     setUserShowcaseData
 }: {
     level: number
     users: UserModel[]
     loggedUser: UserModel
+    loggedUserLevel: number
+    maxTeamLevel: number
     team: TeamModel
-    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, team:TeamModel}) => void
+    setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, loggedUserLevel:number, maxTeamLevel:number, team:TeamModel}) => void
 }) {
     return (
         <div className={styles.segment}>
-            {users.map(user => <Member key={user._id} user={user} userLevel={level} loggedUser={loggedUser} team={team} setUserShowcaseData={setUserShowcaseData}/>)}
+            {users.map(user => <Member key={user._id} user={user} userLevel={level} loggedUser={loggedUser} loggedUserLevel={loggedUserLevel} maxTeamLevel={maxTeamLevel} team={team} setUserShowcaseData={setUserShowcaseData}/>)}
             <span>{level}</span>
         </div>
     )

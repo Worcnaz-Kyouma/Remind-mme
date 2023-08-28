@@ -11,9 +11,9 @@
     border-bottom: 4px solid rgba(0, 0, 0, 0.384);
     border-radius: 12px;
 
-    padding: 20px 0px;
+    padding: 40px 0px;
 
-    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.218) inset;
+    box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.218);
 
     background-color: white;
 
@@ -31,10 +31,22 @@
         background-color: white;
     }
 
+    .opened-team{
+        margin: 9px;
+        border: 1px solid rgba(0, 0, 0, 0.384);
+        border-radius: 8px;
+
+        background-color: rgb(255, 255, 255);
+
+        padding-bottom: 20px;
+
+        box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.218) inset;
+    }
+
     .member-opener {
         position: absolute;
         left: 50%;
-        bottom: 16%;
+        bottom: 45px;
         transform: translateX(-50%);
 
         width: 50px;
@@ -105,6 +117,6 @@
 }
 
 .team-wrapper.opened {
-    padding: 20px 0px 120px 0px;
+    padding: 40px 0px 120px 0px;
     height: fit-content;
 }

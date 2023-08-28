@@ -8,15 +8,10 @@ export default function Layout({
 }: {
     children: React.ReactNode
 }) {
-    const queryClient = new QueryClient();
-
     return (
-        <QueryClientProvider client={queryClient}>
-            <div className={styles['page-wrapper']}>
-                <Header />
-                {children}
-            </div>
-            <ReactQueryDevtools />
-        </QueryClientProvider>
+        <div className={styles['page-wrapper']}>
+            <Header />
+            {children}
+        </div>
     )
 }

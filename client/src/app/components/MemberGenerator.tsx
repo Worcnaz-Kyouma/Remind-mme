@@ -15,11 +15,10 @@ export default function UserTeamGenerator({
 }) {
     const [ inputSearchType, setInputSearchType ] = useState<string>("text")
     const [ page, setPage ] = useState(1)
+    const [ field, setField ] = useState("name")
+    const [ value, setValue ] = useState("")
+    const [ level, setLevel ] = useState("1")
 
-    const fieldInputDOMRef = useRef<HTMLSelectElement|null>(null)
-    const valueInputDOMRef = useRef<HTMLInputElement|null>(null)
-    const levelInputDOMRef = useRef<HTMLInputElement|null>(null)
- 
     const userSearchMutation = useMutation({
         mutationFn: ({page, field, value}:{page:number, field:string, value:string}) => {
             const limit = 3
@@ -41,7 +40,8 @@ export default function UserTeamGenerator({
         <div className={styles['search-wrapper']}>
             <div className={styles['input-search-wrapper']}>
                 <div className={styles['input-wrapper']}>
-                    <select name="field" id="field" defaultValue={"name"} ref={fieldInputDOMRef} onChange={(event) => {
+                    <select name="field" id="field" value={field} onChange={(event) => {
+                        setField(event.target.value)
                         const value = event.target.value
                         if(value === 'name')
                             setInputSearchType('text')
@@ -54,11 +54,11 @@ export default function UserTeamGenerator({
                         <option value="email">Email</option>
                         <option value="number">Number</option>
                     </select>
-                    <input type={inputSearchType} ref={valueInputDOMRef} name="value" id="value"/>
+                    <input type={inputSearchType} value={value} name="value" id="value" onChange={(event) => setValue(event.target.value)}/>
                 </div>
                 <button onClick={() => {
                     userSearchMutation.mutate({
-                        page:page, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                        page:page, field: field, value: value
                     })
                 }}>Search</button>
             </div>
@@ -67,28 +67,32 @@ export default function UserTeamGenerator({
                 <div className={styles['controllers-wrapper']}>
                     <div className={`${styles['input-wrapper']} ${styles['level-wrapper']}`}>
                         <label htmlFor="level">Level </label>
-                        <input type="number" name="level" ref={levelInputDOMRef} id="level" defaultValue={1}/>
+                        <input type="number" name="level" value={level} id="level" onChange={(event) => setLevel(event.target.value)}/>
                     </div>
 
                     <div className={styles['btn-page-controllers']}>
                         <button onClick={() => {
                             setPage(page => ++page)
                             userSearchMutation.mutate({
-                                page:page+1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                                page:page+1, field: field, value: value
                             })
                         }} disabled={page===userSearchMutation.data?.totalPages}></button>
                         <span>{page}/{userSearchMutation.data?.totalPages}</span>
                         <button onClick={() => {
                             setPage(page => --page)
                             userSearchMutation.mutate({
-                                page:page-1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                                page:page-1, field: field, value: value
                             })
                         }} disabled={page===1}></button>
                     </div>
                 </div>
                 <div className={styles['users-wrapper']}>
                     {userSearchMutation.data.users.map(user =>
-                        <FoundUser key={user._id} user={user} team={team._id as string} level={levelInputDOMRef.current?.value} />
+                        <FoundUser key={user._id} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
+                            userSearchMutation.mutate({
+                                page:page, field: field, value: value
+                            })
+                        }} />
                     )}
                 </div>
             </>}

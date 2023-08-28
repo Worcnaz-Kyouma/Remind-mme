@@ -15,7 +15,11 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, calc(-50% - .5px));
+
+    &:focus-within{
+        transform: translate(-50%, -50%);
+    }
 
     z-index: 6;
 
@@ -201,6 +205,7 @@
 
             &:disabled {
                 background-color: rgba(0, 0, 0, 0.151);
+                cursor: default;
             }
         
         }

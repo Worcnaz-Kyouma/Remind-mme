@@ -171,7 +171,7 @@ export function getUserGeneretingWebToken(username: string, password: string) {
             if(err)
                 resolve(generateErrorJSON())
 
-            if(!docs)
+            if(docs)
                 resolve(generateErrorJSON('Incorrect password'))
 
             resolve(generateErrorJSON('User not exist'))
@@ -185,19 +185,22 @@ export function getUserByWebToken(webToken: string) {
             if(err)
                 resolve(generateErrorJSON())
 
-            databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
-                if(err)
-                    resolve(generateErrorJSON())
-
-                databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
+            if(!user)
+                resolve(generateErrorJSON())
+            else
+                databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
                     if(err)
                         resolve(generateErrorJSON())
 
-                    user.teams = teams
+                    databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
+                        if(err)
+                            resolve(generateErrorJSON())
 
-                    resolve(user)
+                        user.teams = teams
+
+                        resolve(user)
+                    })
                 })
-            })
         })
     })
 }

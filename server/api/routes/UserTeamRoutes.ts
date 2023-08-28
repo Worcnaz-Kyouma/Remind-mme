@@ -3,6 +3,9 @@ import * as userTeamController from "./../controllers/UserTeamController"
 
 const router = express.Router()
 
+router.route('/')
+    .post(userTeamController.createUserTeamRelation)
+
 router.route('/level-compare')
     .get(userTeamController.getUserAndMaxLevelInGroup)
 

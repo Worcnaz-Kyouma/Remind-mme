@@ -1,0 +1,49 @@
+.found-user-wrapper{
+    display: flex;
+    width: 80%;
+
+    border: 1px solid rgba(0, 0, 0, 0.384);
+    border-radius: 15px;
+    margin-bottom: 10px;
+
+    padding: 20px;
+
+    cursor: pointer;
+
+    overflow-y: auto;
+
+    .img-wrapper{
+        position: relative;
+
+        border: 2px dotted rgba(0, 0, 0, 0.384);
+        border-radius: 15px;
+
+        width: 100px;
+        max-height: 100px;
+
+        padding: 5px;
+
+        img {
+            width: 70%;
+            aspect-ratio: 1;
+
+            border-radius: 15px;
+        }
+    }
+
+    .data-wrapper{
+        flex-grow: 8;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        padding-left: 20px;
+
+        p {
+            margin: 0px;
+            margin-bottom: 10px;
+        }
+
+    }
+}

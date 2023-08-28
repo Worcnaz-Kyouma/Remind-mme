@@ -2,14 +2,14 @@ import styles from "@/app/styles/components/TeamGenerator.module.scss"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import User from "@shared/models/UserModel"
 import UserModel from "@shared/models/UserModel"
-import { QueryClient, useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export default function TeamGenerator({
     user
 }: {
     user: UserModel
 }) {
-    const queryClient = new QueryClient()
+    const queryClient = useQueryClient()
 
     const teamMutation = useMutation({
         mutationFn: (user: any) => {
@@ -28,6 +28,7 @@ export default function TeamGenerator({
             })
         },
         onSuccess: () => {
+            console.log('sus')
             queryClient.invalidateQueries(["users"])
         },
         onError: (err: ErrorJSON) => {

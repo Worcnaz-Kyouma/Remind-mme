@@ -208,13 +208,13 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
             if(err)
                 resolve(generateErrorJSON())
 
-            databaseUser.find({ [field]: value, $nin: userTeams.map(userTeam => userTeam.userId) }, {}, function(err, users: User[]) {
+            databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
                 if(err)
-                    resolve(generateErrorJSON())
+                    resolve(generateErrorJSON(err.message))
 
                 const result = {
-                    users: users.slice((page-1)*limit, limit),
-                    totalPages: users.length,
+                    users: users ? users.slice((page-1)*limit, limit) : [],
+                    totalPages: users ? Math.ceil(users.length/limit) : 0,
                     currentPage: page
                 }
 

@@ -1,9 +1,10 @@
 import TeamModel from "@shared/models/TeamModel";
 import styles from "@/app/styles/components/MemberGenerator.module.scss" 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import UserModel from "@shared/models/UserModel";
 import ErrorJSON from "@shared/models/ErrorJSON";
+import FoundUser from "./FoundUser";
 
 export default function UserTeamGenerator({
     team,
@@ -13,14 +14,15 @@ export default function UserTeamGenerator({
     closeModal: () => void
 }) {
     const [ inputSearchType, setInputSearchType ] = useState<string>("text")
-    const [ field, setField ] = useState("name")
-    const [ value, setValue ] = useState('')
     const [ page, setPage ] = useState(1)
+
+    const fieldInputDOMRef = useRef<HTMLSelectElement|null>(null)
+    const valueInputDOMRef = useRef<HTMLInputElement|null>(null)
+    const levelInputDOMRef = useRef<HTMLInputElement|null>(null)
  
-    const userSearchQuery = useQuery({
-        queryKey: ['users', 'search'],
-        queryFn: () => {
-            const limit = 5
+    const userSearchMutation = useMutation({
+        mutationFn: ({page, field, value}:{page:number, field:string, value:string}) => {
+            const limit = 3
 
             return fetch(`http://localhost:22194/users/search/?limit=${limit}&page=${page}&field=${field}&value=${value}&teamId=${team._id}`)
                 .then(res => res.json())
@@ -30,13 +32,6 @@ export default function UserTeamGenerator({
                     return resJson
                 })
         },
-        onSuccess: () => {
-            console.log('success')
-
-        },
-        onError: (err: ErrorJSON) => {
-            console.log(err)
-        }
     })
 
 
@@ -44,30 +39,55 @@ export default function UserTeamGenerator({
         <>
         <div className={styles['pseudo-body']} ></div>
         <div className={styles['search-wrapper']}>
-            <select name="field" id="field" defaultValue={"name"} onChange={(event) => {
-                const value = event.target.value
-                if(value === 'name')
-                    setInputSearchType('text')
-                else if (value === "email")
-                    setInputSearchType('email')
-                else
-                    setInputSearchType('number')
-            }}>
-                <option value="name">Name</option>
+            <div className={styles['inputs-wrapper']}>
+                <div className={styles['input-wrapper']}>
+                    <select name="field" id="field" defaultValue={"name"} ref={fieldInputDOMRef} onChange={(event) => {
+                        const value = event.target.value
+                        if(value === 'name')
+                            setInputSearchType('text')
+                        else if (value === "email")
+                            setInputSearchType('email')
+                        else
+                            setInputSearchType('tel')
+                    }}>
+                        <option value="name">Name</option>
+                        <option value="email">Email</option>
+                        <option value="number">Number</option>
+                    </select>
+                    <input type={inputSearchType} ref={valueInputDOMRef} name="value" id="value"/>
+                </div>
 
-                <option value="email">Email</option>
-
-                <option value="number">Number</option>
-            </select>
-            <input type={inputSearchType} name="value" id="value"/>
-            <button>Search</button>
-
-            <div className={styles['found-users']}></div>
-
-            <div className={styles['btn-page-controllers']}>
-                <button>Back</button>
-                <button>Forward</button>
+                <button onClick={() => {
+                    userSearchMutation.mutate({
+                        page:page, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                    })
+                }}>Search</button>
             </div>
+
+            {userSearchMutation.data && userSearchMutation.data.totalPages!==0 && <div className={styles['users-wrapper']}>
+                <div className={styles['input-wrapper']}>
+                    <label htmlFor="level">Level </label>
+                    <input type="number" name="level" ref={levelInputDOMRef} id="level" defaultValue={1}/>
+                </div>
+                {userSearchMutation.data.users.map(user => 
+                    <FoundUser key={user._id} user={user} team={team._id as string} level={levelInputDOMRef.current?.value} />
+                )}
+
+                <div className={styles['btn-page-controllers']}>
+                    <button onClick={() => {
+                        setPage(page => ++page)
+                        userSearchMutation.mutate({
+                            page:page+1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                        })
+                    }} disabled={page===userSearchMutation.data?.totalPages}>Back</button>
+                    <button onClick={() => {
+                        setPage(page => --page)
+                        userSearchMutation.mutate({
+                            page:page-1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                        })
+                    }} disabled={page===1}>Forward</button>
+                </div>
+            </div>}
 
             <button className={styles['exit-button']} onClick={closeModal}>Exit</button>
         </div>

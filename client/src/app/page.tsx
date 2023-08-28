@@ -22,4 +22,6 @@ export default function Page() {
         router.push('/login')
       else console.error(err)
     })
+
+    return <h1>Sus</h1>
 }

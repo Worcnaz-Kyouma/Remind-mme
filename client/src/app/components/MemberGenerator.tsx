@@ -39,7 +39,7 @@ export default function UserTeamGenerator({
         <>
         <div className={styles['pseudo-body']} ></div>
         <div className={styles['search-wrapper']}>
-            <div className={styles['inputs-wrapper']}>
+            <div className={styles['input-search-wrapper']}>
                 <div className={styles['input-wrapper']}>
                     <select name="field" id="field" defaultValue={"name"} ref={fieldInputDOMRef} onChange={(event) => {
                         const value = event.target.value
@@ -56,7 +56,6 @@ export default function UserTeamGenerator({
                     </select>
                     <input type={inputSearchType} ref={valueInputDOMRef} name="value" id="value"/>
                 </div>
-
                 <button onClick={() => {
                     userSearchMutation.mutate({
                         page:page, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
@@ -64,30 +63,35 @@ export default function UserTeamGenerator({
                 }}>Search</button>
             </div>
 
-            {userSearchMutation.data && userSearchMutation.data.totalPages!==0 && <div className={styles['users-wrapper']}>
-                <div className={styles['input-wrapper']}>
-                    <label htmlFor="level">Level </label>
-                    <input type="number" name="level" ref={levelInputDOMRef} id="level" defaultValue={1}/>
-                </div>
-                {userSearchMutation.data.users.map(user => 
-                    <FoundUser key={user._id} user={user} team={team._id as string} level={levelInputDOMRef.current?.value} />
-                )}
+            {userSearchMutation.data && userSearchMutation.data.totalPages!==0 && <>
+                <div className={styles['controllers-wrapper']}>
+                    <div className={`${styles['input-wrapper']} ${styles['level-wrapper']}`}>
+                        <label htmlFor="level">Level </label>
+                        <input type="number" name="level" ref={levelInputDOMRef} id="level" defaultValue={1}/>
+                    </div>
 
-                <div className={styles['btn-page-controllers']}>
-                    <button onClick={() => {
-                        setPage(page => ++page)
-                        userSearchMutation.mutate({
-                            page:page+1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
-                        })
-                    }} disabled={page===userSearchMutation.data?.totalPages}>Back</button>
-                    <button onClick={() => {
-                        setPage(page => --page)
-                        userSearchMutation.mutate({
-                            page:page-1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
-                        })
-                    }} disabled={page===1}>Forward</button>
+                    <div className={styles['btn-page-controllers']}>
+                        <button onClick={() => {
+                            setPage(page => ++page)
+                            userSearchMutation.mutate({
+                                page:page+1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                            })
+                        }} disabled={page===userSearchMutation.data?.totalPages}></button>
+                        <span>{page}/{userSearchMutation.data?.totalPages}</span>
+                        <button onClick={() => {
+                            setPage(page => --page)
+                            userSearchMutation.mutate({
+                                page:page-1, field: fieldInputDOMRef.current!.value, value: valueInputDOMRef.current!.value
+                            })
+                        }} disabled={page===1}></button>
+                    </div>
                 </div>
-            </div>}
+                <div className={styles['users-wrapper']}>
+                    {userSearchMutation.data.users.map(user =>
+                        <FoundUser key={user._id} user={user} team={team._id as string} level={levelInputDOMRef.current?.value} />
+                    )}
+                </div>
+            </>}
 
             <button className={styles['exit-button']} onClick={closeModal}>Exit</button>
         </div>

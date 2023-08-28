@@ -34,3 +34,19 @@ export function createTeamByOwner(userId:string){
         })
     })
 }
+
+export function deleteTeamAndRelations(teamId:string){
+    return new Promise<{ status:string } | ErrorJSON>(async (resolve, reject) => {
+        databaseTeam.remove({ _id: teamId }, {}, function (err, numRemoved) {
+            if(err)
+                resolve(generateErrorJSON())
+
+            databaseUserTeam.remove({ teamId: teamId }, {}, function (err, numRemoved) {
+                if(err)
+                    resolve(generateErrorJSON())
+
+                resolve({ status: 'Success' })
+            })
+        })
+    })
+}

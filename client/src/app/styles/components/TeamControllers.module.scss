@@ -1,0 +1,31 @@
+.btn-team-controllers{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 14%;
+
+    button {
+        border: 1px solid rgba(0, 0, 0, 0.384);
+        border-right: 3px solid rgba(0, 0, 0, 0.384);
+        border-bottom: 3px solid rgba(0, 0, 0, 0.384);
+        border-radius: 8px;
+
+        padding: 8px 18px;
+
+        cursor: pointer;
+
+        background-color: white;
+
+        transition: all 0.4s;
+        &:hover {
+            transform: scale(1.05);
+    
+            box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
+        }
+    }
+}

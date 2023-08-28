@@ -86,3 +86,14 @@ export function createUserTeamRelation(userId: string, teamId: string, level:num
         })
     })
 }
+
+export function deleteUserTeamRelation(userId:string, teamId:string){
+    return new Promise<{ status:string } | ErrorJSON>(async (resolve, reject) => {
+        databaseUserTeam.remove({ userId:userId, teamId: teamId }, {}, function (err, numRemoved) {
+            if(err)
+                resolve(generateErrorJSON())
+
+            resolve({ status: 'Success' })
+        })
+    })
+}

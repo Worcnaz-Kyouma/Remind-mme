@@ -6,6 +6,7 @@ import ErrorJSON from "@shared/models/ErrorJSON"
 import SegmentTeam from "./SegmentTeam"
 import UserModel from "@shared/models/UserModel"
 import MemberGenerator from "./MemberGenerator"
+import TeamControllers from "./TeamControllers"
 
 export default function Team({
     team,
@@ -63,9 +64,7 @@ export default function Team({
     return (
         <>
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
-            <div className={styles['btn-team-controllers']}>
-                <button></button>
-            </div>
+            <TeamControllers canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
             <span>{team.name}</span>
             {!isClosed && 
                 <div className={styles['opened-team']}>

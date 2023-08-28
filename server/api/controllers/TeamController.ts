@@ -25,3 +25,18 @@ export async function createTeamByOwner(req:Request, res:Response) {
 
     res.json(data)
 }
+
+export async function deleteTeamAndRelations(req:Request, res:Response) {
+    if(typeof req.params.teamId === 'undefined'){
+        invalidRequest(res)
+        return
+    }
+
+    const data = await teamService.deleteTeamAndRelations(req.params.teamId)
+
+    res.status(200)
+    if('error' in data)
+        res.status(500)
+
+    res.json(data)
+}

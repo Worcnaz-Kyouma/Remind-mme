@@ -59,3 +59,18 @@ export async function getLevelSegmentsInTeamWithUsers(req:Request, res:Response)
 
     res.json(data)
 }
+
+export async function deleteUserTeamRelation(req:Request, res:Response) {
+    if(typeof req.query.userId === 'undefined' || typeof req.query.teamId === 'undefined'){
+        invalidRequest(res)
+        return
+    }
+
+    const data = await userTeamService.deleteUserTeamRelation(req.query.userId as string, req.query.teamId as string)
+
+    res.status(200)
+    if(data && 'error' in data)
+        res.status(500)
+
+    res.json(data)
+}

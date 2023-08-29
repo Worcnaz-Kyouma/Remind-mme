@@ -72,6 +72,7 @@ export function createUser(req:Request, res:Response) {
                 if(err)
                     resolve(generateErrorJSON())
 
+                databaseUser.loadDatabase()
                 resolve(userJSON)
             })
         })
@@ -176,16 +177,19 @@ export function getUserGeneretingWebToken(username: string, password: string) {
                 })
                 
             }
-        })
-
-        databaseUser.findOne({ username: username }, function(err, docs) {
-            if(err)
-                resolve(generateErrorJSON())
-
-            if(docs)
-                resolve(generateErrorJSON('Incorrect password'))
-
-            resolve(generateErrorJSON('User not exist'))
+            else {
+                databaseUser.findOne({ username: username }, function(err, docs) {
+                    if(err)
+                        resolve(generateErrorJSON())
+        
+                    if(docs){
+                        //console.log(docs)
+                        resolve(generateErrorJSON('Incorrect password'))
+                    }
+        
+                    resolve(generateErrorJSON('User not exist'))
+                })
+            }
         })
     })     
 }

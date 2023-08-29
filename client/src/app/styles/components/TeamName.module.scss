@@ -1,0 +1,30 @@
+.team-name {
+    position: absolute;
+    top: 0px;
+    left: 16px;
+    transform: translate(0%, -50%);
+
+    min-width: 260px;
+
+    border: 1px solid rgba(0, 0, 0, 0.384);
+    border-radius: 8px;
+
+    padding: 5px 10px;
+
+    font-size: 17px;
+
+    background-color: white;
+
+    transition: all 0.4s;
+    &:hover, &:focus {
+        transform: translate(0%, -50%) scale(1.03);
+
+        outline: none;
+
+        box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
+    }
+
+    &:focus {
+        border: 1px solid black;
+    }
+}

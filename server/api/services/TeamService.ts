@@ -15,7 +15,13 @@ function generateErrorJSON(err:any = 'Server internal error'){
     return errorJSON
 }
 
-async function validator(teamJSON:Team) {}
+async function validateName(teamName:string) {
+    if(!teamName)
+        return { error: "Team name cannot be null" }
+
+    if(teamName!='Place Holder' && await getTeamByName(teamName))
+        return { error: "Already exit an team with this name" }
+}
 
 export function createTeamByOwner(userId:string){
     return new Promise<Team | ErrorJSON>(async (resolve, reject) => {
@@ -32,6 +38,36 @@ export function createTeamByOwner(userId:string){
                 resolve(team)
             })
         })
+    })
+}
+
+export function getTeamByName(name: string) {
+    return new Promise<Team | ErrorJSON >(async (resolve, reject) => {
+        databaseTeam.findOne({ name: name }, function(err, docs) {
+            if(err)
+                resolve(generateErrorJSON())
+            else
+                resolve(docs)
+        })
+    })
+}
+
+export function updateTeamName(teamId:string, teamName:string){
+    return new Promise<string | ErrorJSON>(async (resolve, reject) => {
+        if(teamName=='Place Holder')
+            resolve(teamName)
+        else {
+            const validatorResult = await validateName(teamName)
+            if(validatorResult)
+                resolve(generateErrorJSON(validatorResult.error))
+            else
+                databaseTeam.update({ _id: teamId }, { $set: { name:teamName, updatedAt: new Date() } }, {}, function(err, num) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                    else
+                        resolve(teamName)
+                })
+        }
     })
 }
 

@@ -21,11 +21,8 @@
     }
 
     .img-wrapper{
-        display: flex;
-        justify-content: center;
-
         position: relative;
-        width: 110px;
+        width: 100px;
         height: 110px;
 
         border: 2px dotted rgba(0, 0, 0, 0.384);
@@ -34,8 +31,13 @@
         padding: 7px;
 
         img {
-            height: 100%;
-            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 80%;
+            aspect-ratio: auto;
             border-radius: 15px;
         }
     }

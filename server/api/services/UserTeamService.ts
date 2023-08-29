@@ -63,14 +63,16 @@ export function getUserAndMaxLevelInGroup(userId:string, teamId:string) {
                 resolve(generateErrorJSON('User / Team relationship not found'))
 
             else
-                databaseUserTeam.find({}).sort({ level: -1 }).limit(1).exec(function (err, maxLevel:UserTeam[]) {
+                databaseUserTeam.find({ teamId: teamId }).sort({ level: -1 }).exec(function (err, maxLevel:UserTeam[]) {
                     if(err)
                         resolve(generateErrorJSON())
                         
                     if(!maxLevel)
                         resolve(generateErrorJSON('Empty User / Team relationship'))
-                    else
+                    else{
+                        //console.log(maxLevel)
                         resolve({ loggedUserLevel:userTeam.level, maxLevel:maxLevel[0].level })
+                    }
                 })
         })
     })

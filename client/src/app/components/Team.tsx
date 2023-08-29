@@ -7,6 +7,7 @@ import SegmentTeam from "./SegmentTeam"
 import UserModel from "@shared/models/UserModel"
 import MemberGenerator from "./MemberGenerator"
 import TeamControllers from "./TeamControllers"
+import TeamName from "./TeamName"
 
 export default function Team({
     team,
@@ -44,7 +45,7 @@ export default function Team({
     })
 
     const levelQuery = useQuery({
-        queryKey: ['users', 'level', loggedUser._id],
+        queryKey: ['users', 'level', loggedUser._id, team!._id],
         queryFn: () => {
             return fetch(`http://localhost:22194/usersteams/level-compare/?userId=${loggedUser._id}&teamId=${team!._id}`)
                 .then((res) => res.json())
@@ -54,7 +55,6 @@ export default function Team({
                     return resJson
                 })
         },
-        enabled: segmentsQuery.isSuccess,
         onSuccess: (data) => {
             setLoggedUserLevel(data.loggedUserLevel)
             setMaxTeamLevel(data.maxLevel)
@@ -65,7 +65,10 @@ export default function Team({
         <>
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
             <TeamControllers canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
-            <span>{team.name}</span>
+            {maxTeamLevel && loggedUserLevel && maxTeamLevel<=loggedUserLevel
+                ? <TeamName teamId={team!._id as string} teamName={team.name}/> 
+                : <span>{team.name}</span>
+            }
             {!isClosed && 
                 <div className={styles['opened-team']}>
                     {segments && levelQuery.isSuccess && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} loggedUserLevel={loggedUserLevel as number} maxTeamLevel={maxTeamLevel as number} team={team} setUserShowcaseData={setUserShowcaseData} />)}

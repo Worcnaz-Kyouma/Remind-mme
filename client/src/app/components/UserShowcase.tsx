@@ -6,6 +6,7 @@ import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import User from "@shared/models/UserModel"
 import TeamModel from "@shared/models/TeamModel"
+import RemoveMember from "./RemoveMember"
 
 export default function UserShowcase({
     user,
@@ -35,7 +36,6 @@ export default function UserShowcase({
             return fetch('http://localhost:22194/users', {
                 method: "PUT",
                 body: editedUser,
-                credentials: 'include',
                 headers: {
                     "Accept": "application/json"
                 }
@@ -140,6 +140,7 @@ export default function UserShowcase({
                             <label htmlFor="level">Level </label>
                             <input type="number" name="level" id="level" required defaultValue={userLevel} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<userLevel} onChange={() => setHaveChanges(true)}/>
                         </div>
+                        {loggedUserLevel>=userLevel && loggedUser._id!=user._id && <RemoveMember userId={user._id as string} teamId={team!._id as string} setCompressedOn={setCompressedOn}/>}
                     </div>
                 }
 

@@ -51,7 +51,7 @@ export async function getUserByUsername(req:Request, res:Response) {
 
 export async function getUserByWebToken(req:Request, res:Response) {
     if(typeof req.cookies.SESSIONRMM === 'undefined'){
-        invalidRequest(res, "cookie don't exist")
+        invalidRequest(res, "cookie not valid")
         return
     }
 

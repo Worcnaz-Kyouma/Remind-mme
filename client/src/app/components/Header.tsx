@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
+import LogoutButton from "./LogoutButton"
 
 
 export default function Header() {
@@ -29,9 +30,9 @@ export default function Header() {
 
     return (
         <header className={styles['main-header']}>
-            <span>Tasks</span>
-            <h1>Remind-MME</h1>
             <Profile user={userQuery.data as UserModel}/>
+            <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
+            <LogoutButton />
         </header>
     )
 }

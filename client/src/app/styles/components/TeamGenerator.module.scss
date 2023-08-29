@@ -5,8 +5,10 @@
     width: 80px;
     aspect-ratio: 1;
 
-    border: 2px solid black;
-    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.384);
+    border-right: 3px solid rgba(0, 0, 0, 0.384);
+    border-bottom: 3px solid rgba(0, 0, 0, 0.384);
+    border-radius: 8px;
 
     margin-bottom: 20px;
     margin-top: 20px;
@@ -17,6 +19,8 @@
     background-repeat: no-repeat;
     background-size: 75% 75%;
     background-position: 49% 35%;
+
+    background-color: white;
 
     transition: all 0.4s;
 

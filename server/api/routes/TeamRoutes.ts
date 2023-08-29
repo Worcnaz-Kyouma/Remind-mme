@@ -7,6 +7,7 @@ router.route('/')
     .post(teamController.createTeamByOwner)
 
 router.route('/:teamId')
+    .put(teamController.updateTeamName)
     .delete(teamController.deleteTeamAndRelations)
 
 export = router

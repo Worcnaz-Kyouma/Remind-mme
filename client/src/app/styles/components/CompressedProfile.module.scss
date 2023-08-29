@@ -1,4 +1,4 @@
-$size: 100px;
+$size: 115px;
 
 .wrapper{
     position: relative;
@@ -11,6 +11,7 @@ $size: 100px;
     cursor: pointer;
 
     background-color: white;
+    z-index: 5;
 
     box-shadow: -5px -5px 10px 0px rgba(0, 0, 0, 0.218);
 
@@ -31,6 +32,8 @@ $size: 100px;
             max-width: 100%;
             word-wrap: break-word;
             margin: 0px;
+
+            font-size: 15px;
         }
 
         transition: all 0.4s;
@@ -60,8 +63,8 @@ $size: 100px;
 
         img{
             width: 100%;
-            border-radius: 50%;
-            aspect-ratio: 1;
+            aspect-ratio: auto 32 / 32;
+            border-radius: 45%;
         }
     }
 

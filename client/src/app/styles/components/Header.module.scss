@@ -1,11 +1,40 @@
 .main-header {
+    position: relative;
+
     display: flex;
     flex-direction: row;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
 
     h1 {
         margin-left: 3%;
+    }
+
+    .logo-wrapper{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 400px;
+        height: 100px;
+
+        border-radius: 12px;
+
+        box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.691) inset;
+
+        img{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 85%;
+            height: auto;
+        }
+
+        background-color: white;
     }
 
     margin: 12px 50px 50px 50px;

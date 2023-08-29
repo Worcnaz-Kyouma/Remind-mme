@@ -8,12 +8,25 @@ import validatorJS from "validator"
 import fs from "fs"
 
 type ErrorJSON = {
-    error:any
+    errorTitle:string
+    errorMessage:string
+    rawError:any
 }
 
-function generateErrorJSON(err:any = 'Server internal error'){
+function generateErrorJSON(err:ErrorJSON | any = 'Server internal error'){
+    if('errorTitle' in err && 'errorMessage' in err && 'rawError' in err){
+        const errorJSON:ErrorJSON = {
+            errorTitle: err.errorTitle as string,
+            errorMessage: err.errorMessage as string,
+            rawError: err.errorMessage
+        }
+        return errorJSON
+    }
+    
     const errorJSON:ErrorJSON = {
-        error: err
+        errorTitle: "Error",
+        errorMessage: "Internal Error",
+        rawError: err
     }
 
     return errorJSON
@@ -21,27 +34,63 @@ function generateErrorJSON(err:any = 'Server internal error'){
 
 async function validator(userJSON:User) {
     if(!userJSON.username)
-        return { error: "Username cannot be null" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Username cannot be null",
+            rawError: "Username field are null"
+        }
     if(!userJSON.password)
-        return { error: "Password cannot be null" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Password cannot be null",
+            rawError: "Password field are null"
+        }
     if(!userJSON.name)
-        return { error: "Name cannot be null" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Name cannot be null",
+            rawError: "Name field are null"
+        }
     if(!userJSON.email)
-        return { error: "Email cannot be null" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Email cannot be null",
+            rawError: "Email field are null"
+        }
 
     if(!userJSON._id && await getUserByUsername(userJSON.username))
-        return { error: "Already exist an user with that username" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Already exist an user with that username",
+            rawError: "User unique duplicated"
+        }
     else
         if(await getUserByUsernameIdNe(userJSON.username, userJSON._id!))
-            return { error: "Already exist an user with that username" } 
+            return {
+                errorTitle: "Valitation",
+                errorMessage: "Already exist an user with that username",
+                rawError: "User unique duplicated"
+            }
 
     if(!validatorJS.isEmail(userJSON.email))
-        return { error: "Invalid email" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Invalid email",
+            rawError: "Invalid email field"
+        }
     if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
-        return { error: "Invalid number" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Invalid number",
+            rawError: "Invalid number field"
+        }
 
     if(!validatorJS.isBefore(userJSON.bornDate, (new Date()).toISOString()))
-        return { error: "Invalid date" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Invalid date",
+            rawError: "Invalid date field"
+        }
 
     return null
 }
@@ -51,9 +100,9 @@ export function createUser(req:Request, res:Response) {
         upload.single('image')(req, res, async function (err) {
             if (err)
                 resolve (generateErrorJSON({
-                    type: "Upload error",
-                    field: ["image"],
-                    message: "Error in the process of image upload"
+                    errorTitle: "Upload error",
+                    errorMessage: "Error trying to save user image",
+                    rawError: err
                 }))
 
             const userJSON:User = req.body
@@ -61,20 +110,23 @@ export function createUser(req:Request, res:Response) {
             //Validator
             const validatorResult = await validator(userJSON)
             if(validatorResult)
-                resolve(generateErrorJSON(validatorResult.error))
+                resolve(generateErrorJSON(validatorResult))
 
-            userJSON.webToken = crypto.randomUUID()
-            userJSON.imageUrl = req.file?.path || "uploads/template.png"
-            userJSON.createdAt = new Date()
-            userJSON.updatedAt = new Date()
+            else{
+                userJSON.webToken = crypto.randomUUID()
+                userJSON.imageUrl = req.file?.path || "uploads/template.png"
+                userJSON.createdAt = new Date()
+                userJSON.updatedAt = new Date()
 
-            databaseUser.insert(userJSON, function (err, doc) {
-                if(err)
-                    resolve(generateErrorJSON())
-
-                databaseUser.loadDatabase()
-                resolve(userJSON)
-            })
+                databaseUser.insert(userJSON, function (err, doc) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                    else{
+                        databaseUser.loadDatabase()
+                        resolve(userJSON)
+                    }
+                })
+            }
         })
     })
 }
@@ -84,9 +136,9 @@ export function updateUser(req:Request, res:Response) {
         upload.single('image')(req, res, async function (err) {
             if (err)
                 resolve (generateErrorJSON({
-                    type: "Upload error",
-                    field: ["image"],
-                    message: "Error in the process of image upload"
+                    errorTitle: "Upload error",
+                    errorMessage: "Error trying to save user image",
+                    rawError: err
                 }))
 
             if(req.file?.path)
@@ -106,9 +158,13 @@ export function updateUser(req:Request, res:Response) {
                 } }, {}, function (err, doc) {
                     if(err)
                         resolve(generateErrorJSON())
-                    databaseUserTeam.loadDatabase();
-                    if(!userJSON.password)
-                        resolve(userJSON)
+                    else{
+                        databaseUserTeam.loadDatabase();
+                        if(!userJSON.password){
+                            resolve(userJSON)
+                            return
+                        }
+                    }
                 })
                 userJSON.teamId = undefined
                 userJSON.level = undefined
@@ -118,17 +174,21 @@ export function updateUser(req:Request, res:Response) {
                 //Validator
                 const validatorResult = await validator(userJSON)
                 if(validatorResult)
-                    resolve(generateErrorJSON(validatorResult.error))
+                    resolve(generateErrorJSON(validatorResult))
+                
+                else{
+                    userJSON.imageUrl = req.file?.path || req.body.imageUrl
+                    userJSON.updatedAt = new Date()
 
-                userJSON.imageUrl = req.file?.path || req.body.imageUrl
-                userJSON.updatedAt = new Date()
-
-                databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
-                    if(err)
-                        resolve(generateErrorJSON())
-                    databaseUser.loadDatabase()
-                    resolve(userJSON)
-                })
+                    databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
+                        if(err)
+                            resolve(generateErrorJSON())
+                        else{
+                            databaseUser.loadDatabase()
+                            resolve(userJSON)
+                        }
+                    })
+                }
             }
         })
     })
@@ -139,8 +199,8 @@ export function getUserByUsername(username: string) {
         databaseUser.findOne({ username: username }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
-
-            resolve(docs)
+            else
+                resolve(docs)
         })
     })
 }
@@ -150,8 +210,8 @@ export function getUserByUsernameIdNe(username: string, _id: string) {
         databaseUser.findOne({_id: { $ne: _id }, username: username }, function(err, docs) {
             if(err)
                 resolve(generateErrorJSON())
-
-            resolve(docs)
+            else
+                resolve(docs)
         })
     })
 }
@@ -182,12 +242,19 @@ export function getUserGeneretingWebToken(username: string, password: string) {
                     if(err)
                         resolve(generateErrorJSON())
         
-                    if(docs){
-                        //console.log(docs)
-                        resolve(generateErrorJSON('Incorrect password'))
-                    }
-        
-                    resolve(generateErrorJSON('User not exist'))
+                    if(docs)
+                        resolve(generateErrorJSON({
+                            errorTitle: "Incorrect credentials",
+                            errorMessage: "Incorrect password",
+                            rawError: "No use found with this username/password"
+                        }))
+
+                    else
+                        resolve(generateErrorJSON({
+                            errorTitle: "Incorrect credentials",
+                            errorMessage: "User dont exist",
+                            rawError: "No user found with this username"
+                        }))
                 })
             }
         })
@@ -201,21 +268,29 @@ export function getUserByWebToken(webToken: string) {
                 resolve(generateErrorJSON())
 
             if(!user)
-                resolve(generateErrorJSON("cookie not valid"))
+                resolve(generateErrorJSON({
+                    errorTitle: "Cookie",
+                    errorMessage: "This cookie are invalid",
+                    rawError: "No user found with this webtoken"
+                }))
 
             else
                 databaseUserTeam.find({ userId: user._id }, {}, function(err, userTeams: UserTeam[]) {
                     if(err)
                         resolve(generateErrorJSON())
 
-                    databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
-                        if(err)
-                            resolve(generateErrorJSON())
+                    else{
+                        databaseTeam.find({ _id: { $in: userTeams.map(userTeam => userTeam.teamId) }  }, {}, function(err, teams: Team[]) {
+                            if(err)
+                                resolve(generateErrorJSON())
 
-                        user.teams = teams
+                            else{
+                                user.teams = teams
 
-                        resolve(user)
-                    })
+                                resolve(user)
+                            }
+                        })
+                    }
                 })
         })
     })
@@ -230,7 +305,7 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
             else
                 databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
                     if(err)
-                        resolve(generateErrorJSON(err.message))
+                        resolve(generateErrorJSON(err))
 
                     else{
                         const result = {
@@ -238,7 +313,6 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
                             totalPages: users ? Math.ceil(users.length/limit) : 0,
                             currentPage: page
                         }
-
                         resolve(result)
                     }
                 })

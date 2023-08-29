@@ -47,7 +47,7 @@ export default function UserShowcase({
             })
             .then(res => res.json())
             .then((resJson: User | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -58,8 +58,8 @@ export default function UserShowcase({
             team && queryClient.invalidateQueries(['segments', team._id])
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }

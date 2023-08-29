@@ -2,13 +2,19 @@ import styles from "@/app/styles/components/TeamName.module.scss"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import Team from "@shared/models/TeamModel"
 import { useMutation } from "@tanstack/react-query"
+import { Dispatch, SetStateAction } from "react"
 
 export default function TeamName({
     teamId,
-    teamName
+    teamName,
+    generateError
 }: {
     teamId:string,
-    teamName:string
+    teamName:string,
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const teamNameMutation = useMutation({
         mutationFn: (editedName:string) => {
@@ -21,13 +27,16 @@ export default function TeamName({
             })
             .then(res => res.json())
             .then((resJson: string | ErrorJSON) => {
-                if(typeof resJson !== 'string' && 'error' in resJson) 
+                if(typeof resJson !== 'string' && 'rawError' in resJson) 
                     throw resJson
                 return resJson
             })
         },
-        onError: (err: ErrorJSON) => {
-            console.log(err)
+        onError: (error: any) => {
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
     })
 

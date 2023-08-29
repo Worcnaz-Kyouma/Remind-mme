@@ -19,8 +19,8 @@ export default function Header() {
             })
             .then((res) => res.json())
             .then((resJson: UserModel | ErrorJSON) => {
-                if('error' in resJson){
-                    if(resJson.error === 'cookie not valid'){
+                if('rawError' in resJson){
+                    if(resJson.errorTitle === 'Cookie'){
                         router.push('/login')
                         throw resJson
                     }
@@ -37,10 +37,10 @@ export default function Header() {
         return <></>
 
     if(userQuery.isError){
-        if(!('error' in (userQuery.error as any)))
+        if(!('rawError' in (userQuery.error as any)))
             return <ErrorMessage errorTitle='Error' errorMessage='Internal Error' />
         else
-            return <ErrorMessage errorTitle={(userQuery.error as any).error} errorMessage={(userQuery.error as any).error} />
+            return <ErrorMessage errorTitle={(userQuery.error as any).errorTitle} errorMessage={(userQuery.error as any).errorMessage} />
     }
 
     else{

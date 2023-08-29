@@ -33,14 +33,14 @@ export default function UserTeamGenerator({
             return fetch(`http://localhost:22194/users/search/?limit=${limit}&page=${page}&field=${field}&value=${value}&teamId=${team._id}`)
                 .then(res => res.json())
                 .then((resJson: { users: UserModel[], totalPages: number, currentPage: number } | ErrorJSON) => {
-                    if('error' in resJson)
+                    if('rawError' in resJson)
                         throw resJson
                     return resJson
                 })
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }

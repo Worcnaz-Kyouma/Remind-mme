@@ -24,7 +24,7 @@ export async function createUserTeamRelation(req:Request, res:Response) {
     const data = await userTeamService.createUserTeamRelation(req.body.userId, req.body.teamId, parseInt(req.body.level as string))
 
     res.status(201)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
 
     res.json(data)
@@ -39,7 +39,7 @@ export async function getUserAndMaxLevelInGroup(req:Request, res:Response) {
     const data = await userTeamService.getUserAndMaxLevelInGroup(req.query.userId as string, req.query.teamId as string)
 
     res.status(200)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
 
     res.json(data)
@@ -54,7 +54,7 @@ export async function getLevelSegmentsInTeamWithUsers(req:Request, res:Response)
     const data = await userTeamService.getLevelSegmentsInTeamWithUsers(req.params.teamId)
 
     res.status(200)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
 
     res.json(data)
@@ -69,7 +69,7 @@ export async function deleteUserTeamRelation(req:Request, res:Response) {
     const data = await userTeamService.deleteUserTeamRelation(req.query.userId as string, req.query.teamId as string)
 
     res.status(200)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
 
     res.json(data)

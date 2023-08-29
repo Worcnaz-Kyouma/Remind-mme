@@ -1,5 +1,7 @@
 type ErrorJSON = {
-    error:any
+    errorTitle:string
+    errorMessage:string
+    rawError:any
 }
 
 export default ErrorJSON

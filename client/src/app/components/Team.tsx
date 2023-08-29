@@ -37,7 +37,7 @@ export default function Team({
             })
             .then((res) => res.json())
             .then((resJson: { level: number, users: UserModel[] }[] | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -47,8 +47,8 @@ export default function Team({
             setSegments(data)
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         },
@@ -61,7 +61,7 @@ export default function Team({
             return fetch(`http://localhost:22194/usersteams/level-compare/?userId=${loggedUser._id}&teamId=${team!._id}`)
                 .then((res) => res.json())
                 .then((resJson: {loggedUserLevel:number, maxLevel:number} | ErrorJSON) => {
-                    if('error' in resJson) 
+                    if('rawError' in resJson) 
                         throw resJson
                     return resJson
                 })
@@ -71,8 +71,8 @@ export default function Team({
             setMaxTeamLevel(data.maxLevel)
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
@@ -83,7 +83,7 @@ export default function Team({
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
             <TeamControllers generateError={generateError} canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
             {maxTeamLevel && loggedUserLevel && maxTeamLevel<=loggedUserLevel
-                ? <TeamName teamId={team!._id as string} teamName={team.name}/> 
+                ? <TeamName generateError={generateError} teamId={team!._id as string} teamName={team.name}/> 
                 : <span>{team.name}</span>
             }
             {!isClosed && 

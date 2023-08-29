@@ -28,7 +28,7 @@ export default function TeamGenerator({
             })
             .then(res => res.json())
             .then((resJson: User | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -37,8 +37,8 @@ export default function TeamGenerator({
             queryClient.invalidateQueries(["users"])
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }

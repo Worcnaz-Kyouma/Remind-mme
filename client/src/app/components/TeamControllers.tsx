@@ -28,7 +28,7 @@ export default function TeamControllers({
             })
             .then(res => res.json())
             .then((resJson: UserTeam | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -37,8 +37,8 @@ export default function TeamControllers({
             queryClient.invalidateQueries(['users'])
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
@@ -51,7 +51,7 @@ export default function TeamControllers({
             })
             .then(res => res.json())
             .then((resJson: TeamModel | ErrorJSON) => {
-                if('error' in resJson)
+                if('rawError' in resJson)
                     throw resJson
                 return resJson
             })
@@ -60,8 +60,8 @@ export default function TeamControllers({
             queryClient.invalidateQueries(['users'])
         },
         onError: (error: any) => {
-            if('error' in error)
-                generateError({errorTitle: error.title, errorMessage: error.message})
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }

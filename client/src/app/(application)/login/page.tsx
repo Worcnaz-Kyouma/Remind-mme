@@ -24,7 +24,7 @@ export default function Login() {
             })
             .then(res => res.json())
             .then((resJson: UserModel | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -47,7 +47,7 @@ export default function Login() {
     
     return (
         <>
-        {userMutation.isError && <ErrorMessage errorTitle="Sugoma" errorMessage={'error' in (userMutation.error as any) ? (userMutation.error as any).error : "Internal Error"} />}
+        {userMutation.isError && <ErrorMessage errorTitle={'rawError' in (userMutation.error as any) ? (userMutation.error as any).errorTitle : "Error"} errorMessage={'rawError' in (userMutation.error as any) ? (userMutation.error as any).errorMessage : "Internal Error"} />}
         <div className={styles['div-wrapper']}>
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>

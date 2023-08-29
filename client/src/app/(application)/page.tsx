@@ -1,10 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import User from '@shared/models/UserModel'
 import ErrorJSON from '@shared/models/ErrorJSON'
 import { useQuery } from '@tanstack/react-query'
 import UserModel from '@shared/models/UserModel'
 import ErrorMessage from '../components/ErrorMessage'
+import styles from "@/app/styles/root.module.scss"
 
 export default function Page() {
 
@@ -31,9 +31,6 @@ export default function Page() {
         }
     })
 
-    if(userQuery.isLoading)
-        return <></>
-
     if(userQuery.isError){
         return (
             'error' in (userQuery.error as any) && userQuery.error !== 'cookie not valid' &&
@@ -41,6 +38,8 @@ export default function Page() {
         )
     }
 
-    return <h1>Sus</h1>
+    return (
+      <div className={styles['image-wrapper']}><img src="/RemindMMelogo4.png" alt="Remind-mme logo" /></div>
+    )
   
 }

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Remmind-mme',
   description: 'Keep calm, we gonna remind you!',
   icons:{
-    icon: '/next.svg'
+    icon: '/favicon3.png'
   }
 }
 

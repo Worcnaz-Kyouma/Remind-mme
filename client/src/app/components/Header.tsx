@@ -19,11 +19,16 @@ export default function Header() {
             })
             .then((res) => res.json())
             .then((resJson: UserModel | ErrorJSON) => {
-                if('error' in resJson) 
-                    throw resJson
+                if('error' in resJson){
+                    if(resJson.error === 'cookie not valid'){
+                        router.push('/login')
+                        throw resJson
+                    }
+                    else
+                        throw resJson
+                }
                 return resJson
             })
-            .then((res: UserModel) => !res?._id ? router.push('/login') : res)
         },
         refetchInterval: 5000,
     })
@@ -32,19 +37,21 @@ export default function Header() {
         return <></>
 
     if(userQuery.isError){
-        return (
-            'error' in (userQuery.error as any) && userQuery.error !== 'cookie not valid' &&
-                <ErrorMessage errorTitle={userQuery.error as string} errorMessage={userQuery.error as string} />
-        )
+        if(!('error' in (userQuery.error as any)))
+            return <ErrorMessage errorTitle='Error' errorMessage='Internal Error' />
+        else
+            return <ErrorMessage errorTitle={(userQuery.error as any).error} errorMessage={(userQuery.error as any).error} />
     }
 
-    return (
-        <>
-        <header className={styles['main-header']}>
-            <Profile user={userQuery.data as UserModel}/>
-            <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
-            <LogoutButton />
-        </header>
-        </>
-    )
+    else{
+        return (
+            <>
+            <header className={styles['main-header']}>
+                <Profile user={userQuery.data as UserModel}/>
+                <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
+                <LogoutButton />
+            </header>
+            </>
+        )
+    }
 }

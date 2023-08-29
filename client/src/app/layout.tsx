@@ -22,7 +22,6 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           <body>
             {children}
-            <ReactQueryDevtools />
           </body>
         </QueryClientProvider>
       </html>

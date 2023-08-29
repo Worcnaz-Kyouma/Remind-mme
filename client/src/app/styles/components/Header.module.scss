@@ -1,6 +1,4 @@
 .main-header {
-    position: relative;
-
     display: flex;
     flex-direction: row;
     flex-direction: row-reverse;
@@ -12,11 +10,7 @@
     }
 
     .logo-wrapper{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
+        position: relative;
         width: 400px;
         height: 100px;
 

@@ -19,7 +19,7 @@ export default function Header() {
             .then((res) => res.json())
             .then((res: UserModel) => !res?._id ? router.push('/login') : res)
         },
-        refetchInterval: 5000
+        refetchInterval: 5000,
     })
 
     if(userQuery.isLoading)

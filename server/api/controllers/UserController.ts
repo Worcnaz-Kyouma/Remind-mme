@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Request, Response, json } from "express"
 import { User } from './../models/UserModel'
 import * as userService from "./../services/UserService"
 
@@ -15,7 +15,7 @@ export async function createUser(req:Request, res:Response) {
     const data = await userService.createUser(req, res)
 
     res.status(201)
-    if('error' in data)
+    if('rawError' in data)
         res.status(500)
     else{
         res.cookie('SESSIONRMM', data.webToken);
@@ -28,7 +28,7 @@ export async function updateUser(req:Request, res:Response) {
     const data = await userService.updateUser(req, res)
 
     res.status(201)
-    if('error' in data)
+    if('rawError' in data)
         res.status(500)
     
     res.json(data)
@@ -43,7 +43,7 @@ export async function getUserByUsername(req:Request, res:Response) {
     const data = await userService.getUserByUsername(req.params.username)
 
     res.status(200)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
 
     res.json(data)
@@ -51,14 +51,19 @@ export async function getUserByUsername(req:Request, res:Response) {
 
 export async function getUserByWebToken(req:Request, res:Response) {
     if(typeof req.cookies.SESSIONRMM === 'undefined'){
-        invalidRequest(res, "cookie not valid")
+        res.status(400)
+        res.json({
+            errorTitle: "Cookie",
+            errorMessage: "This cookie are invalid",
+            rawError: "No user found with this webtoken"
+        })
         return
     }
 
     const data = await userService.getUserByWebToken(req.cookies.SESSIONRMM)
 
     res.status(200)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
     res.json(data)
 }
@@ -72,7 +77,7 @@ export async function getUserGeneretingCookie(req:Request, res:Response) {
     const data = await userService.getUserGeneretingWebToken(req.body.username, req.body.password);
         
     res.status(200)
-    if(data && 'error' in data){
+    if(data && 'rawError' in data){
         res.status(500)
     }
     else{
@@ -103,7 +108,7 @@ export async function getUsersByGivenFieldOutOfTeam(req:Request, res:Response) {
     )
 
     res.status(200)
-    if(data && 'error' in data)
+    if(data && 'rawError' in data)
         res.status(500)
 
     res.json(data)

@@ -20,7 +20,7 @@ export async function createTeamByOwner(req:Request, res:Response) {
     const data = await teamService.createTeamByOwner(req.body.userId)
 
     res.status(201)
-    if('error' in data)
+    if('rawError' in data)
         res.status(500)
 
     res.json(data)
@@ -35,7 +35,7 @@ export async function updateTeamName(req:Request, res:Response) {
     const data = await teamService.updateTeamName(req.params.teamId, req.body.teamName)
 
     res.status(201)
-    if(typeof data !== 'string' && 'error' in data)
+    if(typeof data !== 'string' && 'rawError' in data)
         res.status(500)
 
     res.json(data)
@@ -50,7 +50,7 @@ export async function deleteTeamAndRelations(req:Request, res:Response) {
     const data = await teamService.deleteTeamAndRelations(req.params.teamId)
 
     res.status(200)
-    if('error' in data)
+    if('rawError' in data)
         res.status(500)
 
     res.json(data)

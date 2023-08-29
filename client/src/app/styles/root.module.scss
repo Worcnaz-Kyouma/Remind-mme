@@ -1,0 +1,46 @@
+.image-wrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 180px;
+
+    border-radius: 12px;
+
+    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.691) inset;
+
+    img{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 85%;
+        height: auto;
+    }
+
+    animation: move 1.6s linear 0s infinite forwards;
+
+    @keyframes move {
+        0% {
+            transform: scaleX(1) scaleY(1)  translate(-50%, -50%);
+        }
+        20% {
+            transform: scaleX(1.02) scaleY(1) translate(-50%, -50%);
+        }
+        40% {
+            transform: scaleX(1.02) scaleY(1.02) translate(-50%, -50%);
+        }
+        60% {
+            transform: scaleX(1.02) scaleY(1.02) translate(-50%, -50%);
+        }
+        80% {
+            transform: scaleX(1.02) scaleY(1.02) translate(-50%, -50%);
+        }
+        100% {
+            transform: scaleX(1) scaleY(1) translate(-50%, -50%);
+        }
+    }
+
+}

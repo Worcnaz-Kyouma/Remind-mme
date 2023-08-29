@@ -3,11 +3,17 @@ import ErrorJSON from "@shared/models/ErrorJSON"
 import User from "@shared/models/UserModel"
 import UserModel from "@shared/models/UserModel"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Dispatch, SetStateAction } from "react"
 
 export default function TeamGenerator({
-    user
+    user,
+    generateError
 }: {
     user: UserModel
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const queryClient = useQueryClient()
 
@@ -22,7 +28,7 @@ export default function TeamGenerator({
             })
             .then(res => res.json())
             .then((resJson: User | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -30,8 +36,11 @@ export default function TeamGenerator({
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
         },
-        onError: (err: ErrorJSON) => {
-            console.log(err)
+        onError: (error: any) => {
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
     })
 

@@ -4,12 +4,25 @@ import validatorJS from "validator"
 import { User, databaseUser } from "../models/UserModel"
 
 type ErrorJSON = {
-    error:any
+    errorTitle:string
+    errorMessage:string
+    rawError:any
 }
 
-function generateErrorJSON(err:any = 'Server internal error'){
+function generateErrorJSON(err:ErrorJSON | any = 'Server internal error'){
+    if('errorTitle' in err && 'errorMessage' in err && 'rawError' in err){
+        const errorJSON:ErrorJSON = {
+            errorTitle: err.errorTitle as string,
+            errorMessage: err.errorMessage as string,
+            rawError: err.errorMessage
+        }
+        return errorJSON
+    }
+    
     const errorJSON:ErrorJSON = {
-        error: { err }
+        errorTitle: "Error",
+        errorMessage: "Internal Error",
+        rawError: err
     }
 
     return errorJSON
@@ -22,33 +35,44 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
                 resolve(generateErrorJSON())
 
             if(!usersTeams)
-                resolve(generateErrorJSON("group don't have any member"))
+                resolve(generateErrorJSON({
+                    errorTitle: "Internal error",
+                    errorMessage: "Group dont have any member",
+                    message: "No use found with this teamId"
+                }))
 
-            databaseUser.find({ _id: { $in: usersTeams.map(userTeam => userTeam.userId) } }).sort({ _id: 1 }).exec(function (err, users:User[]) {
-                if(err)
-                    resolve(generateErrorJSON())
+            else
+                databaseUser.find({ _id: { $in: usersTeams.map(userTeam => userTeam.userId) } }).sort({ _id: 1 }).exec(function (err, users:User[]) {
+                    if(err)
+                        resolve(generateErrorJSON())
 
-                if(!users)
-                    resolve(generateErrorJSON("group don't have any member"))
+                    if(!users)
+                        resolve(generateErrorJSON({
+                            errorTitle: "Internal error",
+                            errorMessage: "Group dont have any member",
+                            message: "No use found with this teamId"
+                        }))
 
-                if(users.length != usersTeams.length)
-                    resolve(generateErrorJSON())
+                    if(users.length != usersTeams.length)
+                        resolve(generateErrorJSON())
 
-                let results:{ level: number, users: User[] }[] = []
-                usersTeams.forEach((userTeam, index) => {
-                    if(typeof results[userTeam.level] === 'undefined'){
-                        results[userTeam.level] = { level: userTeam.level, users: [users[index]] }
-                    }
                     else{
-                        results[userTeam.level].level = userTeam.level
-                        results[userTeam.level].users.push(users[index])
+                        let results:{ level: number, users: User[] }[] = []
+                        usersTeams.forEach((userTeam, index) => {
+                            if(typeof results[userTeam.level] === 'undefined'){
+                                results[userTeam.level] = { level: userTeam.level, users: [users[index]] }
+                            }
+                            else{
+                                results[userTeam.level].level = userTeam.level
+                                results[userTeam.level].users.push(users[index])
+                            }
+                        })
+
+                        results = results!.filter(result => result != null).sort((a, b) => b.level - a.level)
+
+                        resolve(results)
                     }
                 })
-
-                results = results!.filter(result => result != null).sort((a, b) => b.level - a.level)
-
-                resolve(results)
-            })
         })
     })
 }
@@ -60,7 +84,12 @@ export function getUserAndMaxLevelInGroup(userId:string, teamId:string) {
                 resolve(generateErrorJSON())
 
             if(!userTeam)
-                resolve(generateErrorJSON('User / Team relationship not found'))
+                resolve(generateErrorJSON({
+                    errorTitle: "Internal error",
+                    errorMessage: "User / Team relationship not found",
+                    message: "No user found with this user/team"
+                }))
+                
 
             else
                 databaseUserTeam.find({ teamId: teamId }).sort({ level: -1 }).exec(function (err, maxLevel:UserTeam[]) {
@@ -68,11 +97,14 @@ export function getUserAndMaxLevelInGroup(userId:string, teamId:string) {
                         resolve(generateErrorJSON())
                         
                     if(!maxLevel)
-                        resolve(generateErrorJSON('Empty User / Team relationship'))
-                    else{
-                        //console.log(maxLevel)
+                        resolve(generateErrorJSON({
+                            errorTitle: "Internal error",
+                            errorMessage: "Not found User / Team relationship not found",
+                            message: "No user found with this user/team"
+                        }))
+                        
+                    else
                         resolve({ loggedUserLevel:userTeam.level, maxLevel:maxLevel[0].level })
-                    }
                 })
         })
     })
@@ -85,7 +117,8 @@ export function createUserTeamRelation(userId: string, teamId: string, level:num
             if(err)
                 resolve(generateErrorJSON())
 
-            resolve(doc)
+            else
+                resolve(doc)
         })
     })
 }
@@ -96,7 +129,8 @@ export function deleteUserTeamRelation(userId:string, teamId:string){
             if(err)
                 resolve(generateErrorJSON())
 
-            resolve({ status: 'Success' })
+            else
+                resolve({ status: 'Success' })
         })
     })
 }

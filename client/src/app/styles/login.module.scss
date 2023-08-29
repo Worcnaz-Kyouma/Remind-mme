@@ -8,10 +8,14 @@
     max-width: 500px;
     min-width: 300px;
 
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.39) inset;
+
     border: 1px solid rgba(0, 0, 0, 0.384);
     border-radius: 15px;
 
     padding: 50px 20px 30px 20px;
+
+    background-color: white;
     
     &::before {
         $size: 120px;
@@ -28,7 +32,7 @@
         border: 1px solid rgba(0, 0, 0, 0.384);
         border-radius: 50%;
 
-        background: url('http://localhost:22194/uploads/template.jpg');
+        background: url('/template.jpg');
         background-size: 100%;
         background-position: center;
         background-repeat: no-repeat;
@@ -89,6 +93,8 @@
             padding: 4px;
         
             background-color: #f4f4f4;
+
+            box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.218) inset;
 
             transition: all 0.4s;
 

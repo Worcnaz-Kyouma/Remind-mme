@@ -1,6 +1,6 @@
 import TeamModel from "@shared/models/TeamModel";
 import styles from "@/app/styles/components/MemberGenerator.module.scss" 
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import UserModel from "@shared/models/UserModel";
 import ErrorJSON from "@shared/models/ErrorJSON";
@@ -9,11 +9,16 @@ import FoundUser from "./FoundUser";
 export default function UserTeamGenerator({
     team,
     loggedUserLevel,
-    closeModal
+    closeModal,
+    generateError
 }: {
     team: TeamModel
     loggedUserLevel: number
     closeModal: () => void
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const [ inputSearchType, setInputSearchType ] = useState<string>("text")
     const [ page, setPage ] = useState(1)
@@ -28,11 +33,17 @@ export default function UserTeamGenerator({
             return fetch(`http://localhost:22194/users/search/?limit=${limit}&page=${page}&field=${field}&value=${value}&teamId=${team._id}`)
                 .then(res => res.json())
                 .then((resJson: { users: UserModel[], totalPages: number, currentPage: number } | ErrorJSON) => {
-                    if('error' in resJson)
+                    if('rawError' in resJson)
                         throw resJson
                     return resJson
                 })
         },
+        onError: (error: any) => {
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+        }
     })
 
 
@@ -90,7 +101,7 @@ export default function UserTeamGenerator({
                 </div>
                 <div className={styles['users-wrapper']}>
                     {userSearchMutation.data.users.map(user =>
-                        <FoundUser key={user._id} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
+                        <FoundUser key={user._id} generateError={generateError} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
                             userSearchMutation.mutate({
                                 page:page, field: field, value: value
                             })

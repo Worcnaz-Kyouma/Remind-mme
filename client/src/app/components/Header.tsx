@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import LogoutButton from "./LogoutButton"
+import ErrorMessage from "./ErrorMessage"
 
 
 export default function Header() {
@@ -17,7 +18,17 @@ export default function Header() {
                 credentials: 'include',
             })
             .then((res) => res.json())
-            .then((res: UserModel) => !res?._id ? router.push('/login') : res)
+            .then((resJson: UserModel | ErrorJSON) => {
+                if('rawError' in resJson){
+                    if(resJson.errorTitle === 'Cookie'){
+                        router.push('/login')
+                        throw resJson
+                    }
+                    else
+                        throw resJson
+                }
+                return resJson
+            })
         },
         refetchInterval: 5000,
     })
@@ -25,14 +36,22 @@ export default function Header() {
     if(userQuery.isLoading)
         return <></>
 
-    if(userQuery.isError)
-        return <></>
+    if(userQuery.isError){
+        if(!('rawError' in (userQuery.error as any)))
+            return <ErrorMessage errorTitle='Error' errorMessage='Internal Error' />
+        else
+            return <ErrorMessage errorTitle={(userQuery.error as any).errorTitle} errorMessage={(userQuery.error as any).errorMessage} />
+    }
 
-    return (
-        <header className={styles['main-header']}>
-            <Profile user={userQuery.data as UserModel}/>
-            <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
-            <LogoutButton />
-        </header>
-    )
+    else{
+        return (
+            <>
+            <header className={styles['main-header']}>
+                <Profile user={userQuery.data as UserModel}/>
+                <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
+                <LogoutButton />
+            </header>
+            </>
+        )
+    }
 }

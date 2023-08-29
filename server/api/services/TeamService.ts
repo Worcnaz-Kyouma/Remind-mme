@@ -4,12 +4,25 @@ import { Request, Response } from "express"
 import validatorJS from "validator"
 
 type ErrorJSON = {
-    error:any
+    errorTitle:string
+    errorMessage:string
+    rawError:any
 }
 
-function generateErrorJSON(err:any = 'Server internal error'){
+function generateErrorJSON(err:ErrorJSON | any = 'Server internal error'){
+    if('errorTitle' in err && 'errorMessage' in err && 'rawError' in err){
+        const errorJSON:ErrorJSON = {
+            errorTitle: err.errorTitle as string,
+            errorMessage: err.errorMessage as string,
+            rawError: err.errorMessage
+        }
+        return errorJSON
+    }
+    
     const errorJSON:ErrorJSON = {
-        error: { err }
+        errorTitle: "Error",
+        errorMessage: "Internal Error",
+        rawError: err
     }
 
     return errorJSON
@@ -17,10 +30,18 @@ function generateErrorJSON(err:any = 'Server internal error'){
 
 async function validateName(teamName:string) {
     if(!teamName)
-        return { error: "Team name cannot be null" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Team name cannot be null",
+            rawError: "Name field are null"
+        }
 
     if(teamName!='Place Holder' && await getTeamByName(teamName))
-        return { error: "Already exit an team with this name" }
+        return {
+            errorTitle: "Valitation",
+            errorMessage: "Already exist an team with this name",
+            rawError: "Team name unique duplicated"
+        }
 }
 
 export function createTeamByOwner(userId:string){
@@ -30,13 +51,15 @@ export function createTeamByOwner(userId:string){
             if(err)
                 resolve(generateErrorJSON())
 
-            const userTeam:UserTeam = { userId: userId, teamId: team._id as string,  level: 1, createdAt: new Date(), updatedAt: new Date() }
-            databaseUserTeam.insert(userTeam, function(err, userTeam:UserTeam) {
-                if(err)
-                    resolve(generateErrorJSON())
-
-                resolve(team)
-            })
+            else{
+                const userTeam:UserTeam = { userId: userId, teamId: team._id as string,  level: 1, createdAt: new Date(), updatedAt: new Date() }
+                databaseUserTeam.insert(userTeam, function(err, userTeam:UserTeam) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                    else
+                        resolve(team)
+                })
+            }
         })
     })
 }
@@ -59,7 +82,7 @@ export function updateTeamName(teamId:string, teamName:string){
         else {
             const validatorResult = await validateName(teamName)
             if(validatorResult)
-                resolve(generateErrorJSON(validatorResult.error))
+                resolve(generateErrorJSON(validatorResult))
             else
                 databaseTeam.update({ _id: teamId }, { $set: { name:teamName, updatedAt: new Date() } }, {}, function(err, num) {
                     if(err)
@@ -76,13 +99,13 @@ export function deleteTeamAndRelations(teamId:string){
         databaseTeam.remove({ _id: teamId }, {}, function (err, numRemoved) {
             if(err)
                 resolve(generateErrorJSON())
-
-            databaseUserTeam.remove({ teamId: teamId }, {}, function (err, numRemoved) {
-                if(err)
-                    resolve(generateErrorJSON())
-
-                resolve({ status: 'Success' })
-            })
+            else
+                databaseUserTeam.remove({ teamId: teamId }, {}, function (err, numRemoved) {
+                    if(err)
+                        resolve(generateErrorJSON())
+                    else
+                        resolve({ status: 'Success' })
+                })
         })
     })
 }

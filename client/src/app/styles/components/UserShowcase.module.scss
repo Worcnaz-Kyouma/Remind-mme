@@ -6,6 +6,8 @@
     width: 100%;
     height: 100%;
 
+    z-index: 2;
+
     background-color: rgba(0, 0, 0, 0.207);
 }
 
@@ -108,6 +110,8 @@
 
             font-size: 40px;
 
+            background-color: white;
+            
             cursor: pointer;
 
             transition: all 0.4s;
@@ -150,6 +154,8 @@
             padding: 4px;
         
             background-color: #f4f4f4;
+            
+            box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.218) inset;
 
             transition: all 0.4s;
 

@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from "react"
+import { Dispatch, SetStateAction, useRef, useState } from "react"
 import styles from "./../styles/components/UserShowcase.module.scss"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import UserModel from "@shared/models/UserModel"
@@ -16,6 +16,7 @@ export default function UserShowcase({
     maxTeamLevel,
     team,
     setCompressedOn,
+    generateError
 }: {
     user: UserModel
     userLevel?: number
@@ -24,6 +25,10 @@ export default function UserShowcase({
     maxTeamLevel: number
     team?: TeamModel
     setCompressedOn: () => void
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ haveChanges, setHaveChanges ] = useState(false)
@@ -42,7 +47,7 @@ export default function UserShowcase({
             })
             .then(res => res.json())
             .then((resJson: User | ErrorJSON) => {
-                if('error' in resJson) 
+                if('rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -52,8 +57,11 @@ export default function UserShowcase({
             queryClient.invalidateQueries(["users"])
             team && queryClient.invalidateQueries(['segments', team._id])
         },
-        onError: (err: ErrorJSON) => {
-            console.log(err)
+        onError: (error: any) => {
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
     })
 
@@ -140,7 +148,7 @@ export default function UserShowcase({
                             <label htmlFor="level">Level </label>
                             <input type="number" name="level" id="level" required defaultValue={userLevel} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<userLevel} onChange={() => setHaveChanges(true)}/>
                         </div>
-                        {loggedUserLevel>=userLevel && loggedUser._id!=user._id && <RemoveMember userId={user._id as string} teamId={team!._id as string} setCompressedOn={setCompressedOn}/>}
+                        {loggedUserLevel>=userLevel && loggedUser._id!=user._id && <RemoveMember generateError={generateError} userId={user._id as string} teamId={team!._id as string} setCompressedOn={setCompressedOn}/>}
                     </div>
                 }
 

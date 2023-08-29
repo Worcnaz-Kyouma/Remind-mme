@@ -11,6 +11,8 @@
 
     padding: 50px 20px 30px 20px;
 
+    background-color: white;
+
     .login-button {
         $height: 20px;
 
@@ -78,7 +80,7 @@
 
             transition: all 0.4s;
 
-            background-color: transparent;
+            background-color: white;
 
             &:hover {
                 transform: translateY(-50%) scale(1.03);
@@ -124,6 +126,8 @@
             padding: 4px;
         
             background-color: #f4f4f4;
+
+            box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.218) inset;
 
             transition: all 0.4s;
 

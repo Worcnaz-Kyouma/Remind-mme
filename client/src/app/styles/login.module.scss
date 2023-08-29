@@ -12,6 +12,8 @@
     border-radius: 15px;
 
     padding: 50px 20px 30px 20px;
+
+    background-color: white;
     
     &::before {
         $size: 120px;
@@ -89,6 +91,8 @@
             padding: 4px;
         
             background-color: #f4f4f4;
+
+            box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.218) inset;
 
             transition: all 0.4s;
 

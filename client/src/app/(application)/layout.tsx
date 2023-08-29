@@ -13,7 +13,6 @@ export default function Layout({
     return(
         <QueryClientProvider client={queryClient}>
             {children}
-          <ReactQueryDevtools  />
         </QueryClientProvider>
     )
 }

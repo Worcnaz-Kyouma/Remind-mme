@@ -1,6 +1,6 @@
 import TeamModel from "@shared/models/TeamModel";
 import styles from "@/app/styles/components/MemberGenerator.module.scss" 
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import UserModel from "@shared/models/UserModel";
 import ErrorJSON from "@shared/models/ErrorJSON";
@@ -9,11 +9,16 @@ import FoundUser from "./FoundUser";
 export default function UserTeamGenerator({
     team,
     loggedUserLevel,
-    closeModal
+    closeModal,
+    generateError
 }: {
     team: TeamModel
     loggedUserLevel: number
     closeModal: () => void
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const [ inputSearchType, setInputSearchType ] = useState<string>("text")
     const [ page, setPage ] = useState(1)
@@ -33,6 +38,12 @@ export default function UserTeamGenerator({
                     return resJson
                 })
         },
+        onError: (error: any) => {
+            if('error' in error)
+                generateError({errorTitle: error.title, errorMessage: error.message})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+        }
     })
 
 
@@ -90,7 +101,7 @@ export default function UserTeamGenerator({
                 </div>
                 <div className={styles['users-wrapper']}>
                     {userSearchMutation.data.users.map(user =>
-                        <FoundUser key={user._id} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
+                        <FoundUser key={user._id} generateError={generateError} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
                             userSearchMutation.mutate({
                                 page:page, field: field, value: value
                             })

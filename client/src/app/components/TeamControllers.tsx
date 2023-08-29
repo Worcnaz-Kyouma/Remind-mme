@@ -3,15 +3,21 @@ import ErrorJSON from "@shared/models/ErrorJSON"
 import TeamModel from "@shared/models/TeamModel"
 import UserTeam from "@shared/models/UserTeamModel"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Dispatch, SetStateAction } from "react"
 
 export default function TeamControllers({
     canDelete,
     teamId,
-    userId
+    userId,
+    generateError
 }: {
     canDelete: boolean
     teamId: string
     userId: string
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const queryClient = useQueryClient()
 
@@ -29,6 +35,12 @@ export default function TeamControllers({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['users'])
+        },
+        onError: (error: any) => {
+            if('error' in error)
+                generateError({errorTitle: error.title, errorMessage: error.message})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
     })
 
@@ -46,6 +58,12 @@ export default function TeamControllers({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['users'])
+        },
+        onError: (error: any) => {
+            if('error' in error)
+                generateError({errorTitle: error.title, errorMessage: error.message})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
     })
 

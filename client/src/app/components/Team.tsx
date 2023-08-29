@@ -12,11 +12,16 @@ import TeamName from "./TeamName"
 export default function Team({
     team,
     loggedUser,
-    setUserShowcaseData
+    setUserShowcaseData,
+    generateError
 }: {
     team: TeamModel,
     loggedUser: UserModel,
     setUserShowcaseData: (userShowcaseDate:{user:UserModel, userLevel:number, loggedUser:UserModel, loggedUserLevel:number, maxTeamLevel:number, team:TeamModel}) => void
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const [ isClosed, setClosed ] = useState(true)
     const [ segments, setSegments ] = useState<{ level: number, users: UserModel[] }[] | null>(null)
@@ -41,6 +46,12 @@ export default function Team({
         onSuccess: (data) => {
             setSegments(data)
         },
+        onError: (error: any) => {
+            if('error' in error)
+                generateError({errorTitle: error.title, errorMessage: error.message})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+        },
         refetchInterval: 5000
     })
 
@@ -59,12 +70,18 @@ export default function Team({
             setLoggedUserLevel(data.loggedUserLevel)
             setMaxTeamLevel(data.maxLevel)
         },
+        onError: (error: any) => {
+            if('error' in error)
+                generateError({errorTitle: error.title, errorMessage: error.message})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+        }
     })
 
     return (
         <>
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
-            <TeamControllers canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
+            <TeamControllers generateError={generateError} canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
             {maxTeamLevel && loggedUserLevel && maxTeamLevel<=loggedUserLevel
                 ? <TeamName teamId={team!._id as string} teamName={team.name}/> 
                 : <span>{team.name}</span>
@@ -81,7 +98,7 @@ export default function Team({
                 setClosed((isClosed) => !isClosed)
             }}></button>
         </div>
-        {isMemberGeneratorOpen && levelQuery.data?.loggedUserLevel && <MemberGenerator team={team} loggedUserLevel={loggedUserLevel as number} closeModal={() => setMemberGeneratorOpen(false)} />}
+        {isMemberGeneratorOpen && levelQuery.data?.loggedUserLevel && <MemberGenerator generateError={generateError} team={team} loggedUserLevel={loggedUserLevel as number} closeModal={() => setMemberGeneratorOpen(false)} />}
         </>
     )
 }

@@ -5,17 +5,23 @@ import styles from "@/app/styles/components/FoundUser.module.scss"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import UserTeam from "@shared/models/UserTeamModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
+import { Dispatch, SetStateAction } from "react"
 
 export default function FoundUser({
     user,
     teamId,
     level,
-    refetchUserList
+    refetchUserList,
+    generateError
 }: {
     user: User
     teamId: string
     level: string | undefined
     refetchUserList: () => void
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const clientQuery = useQueryClient()
 
@@ -39,8 +45,11 @@ export default function FoundUser({
             refetchUserList()
             clientQuery.invalidateQueries(['segments', teamId])
         },
-        onError: (err: ErrorJSON) => {
-            console.log(err)
+        onError: (error: any) => {
+            if('error' in error)
+                generateError({errorTitle: error.title, errorMessage: error.message})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
         }
     })
 

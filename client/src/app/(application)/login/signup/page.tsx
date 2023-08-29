@@ -5,6 +5,7 @@ import { useRef, useState } from "react"
 import styles from "@/app/styles/signup.module.scss"
 import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
+import ErrorMessage from "@/app/components/ErrorMessage"
 
 export default function Login() {
     const router = useRouter()
@@ -49,6 +50,8 @@ export default function Login() {
     }
 
     return (
+        <>
+        {userMutation.isError && <ErrorMessage errorTitle="Sugoma" errorMessage={'error' in (userMutation.error as any) ? (userMutation.error as any).error : "Internal Error"} />}
         <div className={styles['div-wrapper']}>
             <h1>Sign up</h1>
             <form onSubmit={handleSubmit}>
@@ -113,5 +116,6 @@ export default function Login() {
             </form>
             <button className={styles['login-button']} onClick={() => router.push('./')}>Login</button>
         </div>
+        </>
     )
 }

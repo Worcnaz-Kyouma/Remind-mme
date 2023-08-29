@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import LogoutButton from "./LogoutButton"
+import ErrorMessage from "./ErrorMessage"
 
 
 export default function Header() {
@@ -17,6 +18,11 @@ export default function Header() {
                 credentials: 'include',
             })
             .then((res) => res.json())
+            .then((resJson: UserModel | ErrorJSON) => {
+                if('error' in resJson) 
+                    throw resJson
+                return resJson
+            })
             .then((res: UserModel) => !res?._id ? router.push('/login') : res)
         },
         refetchInterval: 5000,
@@ -25,14 +31,20 @@ export default function Header() {
     if(userQuery.isLoading)
         return <></>
 
-    if(userQuery.isError)
-        return <></>
+    if(userQuery.isError){
+        return (
+            'error' in (userQuery.error as any) && userQuery.error !== 'cookie not valid' &&
+                <ErrorMessage errorTitle={userQuery.error as string} errorMessage={userQuery.error as string} />
+        )
+    }
 
     return (
+        <>
         <header className={styles['main-header']}>
             <Profile user={userQuery.data as UserModel}/>
             <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
             <LogoutButton />
         </header>
+        </>
     )
 }

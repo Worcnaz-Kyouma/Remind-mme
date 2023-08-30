@@ -79,6 +79,8 @@ Header:
 - Na esquerda superior há um botão escrito "Logout", para deslogar o usuario
 - Na direita superior há um pequeno circulo com a imagem de seu proprio usuario logado. Ao clicar neste circulo:
   - Entrará em uma tela de showcase do usuario, ou é possivel ver todos seus dados e tambem edita-los
+ 
+Corpo central: Descrito logo abaixo
 
 Botão inferior:
 - Este botão é o gerador de times, é nele que você irá clicar para gerar quantos times quiser para o usuario logado

@@ -20,7 +20,7 @@
         box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
     }
 
-    .img-wrapper{
+    .img-relative-wrapper{
         position: relative;
         width: 100px;
         height: 110px;
@@ -30,15 +30,29 @@
 
         padding: 7px;
 
-        img {
+        .image-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
+            width: 85%;
+            height: 85%;
+    
             transform: translate(-50%, -50%);
+            overflow: hidden;
+    
+            border-radius: 16px;
 
-            width: 80%;
-            aspect-ratio: auto;
-            border-radius: 15px;
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+        
+                width: 100%;
+                aspect-ratio: auto 32 / 32;
+        
+                border-radius: 16px;
+            }
         }
     }
 }

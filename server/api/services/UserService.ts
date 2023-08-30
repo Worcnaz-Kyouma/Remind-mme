@@ -78,12 +78,12 @@ async function validator(userJSON:User) {
             errorMessage: "Invalid email",
             rawError: "Invalid email field"
         }
-    if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
+    /*if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
         return {
             errorTitle: "Valitation",
             errorMessage: "Invalid number",
             rawError: "Invalid number field"
-        }
+        }*/
 
     if(!validatorJS.isBefore(userJSON.bornDate, (new Date()).toISOString()))
         return {

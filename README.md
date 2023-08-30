@@ -85,6 +85,7 @@ Botão inferior:
 
 ## Corpo central
 Será aqui que os grupos vão aparecer, a principio todos estão minimizados
+
 Times:
 - Na parte direita superior do grupo haverão opções de "Sair" do time ou "Deletar" o time(Vale notar que apenas os usuarios de maior level no time podem deleta-lo)
 - Na parte do time minimazado, existe uma pequena flecha, que ao ser clicada abrirá o grupo

@@ -64,8 +64,10 @@ Esperamos que nosso sistema possa auxili-los, muito obrigado pela oportunidade!
 ## Manual
 
 Tela inicial
+
 Login:
 - Entrar em um usuario ja existente, com seu username e password
+
 Sign Up:
 - Criar usuario na tela de Sign up para logar no sistema
 

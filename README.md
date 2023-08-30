@@ -1,4 +1,4 @@
-<p align="center"><a href="https://www.aquicob.com.br/" target="_blank"><img src="https://www.aquicob.com.br/assets/img/logo/logo1.png" width="400"></a></p>
+<p align="center"><img src="https://media.discordapp.net/attachments/679383239948894220/1146452327998439525/1637075117552-removebg-preview.png" width="400"></p>
 
 ## Proposta do projeto/desafio
 Problema: PROPOSTA A

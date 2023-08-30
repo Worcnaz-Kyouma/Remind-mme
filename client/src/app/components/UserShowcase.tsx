@@ -56,6 +56,7 @@ export default function UserShowcase({
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
             team && queryClient.invalidateQueries(['segments', team._id])
+            setCompressedOn()
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -146,9 +147,9 @@ export default function UserShowcase({
                     <div className={styles['additional-data-wrapper']}>
                         <div className={styles['level-wrapper']}>
                             <label htmlFor="level">Level </label>
-                            <input type="number" name="level" id="level" required defaultValue={userLevel} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<userLevel} onChange={() => setHaveChanges(true)}/>
+                            <input type="number" name="level" id="level" required defaultValue={userLevel} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<=userLevel && maxTeamLevel!=loggedUserLevel} onChange={() => setHaveChanges(true)}/>
                         </div>
-                        {loggedUserLevel>=userLevel && loggedUser._id!=user._id && <RemoveMember generateError={generateError} userId={user._id as string} teamId={team!._id as string} setCompressedOn={setCompressedOn}/>}
+                        {(loggedUserLevel>userLevel || maxTeamLevel==loggedUserLevel) && loggedUser._id!=user._id && <RemoveMember generateError={generateError} userId={user._id as string} teamId={team!._id as string} setCompressedOn={setCompressedOn}/>}
                     </div>
                 }
 

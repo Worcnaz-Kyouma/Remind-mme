@@ -8,7 +8,7 @@ export default function HoverData({
 }: {
     user:UserModel
     inLeft:boolean
-    isProfile:boolean
+    isProfile?:boolean
 }) {
     return (
         <div className={`${styles['hover-wrapper']} ${!inLeft ? styles['left'] : ""} ${isProfile ? styles['profile'] : ""}`}>

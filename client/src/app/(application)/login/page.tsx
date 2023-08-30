@@ -52,11 +52,11 @@ export default function Login() {
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className={styles['input-wrapper']}>
-                    <input type="text" name="username" id="username" placeholder=' ' />
+                    <input type="text" name="username" id="username" placeholder=' ' required />
                     <label htmlFor="username">Username </label>
                 </div>
                 <div className={styles['input-wrapper']}>
-                    <input type={isPasswordVisible ? "text" : "password"} name="password" id="password" placeholder=' ' />
+                    <input type={isPasswordVisible ? "text" : "password"} name="password" id="password" placeholder=' ' required/>
                     <label htmlFor="password">Password </label>
                     <span id="show-password" onClick={() => setPasswordVisible((isVisible) => !isVisible)}></span>
                 </div>

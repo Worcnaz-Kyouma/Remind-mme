@@ -47,7 +47,7 @@ Execute estes passos para as 2 partes da aplicação:
 ## Descrição da solução
 
 Com base nos requisitos, nos, da Remind-mme Company implementamos um sistema completo, que conta com:
-- Criação de usuários especificos, com senha e login
+- Criação de usuários especificos, com login e senha
 - Criação de grupos de serviço, possibilitando não apenas ver os dados de cada participante do grupo, mas tambem se organizar mediante a projetos e tarefas
 - Ainda na parte de grupos, existe um basico sistema de hierarquia com base em um valor singular chamado "level". Assim, usuarios com leveis mais altos em um grupo tem um controle maior sobre ele, possibilitando deleção do grupo e a remoção de participantes
 

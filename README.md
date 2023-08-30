@@ -1,4 +1,4 @@
-<p align="center"><img src="https://media.discordapp.net/attachments/679383239948894220/1146454336398966865/1637075117552-removebg-preview_1.png" width="20%" height="10%"></p>
+<p align="center"><img src="https://media.discordapp.net/attachments/679383239948894220/1146454336398966865/1637075117552-removebg-preview_1.png" width="30%" height="20%"></p>
 
 ## Proposta do projeto/desafio
 Problema: PROPOSTA A

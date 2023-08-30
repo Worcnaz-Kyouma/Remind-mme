@@ -61,7 +61,8 @@ Esperamos que nosso sistema possa auxili-los, muito obrigado pela oportunidade!
 
 
 
-#### Manual
+## Manual
+Abaixo, descrevo uma breve instrução de como usar a aplicação e suas funcionalidades
 
 ## Tela inicial
 
@@ -72,7 +73,8 @@ Sign Up:
 - Criar usuario na tela de Sign up para logar no sistema
 
 
-Tela principal
+## Tela principal
+
 Header:
 - Na esquerda superior há um botão escrito "Logout", para deslogar o usuario
 - Na direita superior há um pequeno circulo com a imagem de seu proprio usuario logado. Ao clicar neste circulo:

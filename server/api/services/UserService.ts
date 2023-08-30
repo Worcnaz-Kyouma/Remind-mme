@@ -161,6 +161,7 @@ export function updateUser(req:Request, res:Response) {
                     else{
                         databaseUserTeam.loadDatabase();
                         if(!userJSON.password){
+                            userJSON.webToken=undefined
                             resolve(userJSON)
                             return
                         }
@@ -185,6 +186,7 @@ export function updateUser(req:Request, res:Response) {
                             resolve(generateErrorJSON())
                         else{
                             databaseUser.loadDatabase()
+                            userJSON.webToken=undefined
                             resolve(userJSON)
                         }
                     })

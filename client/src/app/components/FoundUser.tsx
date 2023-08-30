@@ -60,8 +60,10 @@ export default function FoundUser({
         <div className={styles['found-user-wrapper']} onClick={() => {
             memberMutation.mutate({ userId:user._id as string, teamId:teamId, level: level })
         }}>
-            <div className={styles['img-wrapper']}>
-                <img src={`http://localhost:22194/${user.imageUrl}`} alt="User found image" />
+            <div className={styles['img-relative-wrapper']}>
+                <div className={styles['image-wrapper']}>
+                    <img src={`http://localhost:22194/${user.imageUrl}`} alt="User found image" />
+                </div>
             </div>
             <div className={styles['data-wrapper']} >
                 <p>Name: {user.username}</p>

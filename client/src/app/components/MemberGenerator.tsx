@@ -10,7 +10,8 @@ export default function UserTeamGenerator({
     team,
     loggedUserLevel,
     closeModal,
-    generateError
+    generateError,
+    setLoading
 }: {
     team: TeamModel
     loggedUserLevel: number
@@ -19,6 +20,7 @@ export default function UserTeamGenerator({
         errorTitle: string;
         errorMessage: string;
     } | null>>
+    setLoading: Dispatch<SetStateAction<boolean>>
 }) {
     const [ inputSearchType, setInputSearchType ] = useState<string>("text")
     const [ page, setPage ] = useState(1)
@@ -101,7 +103,7 @@ export default function UserTeamGenerator({
                 </div>
                 <div className={styles['users-wrapper']}>
                     {userSearchMutation.data.users.map(user =>
-                        <FoundUser key={user._id} generateError={generateError} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
+                        <FoundUser key={user._id} setLoading={setLoading} generateError={generateError} user={user} teamId={team._id as string} level={level} refetchUserList={() => {
                             userSearchMutation.mutate({
                                 page:page, field: field, value: value
                             })

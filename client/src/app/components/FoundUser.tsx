@@ -12,7 +12,8 @@ export default function FoundUser({
     teamId,
     level,
     refetchUserList,
-    generateError
+    generateError,
+    setLoading
 }: {
     user: User
     teamId: string
@@ -22,6 +23,7 @@ export default function FoundUser({
         errorTitle: string;
         errorMessage: string;
     } | null>>
+    setLoading: Dispatch<SetStateAction<boolean>>
 }) {
     const clientQuery = useQueryClient()
 
@@ -44,6 +46,7 @@ export default function FoundUser({
         onSuccess: () => {
             refetchUserList()
             clientQuery.invalidateQueries(['segments', teamId])
+            setLoading(true)
         },
         onError: (error: any) => {
             if('rawError' in error)

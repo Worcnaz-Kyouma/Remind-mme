@@ -7,11 +7,13 @@ import ErrorJSON from "@shared/models/ErrorJSON"
 import LogoutButton from "./LogoutButton"
 import ErrorMessage from "./ErrorMessage"
 import { useState } from "react"
+import Loading from "./Loading"
 
 
 export default function Header() {
     const router = useRouter()
     const [ error, setError ] = useState<{errorTitle: string, errorMessage: string} | null>(null)
+    const [ isLoading, setLoading ] = useState(false)
 
     const userQuery = useQuery({
         queryKey: ['users'],
@@ -49,10 +51,11 @@ export default function Header() {
         return (
             <>
             {error && <ErrorMessage errorTitle={error.errorTitle} errorMessage={error.errorMessage} />}
+            {isLoading && <Loading />}
             <header className={styles['main-header']}>
                 <Profile generateError={setError} user={userQuery.data as UserModel}/>
                 <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
-                <LogoutButton />
+                <LogoutButton setLoading={setLoading} />
             </header>
             </>
         )

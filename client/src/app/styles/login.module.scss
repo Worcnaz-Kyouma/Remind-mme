@@ -40,13 +40,14 @@
 
     .signup-button {
         $height: 20px;
+        min-width: 90px;
 
         position: absolute;
         top: - calc($height);
         left: 84%;
         transform: translateX(-50%);
 
-        padding: calc($height / 2) 10px;
+        padding: calc($height / 2) 16px;
 
         border: 1px solid rgba(0, 0, 0, 0.384);
         border-radius: 8px;

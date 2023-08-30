@@ -9,7 +9,8 @@ export default function TeamControllers({
     canDelete,
     teamId,
     userId,
-    generateError
+    generateError,
+    setLoading
 }: {
     canDelete: boolean
     teamId: string
@@ -18,6 +19,7 @@ export default function TeamControllers({
         errorTitle: string;
         errorMessage: string;
     } | null>>
+    setLoading: Dispatch<SetStateAction<boolean>>
 }) {
     const queryClient = useQueryClient()
 
@@ -58,6 +60,7 @@ export default function TeamControllers({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['users'])
+            setLoading(true)
         },
         onError: (error: any) => {
             if('rawError' in error)

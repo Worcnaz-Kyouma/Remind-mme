@@ -7,13 +7,15 @@ import { Dispatch, SetStateAction } from "react"
 
 export default function TeamGenerator({
     user,
-    generateError
+    generateError,
+    setLoading
 }: {
     user: UserModel
     generateError: Dispatch<SetStateAction<{
         errorTitle: string;
         errorMessage: string;
     } | null>>
+    setLoading: Dispatch<SetStateAction<boolean>>
 }) {
     const queryClient = useQueryClient()
 
@@ -34,6 +36,7 @@ export default function TeamGenerator({
             })
         },
         onSuccess: () => {
+            setLoading(true)
             queryClient.invalidateQueries(["users"])
         },
         onError: (error: any) => {

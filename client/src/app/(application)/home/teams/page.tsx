@@ -10,6 +10,7 @@ import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import UserShowcase from "@/app/components/UserShowcase"
 import ErrorMessage from "@/app/components/ErrorMessage"
+import Loading from "@/app/components/Loading"
 
 export default function Teams() {
     type UserShowcaseData = {
@@ -26,6 +27,7 @@ export default function Teams() {
     const [ isUserShowcaseEnabled, setUserShowcaseEnabled ] = useState(false)
     const [ userShowcaseData, setUserShowcaseData ] = useState<UserShowcaseData|null>(null)
     const [ error, setError ] = useState<{errorTitle: string, errorMessage: string} | null>(null)
+    const [ isLoading, setLoading ] = useState(false)
 
     function setUserShowcaseFromComponents(userShowcaseDate:UserShowcaseData){
         setUserShowcaseData(userShowcaseDate)
@@ -49,6 +51,7 @@ export default function Teams() {
         refetchInterval: 5000,
         onSuccess: (data: UserModel) => {
             setTeams(data.teams || null)
+            setLoading(false)
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -58,20 +61,16 @@ export default function Teams() {
         }
     })
 
-    if(userQuery.isLoading)
-        return <></>
-
-    if(userQuery.isError)
-        return <></>
-
+    if(userQuery.isSuccess)
     return (
         <>
             {error && <ErrorMessage errorTitle={error.errorTitle} errorMessage={error.errorMessage} />}
             <div className={styles['teams-wrapper']}>
+            {isLoading && <Loading />}
                 <div className={styles.teams}>
-                    {teams && teams.map((team) => <Team key={ team._id } generateError={setError} team={team} loggedUser={userQuery.data} setUserShowcaseData={setUserShowcaseFromComponents} />)}
+                    {teams && teams.map((team) => <Team key={ team._id } setLoading={setLoading} generateError={setError} team={team} loggedUser={userQuery.data} setUserShowcaseData={setUserShowcaseFromComponents} />)}
                 </div>
-                <TeamGenerator generateError={setError} user={userQuery.data}/>
+                <TeamGenerator setLoading={setLoading} generateError={setError} user={userQuery.data}/>
             </div>
             {isUserShowcaseEnabled && userShowcaseData &&
                 <UserShowcase generateError={setError} user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser} loggedUserLevel={userShowcaseData.loggedUserLevel} maxTeamLevel={userShowcaseData.maxTeamLevel} team={userShowcaseData.team} setCompressedOn={() => setUserShowcaseEnabled(false)} />

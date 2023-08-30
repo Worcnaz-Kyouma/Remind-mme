@@ -13,7 +13,8 @@ export default function Team({
     team,
     loggedUser,
     setUserShowcaseData,
-    generateError
+    generateError,
+    setLoading
 }: {
     team: TeamModel,
     loggedUser: UserModel,
@@ -21,7 +22,8 @@ export default function Team({
     generateError: Dispatch<SetStateAction<{
         errorTitle: string;
         errorMessage: string;
-    } | null>>
+    } | null>>,
+    setLoading: Dispatch<SetStateAction<boolean>>
 }) {
     const [ isClosed, setClosed ] = useState(true)
     const [ segments, setSegments ] = useState<{ level: number, users: UserModel[] }[] | null>(null)
@@ -45,6 +47,7 @@ export default function Team({
         enabled: !isClosed,
         onSuccess: (data) => {
             setSegments(data)
+            setLoading(false)
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -81,7 +84,7 @@ export default function Team({
     return (
         <>
         <div className={`${styles['team-wrapper']} ${!isClosed && styles.opened}`}>
-            <TeamControllers generateError={generateError} canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
+            <TeamControllers setLoading={setLoading} generateError={generateError} canDelete={maxTeamLevel==loggedUserLevel} teamId={team._id as string} userId={loggedUser._id as string}/>
             {maxTeamLevel && loggedUserLevel && maxTeamLevel<=loggedUserLevel
                 ? <TeamName generateError={generateError} teamId={team!._id as string} teamName={team.name}/> 
                 : <span>{team.name}</span>
@@ -98,7 +101,7 @@ export default function Team({
                 setClosed((isClosed) => !isClosed)
             }}></button>
         </div>
-        {isMemberGeneratorOpen && levelQuery.data?.loggedUserLevel && <MemberGenerator generateError={generateError} team={team} loggedUserLevel={loggedUserLevel as number} closeModal={() => setMemberGeneratorOpen(false)} />}
+        {isMemberGeneratorOpen && levelQuery.data?.loggedUserLevel && <MemberGenerator setLoading={setLoading} generateError={generateError} team={team} loggedUserLevel={loggedUserLevel as number} closeModal={() => setMemberGeneratorOpen(false)} />}
         </>
     )
 }

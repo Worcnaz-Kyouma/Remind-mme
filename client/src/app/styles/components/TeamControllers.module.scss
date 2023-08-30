@@ -10,9 +10,10 @@
     width: 14%;
 
     button {
-        border: 1px solid rgba(0, 0, 0, 0.384);
-        border-right: 3px solid rgba(0, 0, 0, 0.384);
-        border-bottom: 3px solid rgba(0, 0, 0, 0.384);
+        border-top: 2px solid #00CC99;
+        border-bottom: 2px solid #6600FF;
+        border-right: 2px solid #6600FF;
+        border-left: 2px solid #00CC99;
         border-radius: 8px;
 
         padding: 8px 18px;

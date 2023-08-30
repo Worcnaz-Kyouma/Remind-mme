@@ -311,7 +311,11 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
 
                     else{
                         const result = {
-                            users: users ? users.slice((page-1)*limit, (page-1)*limit+limit) : [],
+                            users: users ? users.map((user) => {
+                                user.password=''
+                                user.webToken=undefined
+                                return user
+                            }).slice((page-1)*limit, (page-1)*limit+limit) : [],
                             totalPages: users ? Math.ceil(users.length/limit) : 0,
                             currentPage: page
                         }

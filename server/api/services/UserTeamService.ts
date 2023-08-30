@@ -60,9 +60,13 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
                         let results:{ level: number, users: User[] }[] = []
                         usersTeams.forEach((userTeam, index) => {
                             if(typeof results[userTeam.level] === 'undefined'){
+                                users[index].password=''
+                                users[index].webToken=undefined
                                 results[userTeam.level] = { level: userTeam.level, users: [users[index]] }
                             }
                             else{
+                                users[index].password=''
+                                users[index].webToken=undefined
                                 results[userTeam.level].level = userTeam.level
                                 results[userTeam.level].users.push(users[index])
                             }

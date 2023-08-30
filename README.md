@@ -83,14 +83,14 @@ Header:
 Botão inferior:
 - Este botão é o gerador de times, é nele que você irá clicar para gerar quantos times quiser para o usuario logado
 
-Corpo central:
-- Será aqui que os grupos vão aparecer, a principio todos estão minimizados
-- Times:
-  - Na parte direita superior do grupo haverão opções de "Sair" do time ou "Deletar" o time(Vale notar que apenas os usuarios de maior level no time podem deleta-lo)
-  - Na parte do time minimazado, existe uma pequena flecha, que ao ser clicada abrirá o grupo
-  - Com o grupo aberto, mostraram todos os usuarios que pertencem ao grupo, de tal forma que cada um deles estará no segmento referente ao seu level no time.
-  - Ao clicar em um usuario apareceram todas as suas informações, se caso o level de seu usuario logado cumprir alguns requisitos, ele poderá remover o usuario do grupo ou aumentar seu level nele
-  - Na parte mais inferior no time aberto, acima do icone de abrir e fechar o grupo, existe um botão para inserir novos membros no grupo, ao clicar nele abrirá o "Buscador de usuarios"
+## Corpo central
+Será aqui que os grupos vão aparecer, a principio todos estão minimizados
+Times:
+- Na parte direita superior do grupo haverão opções de "Sair" do time ou "Deletar" o time(Vale notar que apenas os usuarios de maior level no time podem deleta-lo)
+- Na parte do time minimazado, existe uma pequena flecha, que ao ser clicada abrirá o grupo
+- Com o grupo aberto, mostraram todos os usuarios que pertencem ao grupo, de tal forma que cada um deles estará no segmento referente ao seu level no time.
+- Ao clicar em um usuario apareceram todas as suas informações, se caso o level de seu usuario logado cumprir alguns requisitos, ele poderá remover o usuario do grupo ou aumentar seu level nele
+- Na parte mais inferior no time aberto, acima do icone de abrir e fechar o grupo, existe um botão para inserir novos membros no grupo, ao clicar nele abrirá o "Buscador de usuarios"
 
 Level: Cada usuario tem um level em cada grupo que tiver, com base neste numero terá algumas permissões especiais
 - Caso seu usuario logado tenha um level que seja igual ao maior do grupo, ele pode deleta-lo e aumentar/diminuir indefinidamente o level de outros usuarios, podendo ate remove-los

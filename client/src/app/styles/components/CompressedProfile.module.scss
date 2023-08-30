@@ -10,6 +10,8 @@
     margin: 14px;
 
     border: 1px solid rgba(0, 0, 0, 0.384);
+    border-right: 4px solid rgba(0, 0, 0, 0.384);
+    border-bottom: 4px solid rgba(0, 0, 0, 0.384);
     border-radius: 50%;
     box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
 
@@ -25,6 +27,8 @@
         height: 90%;
 
         border-radius: 50%;
+
+        border: 1px solid rgba(0, 0, 0, 0.384);
 
         transform: translate(-50%, -50%);
         overflow: hidden;

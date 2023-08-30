@@ -36,8 +36,8 @@ export default function TeamGenerator({
             })
         },
         onSuccess: () => {
-            setLoading(true)
             queryClient.invalidateQueries(["users"])
+            setLoading(true)
         },
         onError: (error: any) => {
             if('rawError' in error)

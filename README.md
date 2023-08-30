@@ -40,17 +40,20 @@ O sistema consiste em 2 partes:
 Execute estes passos para as 2 partes da aplicação:
 
 - Front-end: 
-  - Requesitos: Node.js
-  - Dentro da pasta client, instalar dependencias node presentes no arquivo "package.json". Caso possua o npm execute: "npm i"
-  - Executar no diretorio client o comando: "npm run start"
+  - Requesitos: Node.js, npm
+  - Dentro da pasta client, instalar dependencias node presentes no arquivo "package.json" executando o comando: "npm i"
+  - Apos instalar as dependencias no passo anterior, execute no mesmo diretorio o comando: "npm run build" para construir a aplicação
+  - Apos finalização de todos os passos anteriores, executar no diretorio client o comando: "npm run start"
 - Back-end:
-  - Requesitos: Node.js
-  - Dentro da pasta server, instalar dependencias node presentes no arquivo "package.json". Caso possua o npm execute: "npm i"
-  - Executar no diretorio server o comando: "npm run start"
+  - Requesitos: Node.js, npm
+  - Dentro da pasta servver, instalar dependencias node presentes no arquivo "package.json" executando o comando: "npm i"
+  - Apos finalização de todos os passos anteriores, executar no diretorio server o comando: "npm run start"
 
 
 
 ## Descrição da solução
+
+<p align="center"><img src="https://media.discordapp.net/attachments/679383239948894220/1146449362835210290/RemindMMelogo4.png?width=1440&height=168" width="400"></p>
 
 Com base nos requisitos, nos, da Remind-mme Company implementamos um sistema completo, que conta com:
 - Criação de usuários especificos, com login e senha

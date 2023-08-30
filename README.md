@@ -94,7 +94,7 @@ Times:
 - Na parte mais inferior no time aberto, acima do icone de abrir e fechar o grupo, existe um botão para inserir novos membros no grupo, ao clicar nele abrirá o "Buscador de usuarios"
 
 Level: 
-= Cada usuario tem um level em cada grupo que estiver, com base neste numero terá algumas permissões especiais
+- Cada usuario tem um level em cada grupo que estiver, com base neste numero terá algumas permissões especiais
 - Caso seu usuario logado tenha um level que seja igual ao maior do grupo, ele pode deleta-lo e aumentar/diminuir indefinidamente o level de outros usuarios, podendo ate remove-los
 - Usuario de level menor que o usuario logado podem ser removidos, e alem disto pode-se aumentar o diminuir seu level, com o limite sendo o seu proprio level no grupo(a não ser que a observação de cima seja verdadeira, neste caso, você pode alterar indefinidamente o level do usuario)
 

@@ -7,15 +7,20 @@ import UserModel from "@shared/models/UserModel"
 
 export default function Profile({
     user,
+    generateError
 }: {
-    user: UserModel,
+    user: UserModel
+    generateError: Dispatch<SetStateAction<{
+        errorTitle: string;
+        errorMessage: string;
+    } | null>>
 }) {
     const [ isCompressed, setIsCompressed ] = useState(true)
 
     return (
         <>
         <CompressedProfile user={user} setCompressedOff={() => setIsCompressed(false)}/>
-        {!isCompressed && <UserShowcase user={user} loggedUser={user} setCompressedOn={() => setIsCompressed(true)}/>}
+        {!isCompressed && <UserShowcase generateError={generateError} user={user} loggedUser={user} setCompressedOn={() => setIsCompressed(true)}/>}
         </>
     )
 }

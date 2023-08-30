@@ -21,8 +21,8 @@ export default function UserShowcase({
     user: UserModel
     userLevel?: number
     loggedUser: UserModel
-    loggedUserLevel: number
-    maxTeamLevel: number
+    loggedUserLevel?: number
+    maxTeamLevel?: number
     team?: TeamModel
     setCompressedOn: () => void
     generateError: Dispatch<SetStateAction<{

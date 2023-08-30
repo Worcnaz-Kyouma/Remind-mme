@@ -2,8 +2,11 @@
     position: absolute;
     top: -5px;
 
+    min-height: 105%;
+
     border: 1px solid rgba(0, 0, 0, 0.384);
     border-radius: 15px;
+    box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.218);
 
     p {
         max-width: 80%;
@@ -12,9 +15,9 @@
 
     background-color: white;
 
-    animation: appear 0.3s ease-out forwards;
+    animation: appearleft 0.3s ease-out forwards;
     
-    @keyframes appear {
+    @keyframes appearleft {
         from{
             width: 0%;
             opacity: 0;
@@ -30,7 +33,9 @@
     left: -10px;
     padding-left: 130%;
 
-    @keyframes appear {
+    animation: appearright 0.3s ease-out forwards;
+    
+    @keyframes appearright {
         from{
             width: 0%;
             opacity: 0;
@@ -46,4 +51,27 @@
     right: -10px;
     padding-right: 50%;
     padding-left: 30px;
+}
+
+.hover-wrapper.profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+    p {
+        padding-left: 5px;
+    }
+
+    animation: appearprofile 0.3s ease-out forwards;
+
+    @keyframes appearprofile {
+        from{
+            width: 0%;
+            opacity: 0;
+        }
+        to{
+            width: 240%;
+            opacity: 1;
+        }
+    }
 }

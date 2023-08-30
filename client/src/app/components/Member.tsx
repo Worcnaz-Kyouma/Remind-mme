@@ -58,7 +58,6 @@ export default function Member({
             </div>
             {isHover && inLeft && <HoverData user={user} inLeft={true} />}
         </div>
-        
     </>
     )
 }

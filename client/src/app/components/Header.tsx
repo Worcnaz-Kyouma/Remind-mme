@@ -6,10 +6,12 @@ import UserModel from "@shared/models/UserModel"
 import ErrorJSON from "@shared/models/ErrorJSON"
 import LogoutButton from "./LogoutButton"
 import ErrorMessage from "./ErrorMessage"
+import { useState } from "react"
 
 
 export default function Header() {
     const router = useRouter()
+    const [ error, setError ] = useState<{errorTitle: string, errorMessage: string} | null>(null)
 
     const userQuery = useQuery({
         queryKey: ['users'],
@@ -46,8 +48,9 @@ export default function Header() {
     else{
         return (
             <>
+            {error && <ErrorMessage errorTitle={error.errorTitle} errorMessage={error.errorMessage} />}
             <header className={styles['main-header']}>
-                <Profile user={userQuery.data as UserModel}/>
+                <Profile generateError={setError} user={userQuery.data as UserModel}/>
                 <div className={styles['logo-wrapper']}> <img src="/RemindMMelogo4.png" alt="" /></div>
                 <LogoutButton />
             </header>

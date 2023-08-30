@@ -1,3 +1,7 @@
+html {
+  min-height:100%;
+}
+
 body {
   position: absolute;
   width: 100%;
@@ -9,4 +13,5 @@ body {
   background-image: url('/body10.png');
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }

@@ -56,8 +56,11 @@ export function createTeamByOwner(userId:string){
                 databaseUserTeam.insert(userTeam, function(err, userTeam:UserTeam) {
                     if(err)
                         resolve(generateErrorJSON())
-                    else
+                    else{
                         resolve(team)
+                        databaseTeam.loadDatabase()
+                        databaseUserTeam.loadDatabase()
+                    }
                 })
             }
         })
@@ -87,8 +90,10 @@ export function updateTeamName(teamId:string, teamName:string){
                 databaseTeam.update({ _id: teamId }, { $set: { name:teamName, updatedAt: new Date() } }, {}, function(err, num) {
                     if(err)
                         resolve(generateErrorJSON())
-                    else
+                    else{
+                        databaseTeam.loadDatabase()
                         resolve(teamName)
+                    }
                 })
         }
     })

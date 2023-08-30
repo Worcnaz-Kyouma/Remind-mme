@@ -63,7 +63,7 @@ export default function Login() {
                 <button type="submit">Login</button>
             </form>
 
-            <button className={styles['signup-button']} onClick={() => router.push('login/signup')}>Signup</button>
+            <button className={styles['signup-button']} onClick={() => router.push('login/signup')}>Sign up</button>
         </div>
         </>
     )

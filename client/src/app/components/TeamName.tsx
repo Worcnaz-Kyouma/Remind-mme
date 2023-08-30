@@ -42,7 +42,7 @@ export default function TeamName({
 
     let saveNameTimeout:NodeJS.Timeout
 
-    return <input className={styles['team-name']} type="text" name="name" id="name" defaultValue={teamName} onChange={(event) => {
+    return <input className={styles['team-name']} type="text" name="teamName" id="teamName" defaultValue={teamName} onChange={(event) => {
         if(saveNameTimeout)
             clearTimeout(saveNameTimeout)
         saveNameTimeout = setTimeout(() => {

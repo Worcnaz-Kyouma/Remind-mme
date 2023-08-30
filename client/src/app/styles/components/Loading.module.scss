@@ -40,8 +40,9 @@
         width: 50px;
         height: 50px;
 
-        border-top: 2px solid #00CC99;
-        border-left: 2px solid #6600FF;
+        background: rgb(0,204,153);
+        background: linear-gradient(90deg, rgba(0,204,153,1) 20%, rgba(102,0,255,1) 80%);
+
         border-radius: 50%;
 
         animation: rotate 1.5s linear infinite;
@@ -54,5 +55,21 @@
                 transform: translateY(-50%) rotate(360deg);
             }
         }
+    }
+
+    &::after {
+        content: '';
+
+        position: absolute;
+        top: 51%;
+        left: 27px;
+        transform: translateY(-50%);
+
+        width: 48px;
+        height: 45px;
+
+        border-radius: 50%;
+
+        background-color: white;
     }
 }

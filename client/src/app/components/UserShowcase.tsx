@@ -203,7 +203,7 @@ export default function UserShowcase({
                     </div>
                 }
 
-                {haveChanges &&<button className={userMutation.isSuccess ? styles['success'] : ""} type="submit">Save</button>}
+                {haveChanges &&<button className={userMutation.isSuccess || userTeamMutation.isSuccess ? styles['success'] : ""} type="submit">Save</button>}
             </form>
             <button className={styles['exit-button']} onClick={
                 () => {setCompressedOn()}

@@ -34,7 +34,7 @@ export function updateUserTeamLevel(userId:string, teamId:string, level:number){
             resolve(generateErrorJSON({
                 errorTitle: "Incorrect credentials",
                 errorMessage: "Level cannot be less than 1",
-                rawError: "No user found with this username/password"
+                rawError: "Level cannot be less than 1"
             }))
         }
         else
@@ -58,8 +58,8 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
             if(!usersTeams)
                 resolve(generateErrorJSON({
                     errorTitle: "Internal error",
-                    errorMessage: "Group dont have any member",
-                    message: "No use found with this teamId"
+                    errorMessage: "Team dont have any member",
+                    message: "No user found with this teamId"
                 }))
 
             else
@@ -70,8 +70,8 @@ export function getLevelSegmentsInTeamWithUsers(teamId:string) {
                     if(!users)
                         resolve(generateErrorJSON({
                             errorTitle: "Internal error",
-                            errorMessage: "Group dont have any member",
-                            message: "No use found with this teamId"
+                            errorMessage: "Team dont have any member",
+                            message: "No user found with this teamId"
                         }))
 
                     if(users.length != usersTeams.length)

@@ -6,7 +6,7 @@ type User = {
     webToken?: string
 
     username: string
-    password: string
+    password?: string
     name: string
     email: string
     phone?: string

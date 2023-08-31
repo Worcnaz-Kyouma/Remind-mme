@@ -73,7 +73,7 @@ export default function Teams() {
                 <TeamGenerator setLoading={setLoading} generateError={setError} user={userQuery.data}/>
             </div>
             {isUserShowcaseEnabled && userShowcaseData &&
-                <UserShowcase generateError={setError} user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser} loggedUserLevel={userShowcaseData.loggedUserLevel} maxTeamLevel={userShowcaseData.maxTeamLevel} team={userShowcaseData.team} setCompressedOn={() => setUserShowcaseEnabled(false)} />
+                <UserShowcase generateError={setError} user={userShowcaseData.user} userLevel={userShowcaseData.userLevel} loggedUser={userShowcaseData.loggedUser} loggedUserLevel={userShowcaseData.loggedUserLevel} maxTeamLevel={userShowcaseData.maxTeamLevel} team={userShowcaseData.team} setCompressedOn={() => setUserShowcaseEnabled(false)} canChangeUserData={false} />
             }
         </>
     )

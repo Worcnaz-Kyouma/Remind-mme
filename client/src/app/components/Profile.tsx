@@ -20,7 +20,7 @@ export default function Profile({
     return (
         <>
         <CompressedProfile user={user} setCompressedOff={() => setIsCompressed(false)}/>
-        {!isCompressed && <UserShowcase generateError={generateError} user={user} loggedUser={user} setCompressedOn={() => setIsCompressed(true)}/>}
+        {!isCompressed && <UserShowcase generateError={generateError} user={user} loggedUser={user} setCompressedOn={() => setIsCompressed(true)} canChangeUserData={true}/>}
         </>
     )
 }

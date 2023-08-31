@@ -16,7 +16,8 @@ export default function UserShowcase({
     maxTeamLevel,
     team,
     setCompressedOn,
-    generateError
+    generateError,
+    canChangeUserData=false
 }: {
     user: UserModel
     userLevel?: number
@@ -29,10 +30,11 @@ export default function UserShowcase({
         errorTitle: string;
         errorMessage: string;
     } | null>>
+    canChangeUserData: boolean
 }) {
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ haveChanges, setHaveChanges ] = useState(false)
-    const [ isPasswordVisible, setPasswordVisible ] = useState(false)
+    //const [ isPasswordVisible, setPasswordVisible ] = useState(false)
     const [ numberValue, setNumberValue ] = useState(user.phone)
 
     const queryClient = useQueryClient()
@@ -47,8 +49,8 @@ export default function UserShowcase({
                 }
             })
             .then(res => res.json())
-            .then((resJson: User | ErrorJSON) => {
-                if('rawError' in resJson) 
+            .then((resJson: number | ErrorJSON) => {
+                if(typeof resJson != 'number' && 'rawError' in resJson) 
                     throw resJson
                 return resJson
             })
@@ -67,25 +69,54 @@ export default function UserShowcase({
         }
     })
 
+    const userTeamMutation = useMutation({
+        mutationFn: (newLevel:string) => {
+            return fetch('http://localhost:22194/usersteams/?userId=${}&teamId=${}', {
+                method: "PATCH",
+                body: JSON.stringify({ newLevel: newLevel })
+            })
+            .then(res => res.json())
+            .then((resJson: number | ErrorJSON) => {
+                if(typeof resJson != 'number' && 'rawError' in resJson) 
+                    throw resJson
+                return resJson
+            })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["users"])
+            team && queryClient.invalidateQueries(['segments', team._id])
+            setCompressedOn()
+        },
+        onError: (error: any) => {
+            if('rawError' in error)
+                generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
+            else
+                generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+        }
+    })
+
     function handleSubmit(event: React.FormEvent<EventTarget>){
         event.preventDefault()
 
         const formData = new FormData(event.target as HTMLFormElement)
-        formData.append('_id', user._id as string)
-        formData.append('webToken', user.webToken as string)
-        formData.append('createdAt', user.createdAt as string)
-        formData.append('imageUrl', user.imageUrl as string)
 
-        if(userLevel)
-            formData.append('teamId', team!._id as string)
+        if(!canChangeUserData)
+            userTeamMutation.mutate(formData.get('level') as string)
 
-        userMutation.mutate(formData)
+        else{
+            formData.append('_id', user._id as string)
+            formData.append('webToken', user.webToken as string)
+            formData.append('createdAt', user.createdAt as string)
+            formData.append('imageUrl', user.imageUrl as string)
+        
+            userMutation.mutate(formData)
+        }
     }
 
     return (
         <>
         <div className={styles['pseudo-body']} ></div>
-        <div className={`${styles['showcase-wrapper']} ${user._id !== loggedUser._id && styles['not-editable']} ${team && styles.fixerror}`}>
+        <div className={`${styles['showcase-wrapper']} ${!canChangeUserData && styles['not-editable']} ${team && styles.fixerror}`}>
             <form onSubmit={handleSubmit}>
                 <input type="file" name="image" id="image" accept="image/*" onChange={(event) => {
                     setHaveChanges(true)
@@ -111,10 +142,10 @@ export default function UserShowcase({
 
                 <div className={styles['inputs-wrapper']}>
                     <div className={styles['input-wrapper']}>
-                        <input type="text" name="username" id="username" required defaultValue={user.username} readOnly={user._id !== loggedUser._id} onChange={() => setHaveChanges(true)}/>
+                        <input type="text" name="username" id="username" required defaultValue={user.username} readOnly={!canChangeUserData} onChange={() => setHaveChanges(true)}/>
                         <label htmlFor="username">Username </label>
                     </div>
-                    {user._id === loggedUser._id &&
+                    {canChangeUserData &&
                         <div className={styles['input-wrapper']}>
                             <input type={isPasswordVisible ? "text" : "password"} name="password" id="password"  required defaultValue={user.password} onChange={() => setHaveChanges(true)}/>
                             <label htmlFor="password">Password </label>
@@ -124,18 +155,18 @@ export default function UserShowcase({
                 </div>
 
                 <div className={styles['input-wrapper']}>
-                    <input type="text" name="name" id="name" required defaultValue={user.name} readOnly={user._id !== loggedUser._id} onChange={() => setHaveChanges(true)}/>
+                    <input type="text" name="name" id="name" required defaultValue={user.name} readOnly={!canChangeUserData} onChange={() => setHaveChanges(true)}/>
                     <label htmlFor="name">Name </label>
                 </div>
 
                 <div className={styles['input-wrapper']}>
-                    <input type="email" name="email" id="email" required defaultValue={user.email} readOnly={user._id !== loggedUser._id} onChange={() => setHaveChanges(true)}/>
+                    <input type="email" name="email" id="email" required defaultValue={user.email} readOnly={!canChangeUserData} onChange={() => setHaveChanges(true)}/>
                     <label htmlFor="email">Email </label>
                 </div>
 
                 <div className={styles['inputs-wrapper']}>
                     <div className={styles['input-wrapper']}>
-                        <input type="text" name="phone" id="phone" value={user.phone} readOnly={user._id !== loggedUser._id} onChange={(event) => {
+                        <input type="text" name="phone" id="phone" value={numberValue} readOnly={!canChangeUserData} onChange={(event) => {
                             let formatedValue = event.currentTarget.value
                             
                             formatedValue = formatedValue.replace(/\D/g, '')
@@ -148,7 +179,7 @@ export default function UserShowcase({
                         <label htmlFor="phone">Phone </label>
                     </div>
                     <div className={styles['input-wrapper']}>
-                        <input type="date" name="bornDate" id="bornDate" required defaultValue={user.bornDate} max={new Date().toISOString().slice(0,10)} readOnly={user._id !== loggedUser._id} onChange={() => setHaveChanges(true)}/>
+                        <input type="date" name="bornDate" id="bornDate" required defaultValue={user.bornDate} max={new Date().toISOString().slice(0,10)} readOnly={!canChangeUserData} onChange={() => setHaveChanges(true)}/>
                         <label htmlFor="bornDate">Born date </label>
                     </div>
                 </div>

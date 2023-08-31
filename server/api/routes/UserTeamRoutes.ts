@@ -6,6 +6,7 @@ const router = express.Router()
 router.route('/')
     .post(userTeamController.createUserTeamRelation)
     .delete(userTeamController.deleteUserTeamRelation)
+    .patch()
 
 router.route('/level-compare')
     .get(userTeamController.getUserAndMaxLevelInGroup)

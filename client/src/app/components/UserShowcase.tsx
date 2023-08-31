@@ -92,7 +92,9 @@ export default function UserShowcase({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
-            team && queryClient.invalidateQueries(['segments', team._id])
+            team 
+                ? queryClient.invalidateQueries(['segments', team._id])
+                : queryClient.invalidateQueries(['segments'])
             setTimeout(() => setCompressedOn(), 1000)
         },
         onError: (error: any) => {

@@ -61,14 +61,14 @@ async function validator(userJSON:User) {
     if(!userJSON._id && await getUserByUsername(userJSON.username))
         return {
             errorTitle: "Validation",
-            errorMessage: "Already exist an user with that username",
+            errorMessage: "Username already in use",
             rawError: "User unique duplicated"
         }
     else
         if(await getUserByUsernameIdNe(userJSON.username, userJSON._id!))
             return {
                 errorTitle: "Validation",
-                errorMessage: "Already exist an user with that username",
+                errorMessage: "Username already in use",
                 rawError: "User unique duplicated"
             }
 

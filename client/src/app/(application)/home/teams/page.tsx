@@ -48,11 +48,9 @@ export default function Teams() {
             })
             .then((res: UserModel) => !res?._id ? router.push('/login') : res)
         },
-        refetchInterval: 5000,
         onSuccess: (data: UserModel) => {
             setTeams(data.teams || null)
             setLoading(false)
-            console.log(data.teams || null)
         },
         onError: (error: any) => {
             if('rawError' in error)

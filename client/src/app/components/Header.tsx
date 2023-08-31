@@ -34,7 +34,6 @@ export default function Header() {
                 return resJson
             })
         },
-        refetchInterval: 5000,
     })
 
     if(userQuery.isLoading)

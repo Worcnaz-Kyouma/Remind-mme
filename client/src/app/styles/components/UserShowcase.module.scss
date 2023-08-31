@@ -250,7 +250,11 @@
             }
 
             .input-wrapper:has(input[name="username"]){
-                width: 60%;
+                width: 70%;
+            }
+
+            .input-wrapper:has(input[name="phone"]){
+                width: 22%;
             }
 
             .input-wrapper:has(input[type="date"]){

@@ -77,7 +77,7 @@ Login:
 - Acessar com um usuário já existente, inserindo seu nome de usuário e senha.
 
 Sign Up:
-- Criar um novo usuário na tela de Cadastro para efetuar o login no sistema.
+- Criar um novo usuário para efetuar o login no sistema.
 
 ## Tela Principal
 

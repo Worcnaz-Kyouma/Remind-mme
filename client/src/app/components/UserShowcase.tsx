@@ -33,6 +33,7 @@ export default function UserShowcase({
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ haveChanges, setHaveChanges ] = useState(false)
     const [ isPasswordVisible, setPasswordVisible ] = useState(false)
+    const [ numberValue, setNumberValue ] = useState(user.phone)
 
     const queryClient = useQueryClient()
 
@@ -134,7 +135,16 @@ export default function UserShowcase({
 
                 <div className={styles['inputs-wrapper']}>
                     <div className={styles['input-wrapper']}>
-                        <input type="tel" name="phone" id="phone" defaultValue={user.phone} readOnly={user._id !== loggedUser._id} onChange={() => setHaveChanges(true)}/>
+                        <input type="text" name="phone" id="phone" value={user.phone} readOnly={user._id !== loggedUser._id} onChange={(event) => {
+                            let formatedValue = event.currentTarget.value
+                            
+                            formatedValue = formatedValue.replace(/\D/g, '')
+                            formatedValue = formatedValue.replace(/^(\d{2})(\d)/g, '($1) $2')              
+                            formatedValue = formatedValue.replace(/(\d)(\d{4})$/, '$1-$2')
+                        
+                            setNumberValue(formatedValue)
+                            setHaveChanges(true)
+                        }}/>
                         <label htmlFor="phone">Phone </label>
                     </div>
                     <div className={styles['input-wrapper']}>

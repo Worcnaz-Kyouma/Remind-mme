@@ -20,7 +20,7 @@ export default function CompressedProfile({
                 setIsHover(true)
             }} onMouseLeave={() => {
                 setIsHover(false)
-            }} onClick={setCompressedOff}>
+            }} onClick={setCompressedOff} title="Show/Change user data">
                 <img src={`http://localhost:22194/${user.imageUrl}`} alt="Member image" />
             </div>
         </div>

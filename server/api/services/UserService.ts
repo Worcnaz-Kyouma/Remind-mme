@@ -35,59 +35,59 @@ function generateErrorJSON(err:ErrorJSON | any = 'Server internal error'){
 async function validator(userJSON:User) {
     if(!userJSON.username)
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Username cannot be null",
             rawError: "Username field are null"
         }
     if(!userJSON.password)
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Password cannot be null",
             rawError: "Password field are null"
         }
     if(!userJSON.name)
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Name cannot be null",
             rawError: "Name field are null"
         }
     if(!userJSON.email)
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Email cannot be null",
             rawError: "Email field are null"
         }
 
     if(!userJSON._id && await getUserByUsername(userJSON.username))
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Already exist an user with that username",
             rawError: "User unique duplicated"
         }
     else
         if(await getUserByUsernameIdNe(userJSON.username, userJSON._id!))
             return {
-                errorTitle: "Valitation",
+                errorTitle: "Validation",
                 errorMessage: "Already exist an user with that username",
                 rawError: "User unique duplicated"
             }
 
     if(!validatorJS.isEmail(userJSON.email))
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Invalid email",
             rawError: "Invalid email field"
         }
     /*if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Invalid number",
             rawError: "Invalid number field"
         }*/
 
     if(!validatorJS.isBefore(userJSON.bornDate, (new Date()).toISOString()))
         return {
-            errorTitle: "Valitation",
+            errorTitle: "Validation",
             errorMessage: "Invalid date",
             rawError: "Invalid date field"
         }

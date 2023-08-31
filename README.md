@@ -53,7 +53,7 @@ Execute estes passos para as 2 partes da aplicação:
 
 ## Descrição da solução
 
-<p align="center" style="margin:50px;"><img src="https://media.discordapp.net/attachments/679383239948894220/1146449362835210290/RemindMMelogo4.png?width=1440&height=168" width="400"></p>
+<p align="center" style="margin:50px;"><img src="https://media.discordapp.net/attachments/679383239948894220/1146646488588505178/Sem_Titulo-1.png?width=989&height=347"></p>
 
 Com base nos requisitos, nos, da Remind-mme Company implementamos um sistema completo, que conta com:
 - Criação de usuários especificos, com login e senha

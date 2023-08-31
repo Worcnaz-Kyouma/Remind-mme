@@ -6,6 +6,7 @@ pnp
 .pnp.js
 database/
 uploads/
+!template.jpg
 
 # testing
 coverage

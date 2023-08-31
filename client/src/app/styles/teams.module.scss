@@ -16,3 +16,23 @@
 
     margin-bottom: 110px;
 }
+
+.not-in-team {
+    position: absolute;
+    top:35%;
+    transform: translateY(-50%);
+
+    width: 30%;
+
+    border-radius: 12px;
+
+    padding: 30px 5px;
+
+    text-align: center;
+
+    font-size: 20px;
+
+    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.691) inset;
+
+    background-color: rgba(255, 255, 255, 0.815);
+}

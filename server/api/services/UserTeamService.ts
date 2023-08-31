@@ -28,6 +28,19 @@ function generateErrorJSON(err:ErrorJSON | any = 'Server internal error'){
     return errorJSON
 }
 
+export function updateUserTeamLevel(userId:string, teamId:string, level:number){
+    return new Promise<number | ErrorJSON>(async (resolve, reject) => {
+        databaseUserTeam.update({ userId: userId, teamId: teamId }, { $set: { level: level, updatedAt: new Date() } }, {}, function(err, num) {
+            if(err)
+                resolve(generateErrorJSON())
+            else{
+                databaseUserTeam.loadDatabase()
+                resolve(num)
+            }
+        })
+    })
+}
+
 export function getLevelSegmentsInTeamWithUsers(teamId:string) {
     return new Promise<{ level: number, users: User[] }[] | ErrorJSON>(async (resolve, reject) => {
         databaseUserTeam.find({ teamId: teamId }).sort({ userId: 1 }).exec(function (err, usersTeams: UserTeam[]) {
@@ -121,20 +134,24 @@ export function createUserTeamRelation(userId: string, teamId: string, level:num
             if(err)
                 resolve(generateErrorJSON())
 
-            else
+            else{
+                databaseUserTeam.loadDatabase()
                 resolve(doc)
+            }
         })
     })
 }
 
 export function deleteUserTeamRelation(userId:string, teamId:string){
-    return new Promise<{ status:string } | ErrorJSON>(async (resolve, reject) => {
+    return new Promise<number | ErrorJSON>(async (resolve, reject) => {
         databaseUserTeam.remove({ userId:userId, teamId: teamId }, {}, function (err, numRemoved) {
             if(err)
                 resolve(generateErrorJSON())
 
-            else
-                resolve({ status: 'Success' })
+            else{
+                databaseUserTeam.loadDatabase()
+                resolve(numRemoved)
+            }
         })
     })
 }

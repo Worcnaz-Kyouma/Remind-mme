@@ -7,6 +7,9 @@ router.route('/')
     .post(userController.createUser)
     .put(userController.updateUser)
 
+router.route('/:userId')
+    .patch(userController.updateUserPassword)
+
 router.route('/username/:username')
     .get(userController.getUserByUsername)
 

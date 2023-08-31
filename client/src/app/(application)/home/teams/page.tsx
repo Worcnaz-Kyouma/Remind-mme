@@ -52,6 +52,7 @@ export default function Teams() {
         onSuccess: (data: UserModel) => {
             setTeams(data.teams || null)
             setLoading(false)
+            console.log(data.teams || null)
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -68,7 +69,10 @@ export default function Teams() {
             <div className={styles['teams-wrapper']}>
             {isLoading && <Loading />}
                 <div className={styles.teams}>
-                    {teams && teams.map((team) => <Team key={ team._id } setLoading={setLoading} generateError={setError} team={team} loggedUser={userQuery.data} setUserShowcaseData={setUserShowcaseFromComponents} />)}
+                    {teams && teams.length != 0
+                        ? teams.map((team) => <Team key={ team._id } setLoading={setLoading} generateError={setError} team={team} loggedUser={userQuery.data} setUserShowcaseData={setUserShowcaseFromComponents} />)
+                        : <h2 className={styles['not-in-team']}>You are not in any team yet</h2>
+                    }
                 </div>
                 <TeamGenerator setLoading={setLoading} generateError={setError} user={userQuery.data}/>
             </div>

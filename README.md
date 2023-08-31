@@ -47,6 +47,7 @@ Front-end:
 - Abra um terminal dentro da pasta "client", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
 - Após instalar as dependências no passo anterior, execute o comando "npm run build" no mesmo diretório para construir a aplicação.
 - Ao finalizar os passos anteriores, execute o comando "npm run start" no diretório "client".
+- A aplicação estará rodando na URL: <b><a>http://localhost:3000</a></b>
 
 Back-end:
 - Requisitos: Node.js, npm.

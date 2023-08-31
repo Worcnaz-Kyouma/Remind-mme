@@ -30,14 +30,22 @@ function generateErrorJSON(err:ErrorJSON | any = 'Server internal error'){
 
 export function updateUserTeamLevel(userId:string, teamId:string, level:number){
     return new Promise<number | ErrorJSON>(async (resolve, reject) => {
-        databaseUserTeam.update({ userId: userId, teamId: teamId }, { $set: { level: level, updatedAt: new Date() } }, {}, function(err, num) {
-            if(err)
-                resolve(generateErrorJSON())
-            else{
-                databaseUserTeam.loadDatabase()
-                resolve(num)
-            }
-        })
+        if(level<1){
+            resolve(generateErrorJSON({
+                errorTitle: "Incorrect credentials",
+                errorMessage: "Level cannot be less than 1",
+                rawError: "No user found with this username/password"
+            }))
+        }
+        else
+            databaseUserTeam.update({ userId: userId, teamId: teamId }, { $set: { level: level, updatedAt: new Date() } }, {}, function(err, num) {
+                if(err)
+                    resolve(generateErrorJSON())
+                else{
+                    databaseUserTeam.loadDatabase()
+                    resolve(num)
+                }
+            })
     })
 }
 

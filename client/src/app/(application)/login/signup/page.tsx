@@ -101,7 +101,7 @@ export default function Login() {
 
                 <div className={styles['inputs-wrapper']}>
                     <div className={styles['input-wrapper']}>
-                        <input type="text" name="phone" id="phone" maxLength={15} placeholder=' ' value={numberValue} onChange={(event) => {
+                        <input type="text" name="phone" id="phone" maxLength={15} minLength={14} placeholder=' ' value={numberValue} onChange={(event) => {
                             let formatedValue = event.currentTarget.value
                             
                             formatedValue = formatedValue.replace(/\D/g, '')

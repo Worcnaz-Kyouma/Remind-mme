@@ -141,7 +141,7 @@ export function updateUser(req:Request, res:Response) {
                     rawError: err
                 }))
 
-            if(req.file?.path)
+            if(req.file?.path && req.file?.path != 'uploads/template.jpg')
                 fs.unlink(req.body.imageUrl, err => {
                     if (err) resolve(generateErrorJSON("Error trying delete old image"))
                 })
@@ -178,7 +178,7 @@ export function updateUserPassword(userId:string, currentPassword:string, newPas
             if(!user)
                 resolve(generateErrorJSON({
                     errorTitle: "Internal error",
-                    errorMessage: "User not exist",
+                    errorMessage: "User does not exist",
                     rawError: "Dont exist a user with this username"
                 }))
             else{
@@ -313,7 +313,10 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
             if(err)
                 resolve(generateErrorJSON())
 
-            else
+            else{
+                if(field==='phone'){
+                    value = value.replace('(', '\\(').replace(')','\\)')
+                }
                 databaseUser.find({ [field]: { $regex: RegExp(value) }, _id: { $nin: userTeams.map(userTeam => userTeam.userId) } }, {}, function(err, users: User[]) {
                     if(err)
                         resolve(generateErrorJSON(err))
@@ -331,6 +334,7 @@ export function getUsersByGivenFieldOutOfTeam(limit: number, page: number, field
                         resolve(result)
                     }
                 })
+            }
             })
     })
 }

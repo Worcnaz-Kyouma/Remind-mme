@@ -175,7 +175,7 @@ export default function UserShowcase({
 
                 <div className={styles['inputs-wrapper']}>
                     <div className={styles['input-wrapper']}>
-                        <input type="text" name="phone" id="phone" value={numberValue} readOnly={!canChangeUserData} onChange={(event) => {
+                        <input type="text" name="phone" id="phone" value={numberValue} maxLength={15} minLength={14} readOnly={!canChangeUserData} onChange={(event) => {
                             let formatedValue = event.currentTarget.value
                             
                             formatedValue = formatedValue.replace(/\D/g, '')
@@ -197,7 +197,7 @@ export default function UserShowcase({
                     <div className={styles['additional-data-wrapper']}>
                         <div className={styles['level-wrapper']}>
                             <label htmlFor="level">Level </label>
-                            <input type="number" name="level" id="level" required defaultValue={userLevel} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<=userLevel && maxTeamLevel!=loggedUserLevel} onChange={() => setHaveChanges(true)}/>
+                            <input type="number" name="level" id="level" required defaultValue={userLevel} min={1} max={loggedUserLevel<maxTeamLevel  ? loggedUserLevel : undefined} readOnly={loggedUserLevel<=userLevel && maxTeamLevel!=loggedUserLevel} onChange={() => setHaveChanges(true)}/>
                         </div>
                         {(loggedUserLevel>userLevel || maxTeamLevel==loggedUserLevel) && loggedUser._id!=user._id && <RemoveMember generateError={generateError} userId={user._id as string} teamId={team!._id as string} setCompressedOn={setCompressedOn}/>}
                     </div>

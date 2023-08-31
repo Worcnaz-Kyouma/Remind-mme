@@ -66,13 +66,24 @@ export default function UserTeamGenerator({
                         else if (value === "email")
                             setInputSearchType('email')
                         else
-                            setInputSearchType('tel')
+                            setInputSearchType('text')
                     }}>
                         <option value="name">Name</option>
                         <option value="email">Email</option>
-                        <option value="number">Number</option>
+                        <option value="phone">Phone</option>
                     </select>
-                    <input type={inputSearchType} value={value} name="value" id="value" onChange={(event) => setValue(event.target.value)}/>
+                    <input type={inputSearchType} value={value} name="value" id="value" onChange={(event) => {
+                        setValue(event.target.value)
+                        if(field == 'phone'){
+                            let formatedValue = event.currentTarget.value
+                            
+                            formatedValue = formatedValue.replace(/\D/g, '')
+                            formatedValue = formatedValue.replace(/^(\d{2})(\d)/g, '($1) $2')              
+                            formatedValue = formatedValue.replace(/(\d)(\d{4})$/, '$1-$2')
+                        
+                            setValue(formatedValue)
+                        }
+                        }}/>
                 </div>
                 <button onClick={() => {
                     userSearchMutation.mutate({

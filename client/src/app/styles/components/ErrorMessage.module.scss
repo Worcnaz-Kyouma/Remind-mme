@@ -1,13 +1,12 @@
 .fixed-wrapper{
     position: fixed;
-    top: 2%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 3%;
+    right: 3%;
 
     z-index: 99;
 
     width: 20%;
-    min-width: 450px;
+    min-width: 300px;
 }
 
 .error-wrapper {
@@ -63,6 +62,7 @@
         width: 100%;
         word-wrap: break-word;
         padding: 5px;
+        font-size: 18px;
     }
 
     .close-button {

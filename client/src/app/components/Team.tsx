@@ -47,15 +47,17 @@ export default function Team({
         enabled: !isClosed,
         onSuccess: (data) => {
             setSegments(data)
-            setLoading(false)
+            setLoading(false)            
         },
         onError: (error: any) => {
             if('rawError' in error)
                 generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+            setTimeout(() => {
+                generateError(null)
+            }, 5100)
         },
-        refetchInterval: 5000
     })
 
     const levelQuery = useQuery({
@@ -78,6 +80,9 @@ export default function Team({
                 generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+            setTimeout(() => {
+                generateError(null)
+            }, 5100)
         }
     })
 

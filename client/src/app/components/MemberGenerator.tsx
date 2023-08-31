@@ -45,6 +45,9 @@ export default function UserTeamGenerator({
                 generateError({errorTitle: error.errorTitle, errorMessage: error.errorMessage})
             else
                 generateError({errorTitle: 'Error', errorMessage: 'Internal Error'})
+            setTimeout(() => {
+                generateError(null)
+            }, 5100)
         }
     })
 

@@ -39,7 +39,7 @@ async function validateName(teamName:string) {
     if(teamName!='Enter the team name' && await getTeamByName(teamName))
         return {
             errorTitle: "Validation",
-            errorMessage: "Already exist an team with this name",
+            errorMessage: "Team name already in use",
             rawError: "Team name unique duplicated"
         }
 }

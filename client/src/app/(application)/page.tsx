@@ -31,7 +31,8 @@ export default function Page() {
         },
         onSuccess: (data) => {
           data?._id ? router.push('/home/teams') : router.push('/login')
-        }
+        },
+        refetchInterval: 5000
     })
 
     if(userQuery.isError){

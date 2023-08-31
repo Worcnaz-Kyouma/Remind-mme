@@ -44,13 +44,13 @@ Execute estes passos para as 2 partes da aplicação:
 
 Front-end:
 - Requisitos: Node.js, npm.
-- Dentro da pasta "client", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
+- Abra um terminal dentro da pasta "client", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
 - Após instalar as dependências no passo anterior, execute o comando "npm run build" no mesmo diretório para construir a aplicação.
 - Ao finalizar os passos anteriores, execute o comando "npm run start" no diretório "client".
 
 Back-end:
 - Requisitos: Node.js, npm.
-- Dentro da pasta "server", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
+- Abra um outro terminal(diferente do anterior que esta rodando o client) dentro da pasta "server", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
 - Após concluir os passos anteriores, execute o comando "npm run start" no diretório "server".
 
 
@@ -107,7 +107,3 @@ Level:
 Buscador de Usuários:
 - Nessa tela destinada a buscar novos usuários, você pode realizar a busca com base no "Nome, Email e Telefone". Ao clicar em "Buscar", os usuários correspondentes serão exibidos de forma paginada.
 - Ao clicar em um usuário encontrado, ele será adicionado ao grupo.
-
-
-
-

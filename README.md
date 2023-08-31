@@ -85,7 +85,7 @@ Header:
  
 Corpo central: Descrito logo abaixo
 
-Botão inferior:
+Botão inferior esquerdo:
 - Este botão é o gerador de times, é nele que você irá clicar para gerar quantos times quiser para o usuario logado
 
 ## Corpo central

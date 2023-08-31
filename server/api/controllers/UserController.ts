@@ -34,6 +34,25 @@ export async function updateUser(req:Request, res:Response) {
     res.json(data)
 }
 
+export async function updateUserPassword(req:Request, res:Response) {
+    if(
+        typeof req.params.userId === "undefined" && 
+        typeof req.body.currentPassword === "undefined"  &&
+        typeof req.body.newPassword === "undefined" 
+    ){
+        invalidRequest(res)
+        return
+    }
+
+    const data = await userService.updateUserPassword(req.params.userId, req.body.currentPassword, req.body.newPassword)
+
+    res.status(201)
+    if(typeof data !== 'number' && 'rawError' in data)
+        res.status(500)
+
+    res.json(data)
+}
+
 export async function getUserByUsername(req:Request, res:Response) {
     if(typeof req.params.username === 'undefined'){
         invalidRequest(res)

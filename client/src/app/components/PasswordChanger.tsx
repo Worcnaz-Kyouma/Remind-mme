@@ -23,7 +23,7 @@ export default function PasswordChanger({
 
     const userMutation = useMutation({
         mutationFn: (editedPassword: { [k:string]: FormDataEntryValue }) => {
-            return fetch(`http://localhost:22194/users/:userId=${userId}`, {
+            return fetch(`http://localhost:22194/users/${userId}`, {
                 method: "PATCH",
                 body: JSON.stringify(editedPassword),
                 headers: {
@@ -53,25 +53,24 @@ export default function PasswordChanger({
         event.preventDefault()
 
         const formData = new FormData(event.target as HTMLFormElement)
-        //formData.append('_id', userId)
 
         const formJson = Object.fromEntries(formData.entries())
 
-        console.log(formJson)
-
-        //userMutation.mutate(formJson)
+        userMutation.mutate(formJson)
     }
 
     return (
         <>
         <div className={styles['pseudo-body']} ></div>
         <div className={`${styles['password-wrapper']}`}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={userMutation.isSuccess ? styles['sucess'] : ""}>
                 <h1>Change password</h1>
                 <div className={styles['input-wrapper']}>
                     <input type={isCurrectPasswordVisible ? "text" : "password"} name="currentPassword" id="currentPassword"  required placeholder=' '/>
                     <label htmlFor="currentPassword">Current password </label>
-                    <span id="show-password" onClick={() => setCurrentPasswordVisible((isVisible) => !isVisible)}></span>
+                    <span id="show-password" onClick={() => {
+                        setCurrentPasswordVisible((isVisible) => !isVisible)
+                    }}></span>
                 </div>
 
                 <div className={styles['input-wrapper']}>

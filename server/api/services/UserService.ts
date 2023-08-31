@@ -170,6 +170,41 @@ export function updateUser(req:Request, res:Response) {
     })
 }
 
+export function updateUserPassword(userId:string, currentPassword:string, newPassword:string) {
+    return new Promise<number | ErrorJSON>(async (resolve, reject) => {
+        databaseUser.findOne({ _id: userId }, function(err, user:User) {
+            if(err)
+                resolve(generateErrorJSON())
+            if(!user)
+                resolve(generateErrorJSON({
+                    errorTitle: "Internal error",
+                    errorMessage: "User not exist",
+                    rawError: "Dont exist a user with this username"
+                }))
+            else{
+                if(user.password != currentPassword)
+                    resolve(generateErrorJSON({
+                        errorTitle: "Incorrect credentials",
+                        errorMessage: "Incorrect password",
+                        rawError: "No user found with this username/password"
+                    }))
+                else{
+                    user.password = newPassword
+                    user.updatedAt = new Date()
+                    databaseUser.update({ _id: user._id }, user, {}, function(err, num) {
+                        if(err)
+                            resolve(generateErrorJSON())
+                        else{
+                            databaseUser.loadDatabase()
+                            resolve(num)
+                        }
+                    })
+                }
+            }
+        })
+    })
+}
+
 export function getUserByUsername(username: string) {
     return new Promise<User | ErrorJSON >(async (resolve, reject) => {
         databaseUser.findOne({ username: username }, function(err, docs) {
@@ -222,7 +257,7 @@ export function getUserGeneretingWebToken(username: string, password: string) {
                         resolve(generateErrorJSON({
                             errorTitle: "Incorrect credentials",
                             errorMessage: "Incorrect password",
-                            rawError: "No use found with this username/password"
+                            rawError: "No user found with this username/password"
                         }))
 
                     else

@@ -103,7 +103,7 @@ Times:
 Level:
 - Cada usuário possui um level em cada grupo ao qual pertence. Com base nesse número, algumas permissões especiais serão concedidas.
 - Se o level do seu usuário logado for igual ao level mais alto do grupo, ele pode excluí-lo e aumentar/diminuir o level de outros usuários, podendo até mesmo removê-los.
-- Usuários com leveis mais baixos do que o usuário logado podem ser removidos, e também é possível aumentar ou diminuir o level deles. O limite é o próprio level do usuário no grupo (a menos que a observação anterior seja aplicável; nesse caso, você pode alterar o level do usuário indefinidamente).
+- Usuários com leveis mais baixos do que o usuário logado podem ser removidos, e também é possível aumentar ou diminuir o level deles. O limite é o próprio level do usuário no grupo (a menos que a observação anterior seja aplicável; nesse caso, você pode alterar o level do usuário indefinidamente, com o limite no level 1).
 
 Buscador de Usuários:
 - Nessa tela destinada a buscar novos usuários, você pode realizar a busca com base no "Nome, Email e Telefone". Ao clicar em "Buscar", os usuários correspondentes serão exibidos de forma paginada.

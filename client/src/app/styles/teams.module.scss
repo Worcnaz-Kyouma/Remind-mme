@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    min-height: 74vh;
 }
 
 .teams {
@@ -15,4 +13,6 @@
 
     flex: 1;
     overflow-y: auto;
+
+    margin-bottom: 110px;
 }

@@ -13,6 +13,7 @@ export default function Login() {
     const imgElementRef = useRef(null)
     const [ imgSrc, setImgSrc ] = useState<string|null>(null)
     const [ isPasswordVisible, setPasswordVisible ] = useState(false)
+    const [ numberValue, setNumberValue ] = useState('')
     // const [ usernameInvalid, setUsernameInvalid ] = useState<boolean>(false)
 
     const userMutation = useMutation({
@@ -100,7 +101,15 @@ export default function Login() {
 
                 <div className={styles['inputs-wrapper']}>
                     <div className={styles['input-wrapper']}>
-                        <input type="tel" name="phone" id="phone" placeholder=' ' />
+                        <input type="text" name="phone" id="phone" maxLength={15} placeholder=' ' value={numberValue} onChange={(event) => {
+                            let formatedValue = event.currentTarget.value
+                            
+                            formatedValue = formatedValue.replace(/\D/g, '')
+                            formatedValue = formatedValue.replace(/^(\d{2})(\d)/g, '($1) $2')              
+                            formatedValue = formatedValue.replace(/(\d)(\d{4})$/, '$1-$2')
+                        
+                            setNumberValue(formatedValue)
+                        }}/>
                         <label htmlFor="phone">Phone </label>
                     </div>
                     <div className={styles['input-wrapper']}>

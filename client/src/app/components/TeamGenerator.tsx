@@ -47,7 +47,7 @@ export default function TeamGenerator({
         }
     })
 
-    return <button className={styles['team-generator']} onClick={() => {
+    return <button title="Generate Team" className={styles['team-generator']} onClick={() => {
         teamMutation.mutate(user)
     }}></button>
 }

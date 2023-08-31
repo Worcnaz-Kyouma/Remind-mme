@@ -114,7 +114,7 @@ export function createUser(req:Request, res:Response) {
 
             else{
                 userJSON.webToken = crypto.randomUUID()
-                userJSON.imageUrl = req.file?.path || "uploads/template.png"
+                userJSON.imageUrl = req.file?.path || "uploads/template.jpg"
                 userJSON.createdAt = new Date()
                 userJSON.updatedAt = new Date()
 

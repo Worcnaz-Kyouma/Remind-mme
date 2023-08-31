@@ -92,7 +92,7 @@ export default function Team({
             {!isClosed && 
                 <div className={styles['opened-team']}>
                     {segments && levelQuery.isSuccess && segments.map((segment) => <SegmentTeam key={segment.level} level={segment.level} users={segment.users} loggedUser={loggedUser} loggedUserLevel={loggedUserLevel as number} maxTeamLevel={maxTeamLevel as number} team={team} setUserShowcaseData={setUserShowcaseData} />)}
-                    <button className={styles['member-opener']} onClick={() => {
+                    <button title="Add member" className={styles['member-opener']} onClick={() => {
                         setMemberGeneratorOpen(true)
                     }}></button>
                 </div>

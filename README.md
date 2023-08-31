@@ -1,4 +1,4 @@
-
+<p align="center"><img src="https://media.discordapp.net/attachments/679383239948894220/1146645237050114129/1637075117552__1_-removebg-preview.png" width="30%" height="20%"></p>
 
 ## Proposta do projeto/desafio
 Problema: PROPOSTA A
@@ -20,93 +20,93 @@ Alguns pontos importantes:
 
 O sistema consiste em 2 partes: 
 
-- Front-end
-  - React(Com framework Next.js)
-  - Typescript
-  - React Query
-  - SCSS
-- Back-end
-  - REST-Api
-  - Node.js
-  - Typescript
-  - Express
-  - ValidatorJS
-  - NeDB
+Front-end
+- React(Com framework Next.js)
+- Typescript
+- React Query
+- SCSS
+
+Back-end
+- REST-Api
+- Node.js
+- Typescript
+- Express
+- ValidatorJS
+- NeDB
 
 
 
 ## Como rodar
 
+Baixe o arquivo ZIP do projeto e descompacte-o onde preferir.
+
 Execute estes passos para as 2 partes da aplicação:
 
-- Front-end: 
-  - Requesitos: Node.js, npm
-  - Dentro da pasta client, instalar dependencias node presentes no arquivo "package.json" executando o comando: "npm i"
-  - Apos instalar as dependencias no passo anterior, execute no mesmo diretorio o comando: "npm run build" para construir a aplicação
-  - Apos finalização de todos os passos anteriores, executar no diretorio client o comando: "npm run start"
-- Back-end:
-  - Requesitos: Node.js, npm
-  - Dentro da pasta servver, instalar dependencias node presentes no arquivo "package.json" executando o comando: "npm i"
-  - Apos finalização de todos os passos anteriores, executar no diretorio server o comando: "npm run start"
+Front-end:
+- Requisitos: Node.js, npm.
+- Dentro da pasta "client", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
+- Após instalar as dependências no passo anterior, execute o comando "npm run build" no mesmo diretório para construir a aplicação.
+- Ao finalizar os passos anteriores, execute o comando "npm run start" no diretório "client".
 
+Back-end:
+- Requisitos: Node.js, npm.
+- Dentro da pasta "server", instale as dependências do Node presentes no arquivo "package.json" executando o comando: "npm i".
+- Após concluir os passos anteriores, execute o comando "npm run start" no diretório "server".
 
 
 ## Descrição da solução
 
 <p align="center" style="margin:50px;"><img src="https://media.discordapp.net/attachments/679383239948894220/1146646488588505178/Sem_Titulo-1.png?width=989&height=347" width="50%" height="40%"></p>
 
-Com base nos requisitos, nos, da Remind-mme Company implementamos um sistema completo, que conta com:
-- Criação de usuários especificos, com login e senha
-- Criação de grupos de serviço, possibilitando não apenas ver os dados de cada participante do grupo(como nome, email e telefone), mas tambem se organizar mediante a projetos e tarefas
-- Ainda na parte de grupos, existe um sistema basico de hierarquia com base em um valor singular chamado "level". Assim, usuarios com leveis mais altos em um grupo tem um controle maior sobre ele, possibilitando deleção do grupo e a remoção de participantes
+Com base nos requisitos, nós da Remind-me Company implementamos um sistema completo que conta com:
+- Criação de usuários específicos, com login e senha.
+- Criação de grupos de serviço, possibilitando não apenas a visualização dos dados de cada participante do grupo (como nome, email e telefone), mas também a organização por projetos e tarefas.
+- Além disso, na parte de grupos, existe um sistema básico de hierarquia com base em um valor singular chamado "level". Dessa forma, usuários com níveis mais altos em um grupo têm um controle maior sobre ele, possibilitando a exclusão do grupo e a remoção de participantes.
 
-Esperamos que nosso sistema possa auxili-los, muito obrigado pela oportunidade!
+
+Esperamos que nosso sistema possa auxiliá-los. Muito obrigado pela oportunidade!
 
 
 
 ## Manual
-Abaixo, descrevo uma breve instrução de como usar a aplicação e suas funcionalidades
+Abaixo, descrevo uma breve instrução sobre como usar a aplicação e suas funcionalidades:
 
-## Tela inicial
-
+## Tela Inicial
 Login:
-- Entrar em um usuario ja existente, com seu username e password
+- Acessar com um usuário já existente, inserindo seu nome de usuário e senha.
 
 Sign Up:
-- Criar usuario na tela de Sign up para logar no sistema
+- Criar um novo usuário na tela de Cadastro para efetuar o login no sistema.
 
-
-## Tela principal
+## Tela Principal
 
 Header:
-- Na esquerda superior há um botão escrito "Logout", para deslogar o usuario
-- Na direita superior há um pequeno circulo com a imagem de seu proprio usuario logado. Ao clicar neste circulo:
-  - Entrará em uma tela de showcase do usuario, ou é possivel ver todos seus dados e tambem edita-los
- 
-Corpo central: Descrito logo abaixo
+- No canto superior esquerdo, há um botão escrito "Sair" para efetuar o logout do usuário.
+- No canto superior direito, encontra-se um pequeno círculo com a imagem do usuário logado. Ao clicar neste círculo:
+  - Você será redirecionado para uma tela de perfil do usuário, onde é possível visualizar e editar seus dados.
 
-Botão inferior esquerdo:
-- Este botão é o gerador de times, é nele que você irá clicar para gerar quantos times quiser para o usuario logado
+## Corpo Central
+No centro, a aplicação informará caso o usuário logado não esteja em nenhum grupo. Além disso, nesta seção os times serão exibidos. Inicialmente, todos os times estarão minimizados.
 
-## Corpo central
-Será aqui que os grupos vão aparecer, a principio todos estão minimizados
+Botão Inferior Esquerdo:
+- Este botão é o gerador de times. Ao clicar nele, você poderá criar quantos times desejar para o usuário logado.
 
 Times:
-- Na parte direita superior do grupo haverão opções de "Sair" do time ou "Deletar" o time(Vale notar que apenas os usuarios de maior level no time podem deleta-lo)
-- Na parte do time minimazado, existe uma pequena flecha, que ao ser clicada abrirá o grupo
-- Com o grupo aberto, mostraram todos os usuarios que pertencem ao grupo, de tal forma que cada um deles estará no segmento referente ao seu level no time.
-- Ao clicar em um usuario apareceram todas as suas informações, se caso o level de seu usuario logado cumprir alguns requisitos(presentes na sessão de Level do manual, logo abaixo), ele poderá remover o usuario do grupo ou aumentar seu level nele
-- Na parte mais inferior no time aberto, acima do icone de abrir e fechar o grupo, existe um botão para inserir novos membros no grupo, ao clicar nele abrirá o "Buscador de usuarios"
+- Na parte superior direita de cada grupo, haverão opções "Sair" do time ou "Excluir" o time (É importante observar que apenas os usuários com leveis mais altos no time podem excluí-lo).
+- Na seção de time minimizado, existe uma pequena seta que, ao ser clicada, expandirá o grupo.
+- Com o grupo expandido, todos os usuários pertencentes ao grupo serão exibidos, cada um no segmento correspondente ao seu level no time.
+- Ao clicar em um usuário, todas as suas informações serão mostradas. Se o level do seu usuário logado atender a certos requisitos (detalhados na seção de "Level" do manual, logo abaixo), você poderá remover o usuário do grupo ou aumentar o level dele.
+- Clicando em seu usuário no time, é possível aumentar o seu próprio nível, caso tenha capacidade para fazê-lo.
+- Na parte inferior da seção do time expandido, acima do ícone de expandir/contrair o grupo, existe um botão para adicionar novos membros ao grupo. Ao clicar nele, o "Buscador de Usuários" será aberto.
 
-Level: 
-- Cada usuario tem um level em cada grupo que estiver, com base neste numero terá algumas permissões especiais
-- Caso seu usuario logado tenha um level que seja igual ao maior do grupo, ele pode deleta-lo e aumentar/diminuir indefinidamente o level de outros usuarios, podendo ate remove-los
-- Usuario de level menor que o usuario logado podem ser removidos, e alem disto pode-se aumentar o diminuir seu level, com o limite sendo o seu proprio level no grupo(a não ser que a observação de cima seja verdadeira, neste caso, você pode alterar indefinidamente o level do usuario)
+Level:
+- Cada usuário possui um level em cada grupo ao qual pertence. Com base nesse número, algumas permissões especiais serão concedidas.
+- Se o level do seu usuário logado for igual ao level mais alto do grupo, ele pode excluí-lo e aumentar/diminuir o level de outros usuários, podendo até mesmo removê-los.
+- Usuários com leveis mais baixos do que o usuário logado podem ser removidos, e também é possível aumentar ou diminuir o level deles. O limite é o próprio level do usuário no grupo (a menos que a observação anterior seja aplicável; nesse caso, você pode alterar o level do usuário indefinidamente).
 
-Buscador de usuarios:
-- Nesta tela designada a buscar novos usuario, pode-se buscar com base no "Nome, Email e Telefone", e ao clicar em "Search" encontrará os usuarios, que serão dispostos de maneira paginada
-- Ao clicar em um usuario encontrado ele será adicionado no grupo
-
+Buscador de Usuários:
+- Nessa tela destinada a buscar novos usuários, você pode realizar a busca com base no "Nome, Email e Telefone". Ao clicar em "Buscar", os usuários correspondentes serão exibidos de forma paginada.
+- Ao clicar em um usuário encontrado, ele será adicionado ao grupo.
 
 
 

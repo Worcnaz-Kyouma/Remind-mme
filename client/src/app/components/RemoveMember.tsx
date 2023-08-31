@@ -26,8 +26,8 @@ export default function RemoveMember({
                 method: 'DELETE'
             })
             .then(res => res.json())
-            .then((resJson: UserTeam | ErrorJSON) => {
-                if('rawError' in resJson) 
+            .then((resJson: number | ErrorJSON) => {
+                if(typeof resJson !== 'number' && 'rawError' in resJson) 
                     throw resJson
                 return resJson
             })

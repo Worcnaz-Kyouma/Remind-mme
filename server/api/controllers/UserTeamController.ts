@@ -11,6 +11,25 @@ function invalidRequest(res:Response, message="Invalid request"){
     res.json({error: message})
 }
 
+export async function updateUserTeamLevel(req:Request, res:Response) {
+    if(
+        typeof req.query.userId === "undefined" && 
+        typeof req.query.teamId === "undefined"  &&
+        typeof req.body.level === "undefined"
+    ){
+        invalidRequest(res)
+        return
+    }
+
+    const data = await userTeamService.updateUserTeamLevel(req.query.userId as string, req.query.teamId as string, parseInt(req.body.level))
+
+    res.status(200)
+    if(typeof data !== 'number' && 'rawError' in data)
+        res.status(500)
+
+    res.json(data)
+}
+
 export async function createUserTeamRelation(req:Request, res:Response) {
     if(
         typeof req.body.userId === "undefined" && 
@@ -69,7 +88,7 @@ export async function deleteUserTeamRelation(req:Request, res:Response) {
     const data = await userTeamService.deleteUserTeamRelation(req.query.userId as string, req.query.teamId as string)
 
     res.status(200)
-    if(data && 'rawError' in data)
+    if(typeof data !== 'number' && 'rawError' in data)
         res.status(500)
 
     res.json(data)

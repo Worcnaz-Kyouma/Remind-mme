@@ -7,6 +7,7 @@ import ErrorJSON from "@shared/models/ErrorJSON"
 import User from "@shared/models/UserModel"
 import TeamModel from "@shared/models/TeamModel"
 import RemoveMember from "./RemoveMember"
+import PasswordChanger from "./PasswordChanger"
 
 export default function UserShowcase({
     user,
@@ -36,6 +37,7 @@ export default function UserShowcase({
     const [ haveChanges, setHaveChanges ] = useState(false)
     //const [ isPasswordVisible, setPasswordVisible ] = useState(false)
     const [ numberValue, setNumberValue ] = useState(user.phone)
+    const [ isPasswordChangerPopupOn, setPasswordChangerPopupOn ] = useState(false)
 
     const queryClient = useQueryClient()
 
@@ -71,9 +73,9 @@ export default function UserShowcase({
 
     const userTeamMutation = useMutation({
         mutationFn: (newLevel:string) => {
-            return fetch('http://localhost:22194/usersteams/?userId=${}&teamId=${}', {
+            return fetch(`http://localhost:22194/usersteams/?userId=${user._id}&teamId=${team?._id}`, {
                 method: "PATCH",
-                body: JSON.stringify({ newLevel: newLevel })
+                body: JSON.stringify({ level: newLevel })
             })
             .then(res => res.json())
             .then((resJson: number | ErrorJSON) => {
@@ -105,7 +107,6 @@ export default function UserShowcase({
 
         else{
             formData.append('_id', user._id as string)
-            formData.append('webToken', user.webToken as string)
             formData.append('createdAt', user.createdAt as string)
             formData.append('imageUrl', user.imageUrl as string)
         
@@ -116,6 +117,7 @@ export default function UserShowcase({
     return (
         <>
         <div className={styles['pseudo-body']} ></div>
+        {isPasswordChangerPopupOn && <PasswordChanger generateError={generateError} userId={user._id as string} setCompressedOn={() => setPasswordChangerPopupOn(false)}/>}
         <div className={`${styles['showcase-wrapper']} ${!canChangeUserData && styles['not-editable']} ${team && styles.fixerror}`}>
             <form onSubmit={handleSubmit}>
                 <input type="file" name="image" id="image" accept="image/*" onChange={(event) => {
@@ -145,13 +147,7 @@ export default function UserShowcase({
                         <input type="text" name="username" id="username" required defaultValue={user.username} readOnly={!canChangeUserData} onChange={() => setHaveChanges(true)}/>
                         <label htmlFor="username">Username </label>
                     </div>
-                    {canChangeUserData &&
-                        <div className={styles['input-wrapper']}>
-                            <input type={isPasswordVisible ? "text" : "password"} name="password" id="password"  required defaultValue={user.password} onChange={() => setHaveChanges(true)}/>
-                            <label htmlFor="password">Password </label>
-                            <span id="show-password" onClick={() => setPasswordVisible((isVisible) => !isVisible)}></span>
-                        </div>
-                    }
+                    {canChangeUserData && <button className={styles['password-popup-opener']} onClick={() => setPasswordChangerPopupOn(true)}>Change password</button>}
                 </div>
 
                 <div className={styles['input-wrapper']}>

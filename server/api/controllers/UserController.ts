@@ -28,7 +28,7 @@ export async function updateUser(req:Request, res:Response) {
     const data = await userService.updateUser(req, res)
 
     res.status(201)
-    if('rawError' in data)
+    if(typeof data !== 'number' && 'rawError' in data)
         res.status(500)
     
     res.json(data)

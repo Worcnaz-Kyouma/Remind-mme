@@ -39,7 +39,7 @@ async function validator(userJSON:User) {
             errorMessage: "Username cannot be null",
             rawError: "Username field are null"
         }
-    if(!userJSON.password)
+    if(!userJSON._id && !userJSON.password)
         return {
             errorTitle: "Validation",
             errorMessage: "Password cannot be null",
@@ -78,12 +78,12 @@ async function validator(userJSON:User) {
             errorMessage: "Invalid email",
             rawError: "Invalid email field"
         }
-    /*if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
+    if(userJSON.phone && !validatorJS.isNumeric(userJSON.phone))
         return {
             errorTitle: "Validation",
             errorMessage: "Invalid number",
             rawError: "Invalid number field"
-        }*/
+        }
 
     if(!validatorJS.isBefore(userJSON.bornDate, (new Date()).toISOString()))
         return {
@@ -132,12 +132,12 @@ export function createUser(req:Request, res:Response) {
 }
 
 export function updateUser(req:Request, res:Response) {
-    return new Promise<User | ErrorJSON>(async (resolve, reject) => {
+    return new Promise<number | ErrorJSON>(async (resolve, reject) => {
         upload.single('image')(req, res, async function (err) {
             if (err)
                 resolve (generateErrorJSON({
                     errorTitle: "Upload error",
-                    errorMessage: "Error trying to save user image",
+                    errorMessage: "Invalid Image",
                     rawError: err
                 }))
 
@@ -146,51 +146,25 @@ export function updateUser(req:Request, res:Response) {
                     if (err) resolve(generateErrorJSON("Error trying delete old image"))
                 })
 
-            const userJSON:User & { teamId?:string, level?:string } = req.body
+            const userJSON:User = req.body
 
-            if(userJSON.teamId && userJSON.level){
-                databaseUserTeam.update({ 
-                    userId: userJSON._id, 
-                    teamId: userJSON.teamId 
-                }, { $set: { 
-                    level: parseInt(userJSON.level), 
-                    updatedAt: new Date() 
-                } }, {}, function (err, doc) {
+            //Validator
+            const validatorResult = await validator(userJSON)
+            if(validatorResult)
+                resolve(generateErrorJSON(validatorResult))
+            
+            else{
+                userJSON.imageUrl = req.file?.path || userJSON.imageUrl
+                userJSON.updatedAt = new Date()
+
+                databaseUser.update({ _id: userJSON._id }, { $set: userJSON }, {}, function (err, doc) {
                     if(err)
                         resolve(generateErrorJSON())
                     else{
-                        databaseUserTeam.loadDatabase();
-                        if(!userJSON.password){
-                            userJSON.webToken=undefined
-                            resolve(userJSON)
-                            return
-                        }
+                        databaseUser.loadDatabase()
+                        resolve(doc)
                     }
                 })
-                userJSON.teamId = undefined
-                userJSON.level = undefined
-            }
-
-            if(userJSON.password){
-                //Validator
-                const validatorResult = await validator(userJSON)
-                if(validatorResult)
-                    resolve(generateErrorJSON(validatorResult))
-                
-                else{
-                    userJSON.imageUrl = req.file?.path || req.body.imageUrl
-                    userJSON.updatedAt = new Date()
-
-                    databaseUser.update({ _id: userJSON._id }, userJSON, {}, function (err, doc) {
-                        if(err)
-                            resolve(generateErrorJSON())
-                        else{
-                            databaseUser.loadDatabase()
-                            userJSON.webToken=undefined
-                            resolve(userJSON)
-                        }
-                    })
-                }
             }
         })
     })

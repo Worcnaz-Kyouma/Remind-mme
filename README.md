@@ -59,7 +59,7 @@ Back-end:
 
 <p align="center" style="margin:50px;"><img src="https://media.discordapp.net/attachments/679383239948894220/1146646488588505178/Sem_Titulo-1.png?width=989&height=347" width="50%" height="40%"></p>
 
-Com base nos requisitos, nós da Remind-me Company implementamos um sistema completo que conta com:
+Com base nos requisitos, nós da Remind-mme Company implementamos um sistema completo que conta com:
 - Criação de usuários específicos, com login e senha.
 - Criação de grupos de serviço, possibilitando não apenas a visualização dos dados de cada participante do grupo (como nome, email e telefone), mas também a organização por projetos e tarefas.
 - Além disso, na parte de grupos, existe um sistema básico de hierarquia com base em um valor singular chamado "level". Dessa forma, usuários com níveis mais altos em um grupo têm um controle maior sobre ele, possibilitando a exclusão do grupo e a remoção de participantes.

@@ -61,7 +61,7 @@ export default function UserShowcase({
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
             team && queryClient.invalidateQueries(['segments', team._id])
-            setCompressedOn()
+            setTimeout(() => setCompressedOn(), 1000)
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -75,7 +75,10 @@ export default function UserShowcase({
         mutationFn: (newLevel:string) => {
             return fetch(`http://localhost:22194/usersteams/?userId=${user._id}&teamId=${team?._id}`, {
                 method: "PATCH",
-                body: JSON.stringify({ level: newLevel })
+                body: JSON.stringify({ level: newLevel }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
             .then(res => res.json())
             .then((resJson: number | ErrorJSON) => {
@@ -87,7 +90,7 @@ export default function UserShowcase({
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
             team && queryClient.invalidateQueries(['segments', team._id])
-            setCompressedOn()
+            setTimeout(() => setCompressedOn(), 1000)
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -102,8 +105,9 @@ export default function UserShowcase({
 
         const formData = new FormData(event.target as HTMLFormElement)
 
-        if(!canChangeUserData)
+        if(!canChangeUserData){
             userTeamMutation.mutate(formData.get('level') as string)
+        }
 
         else{
             formData.append('_id', user._id as string)
@@ -147,7 +151,10 @@ export default function UserShowcase({
                         <input type="text" name="username" id="username" required defaultValue={user.username} readOnly={!canChangeUserData} onChange={() => setHaveChanges(true)}/>
                         <label htmlFor="username">Username </label>
                     </div>
-                    {canChangeUserData && <button className={styles['password-popup-opener']} onClick={() => setPasswordChangerPopupOn(true)}>Change password</button>}
+                    {canChangeUserData && <button className={styles['password-popup-opener']} onClick={(event) => {
+                        event.preventDefault()
+                        setPasswordChangerPopupOn(true)
+                    }}>Change password</button>}
                 </div>
 
                 <div className={styles['input-wrapper']}>

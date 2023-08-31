@@ -36,7 +36,7 @@ async function validateName(teamName:string) {
             rawError: "Name field are null"
         }
 
-    if(teamName!='Enter the team name ' && await getTeamByName(teamName))
+    if(teamName!='Enter the team name' && await getTeamByName(teamName))
         return {
             errorTitle: "Validation",
             errorMessage: "Already exist an team with this name",
@@ -46,7 +46,7 @@ async function validateName(teamName:string) {
 
 export function createTeamByOwner(userId:string){
     return new Promise<Team | ErrorJSON>(async (resolve, reject) => {
-        const team:Team = { name: "Enter the team name ", createdAt: new Date(), updatedAt: new Date() }
+        const team:Team = { name: "Enter the team name", createdAt: new Date(), updatedAt: new Date() }
         databaseTeam.insert(team, function(err, team:Team) {
             if(err)
                 resolve(generateErrorJSON())
@@ -80,7 +80,7 @@ export function getTeamByName(name: string) {
 
 export function updateTeamName(teamId:string, teamName:string){
     return new Promise<string | ErrorJSON>(async (resolve, reject) => {
-        if(teamName=='Enter the team name ')
+        if(teamName=='Enter the team name')
             resolve(teamName)
         else {
             const validatorResult = await validateName(teamName)

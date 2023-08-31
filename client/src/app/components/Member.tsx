@@ -29,7 +29,6 @@ export default function Member({
 
     useEffect(() => {
         const observer = new ResizeObserver(() => {
-            console.log('sus')
             const rect = memberWrapperDOMRef.current!.getBoundingClientRect()
             if(rect.left>window.innerWidth/2)
                 setInLeft(false)

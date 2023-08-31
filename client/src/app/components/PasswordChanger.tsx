@@ -23,7 +23,7 @@ export default function PasswordChanger({
 
     const userMutation = useMutation({
         mutationFn: (editedPassword: { [k:string]: FormDataEntryValue }) => {
-            return fetch('http://localhost:22194/users', {
+            return fetch(`http://localhost:22194/users/:userId=${userId}`, {
                 method: "PATCH",
                 body: JSON.stringify(editedPassword),
                 headers: {
@@ -40,7 +40,6 @@ export default function PasswordChanger({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(["users"])
-            setCompressedOn()
         },
         onError: (error: any) => {
             if('rawError' in error)
@@ -54,11 +53,13 @@ export default function PasswordChanger({
         event.preventDefault()
 
         const formData = new FormData(event.target as HTMLFormElement)
-        formData.append('_id', userId)
+        //formData.append('_id', userId)
 
         const formJson = Object.fromEntries(formData.entries())
 
-        userMutation.mutate(formJson)
+        console.log(formJson)
+
+        //userMutation.mutate(formJson)
     }
 
     return (
@@ -66,23 +67,30 @@ export default function PasswordChanger({
         <div className={styles['pseudo-body']} ></div>
         <div className={`${styles['password-wrapper']}`}>
             <form onSubmit={handleSubmit}>
+                <h1>Change password</h1>
                 <div className={styles['input-wrapper']}>
-                    <input type={isCurrectPasswordVisible ? "text" : "password"} name="currentPassword" id="currentPassword"  required />
-                    <label htmlFor="password">Password </label>
+                    <input type={isCurrectPasswordVisible ? "text" : "password"} name="currentPassword" id="currentPassword"  required placeholder=' '/>
+                    <label htmlFor="currentPassword">Current password </label>
                     <span id="show-password" onClick={() => setCurrentPasswordVisible((isVisible) => !isVisible)}></span>
                 </div>
 
                 <div className={styles['input-wrapper']}>
-                    <input type={isPasswordVisible ? "text" : "password"} name="newPassword" id="newPassword"  required />
-                    <label htmlFor="password">Password </label>
+                    <input type={isPasswordVisible ? "text" : "password"} name="newPassword" id="newPassword"  required placeholder=' '/>
+                    <label htmlFor="newPassword">New password </label>
                     <span id="show-password" onClick={() => setPasswordVisible((isVisible) => !isVisible)}></span>
                 </div>
 
+
                 <button className={userMutation.isSuccess ? styles['success'] : ""} type="submit">Save</button>
+                
+                <button className={styles['exit-button']} onClick={(event) => {
+                    event.preventDefault()
+                    setCompressedOn()
+                }
+                }>Exit</button>
+
+                
             </form>
-            <button className={styles['exit-button']} onClick={
-                () => {setCompressedOn()}
-            }>Exit</button>
         </div>
         </>
     )

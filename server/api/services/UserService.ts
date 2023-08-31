@@ -141,7 +141,7 @@ export function updateUser(req:Request, res:Response) {
                     rawError: err
                 }))
 
-            if(req.file?.path && req.file?.path != 'uploads/template.jpg')
+            if(req.file?.path && !req.body.imageUrl.includes('template.jpg'))
                 fs.unlink(req.body.imageUrl, err => {
                     if (err) resolve(generateErrorJSON("Error trying delete old image"))
                 })

@@ -94,6 +94,7 @@ Botão Inferior Esquerdo:
 
 Times:
 - Na parte superior direita de cada grupo, haverão opções "Sair" do time ou "Excluir" o time (É importante observar que apenas os usuários com leveis mais altos no time podem excluí-lo).
+- Na parte superior esquerda de cada grupo, há o nome do time. Se o usuário logado for capaz, mediante a seu level no time, poderá clicar no nome do time e altera-lo livremente. (Vale notar que o nome de cada time deve ser unico)
 - Na seção de time minimizado, existe uma pequena seta que, ao ser clicada, expandirá o grupo.
 - Com o grupo expandido, todos os usuários pertencentes ao grupo serão exibidos, cada um no segmento correspondente ao seu level no time.
 - Ao clicar em um usuário, todas as suas informações serão mostradas. Se o level do seu usuário logado atender a certos requisitos (detalhados na seção de "Level" do manual, logo abaixo), você poderá remover o usuário do grupo ou aumentar o level dele.

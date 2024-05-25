@@ -1,4 +1,4 @@
-<p align="center"><img src="https://media.discordapp.net/attachments/679383239948894220/1146645237050114129/1637075117552__1_-removebg-preview.png" width="30%" height="20%"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/Nicolas-Prado/Remind-mme/main/iconMM.png" width="30%" height="20%"></p>
 
 ## Proposta do projeto/desafio
 Problema: PROPOSTA A
@@ -57,7 +57,7 @@ Back-end:
 
 ## Descrição da solução
 
-<p align="center" style="margin:50px;"><img src="https://media.discordapp.net/attachments/679383239948894220/1146646488588505178/Sem_Titulo-1.png?width=989&height=347" width="50%" height="40%"></p>
+<p align="center" style="margin:50px;"><img src="https://raw.githubusercontent.com/Nicolas-Prado/Remind-mme/main/iconRMM.png?width=989&height=347" width="50%" height="40%"></p>
 
 Com base nos requisitos, nós da Remind-mme Company implementamos um sistema completo que conta com:
 - Criação de usuários específicos, com login e senha.

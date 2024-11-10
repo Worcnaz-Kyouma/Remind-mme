@@ -109,3 +109,127 @@ Level:
 Buscador de Usuários:
 - Nessa tela destinada a buscar novos usuários, você pode realizar a busca com base no "Nome, Email e Telefone". Ao clicar em "Buscar", os usuários correspondentes serão exibidos de forma paginada.
 - Ao clicar em um usuário encontrado, ele será adicionado ao grupo.
+
+# Documentação Back-end
+- Vale dizer que todas as consultas são feitas na root(ou seja, protocol://localhost:port/{URI}) precedidas pela fragment da entity relativa ao recurso.
+## User Entity(/users)
+### GET:
+- Descrição: Consultar usuarios por nome 
+- URI: /username/:username
+- URL Params: :username
+- Query Params: N/A
+- Body Content: N/A
+
+### POST:
+- Descrição: Cadastrar usuario 
+- URI: /
+- URL Params: N/A
+- Query Params: N/A
+- Body Content:
+```
+{
+  username: 'JohnDoe',
+  password: '123',
+  name: 'John Doe',
+  email: 'JohnDoe@gmail.com',
+  phone: '(42) 99999-9999',
+  bornDate: '2004-12-28'
+}
+```
+
+### PUT:
+- Descrição: Atualizar usuario 
+- URI: /
+- URL Params: N/A
+- Query Params: N/A
+- Body Content:
+```
+{
+  username: 'JaneDoe',
+  name: 'Jane Doe',
+  email: 'janedoe@gmail.com',
+  phone: '(42) 99999-9999'
+}
+```
+
+## Team Entity(/teams)
+### POST
+- Descrição: Cadastrar time 
+- URI: /
+- URL Params: N/A
+- Query Params: N/A
+- Body Content:
+```
+{
+  userId: 1,
+  teamName: "nome"
+}
+```
+
+### PUT
+- Descrição: Atualizar time 
+- URI: /:teamId
+- URL Params: :teamId
+- Query Params: N/A
+- Body Content:
+```
+{
+  teamName: "Novo nome"
+}
+```
+
+### DELETE
+- Descrição: Deletar time 
+- URI: /:teamId
+- URL Params: :teamId
+- Query Params: N/A
+- Body Content: N/A
+
+## User Team Entity(/usersteams)
+### GET
+- Descrição: Consulta um time junto de seus usuarios, com seus respectivos niveis 
+- URI: /:teamId
+- URL Params: :teamId
+- Query Params: N/A
+- Body Content: N/A
+
+### POST
+- Descrição: Cadastrar usuario em um time, com seu devido level neste time 
+- URI: /
+- URL Params: N/A
+- Query Params: N/A
+- Body Content:
+```
+{
+  userId: 1,
+  teamId: 1,
+  level: 1
+}
+```
+
+### PATCH
+- Descrição: Atualizar level de um usuario em um time
+- URI: /
+- URL Params: N/A
+- Query Params: N/A
+- Body Content:
+```
+{
+  userId: 1,
+  teamId: 1,
+  level: 2
+}
+```
+
+### DELETE
+- Descrição: Remove um usuario de um time
+- URI: /
+- URL Params: N/A
+- Query Params: N/A
+- Body Content:
+```
+{
+  userId: 1,
+  teamId: 1
+}
+```
